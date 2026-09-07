@@ -4,26 +4,23 @@ import 'package:shipit_ui/src/foundation/app_spacing.dart';
 import 'package:shipit_ui/src/foundation/app_radius.dart';
 import 'package:shipit_ui/src/foundation/app_typography.dart';
 
-/// Text field variant types for AppTextField.
-enum AppTextFieldVariant { normal, error, disabled }
+/// Text field state types for AppTextField.
+enum AppTextFieldState { default_, error, disabled }
 
 /// A reusable text field widget following the shipit_ui design system.
 ///
-/// Supports normal, error, and disabled states.
+/// Supports default, error, and disabled states.
+/// Based on approved Penpot design tokens.
 ///
 /// ## Semantics
 ///
 /// Uses [Semantics] with `textField: true` and `label` for
 /// accessibility automation.
-///
-/// ## Provisional
-///
-/// Visual values are provisional until approved Penpot tokens are adopted.
 class AppTextField extends StatefulWidget {
   final String label;
   final String? hint;
   final String? initialValue;
-  final AppTextFieldVariant variant;
+  final AppTextFieldState state;
   final bool isReadOnly;
   final TextEditingController? controller;
   final FocusNode? focusNode;
@@ -42,7 +39,7 @@ class AppTextField extends StatefulWidget {
     required this.label,
     this.hint,
     this.initialValue,
-    this.variant = AppTextFieldVariant.normal,
+    this.state = AppTextFieldState.default_,
     this.isReadOnly = false,
     this.controller,
     this.focusNode,
@@ -97,7 +94,7 @@ class AppTextField extends StatefulWidget {
       key: semanticLabel,
       label: label,
       hint: hint,
-      variant: AppTextFieldVariant.error,
+      state: AppTextFieldState.error,
       controller: controller,
       focusNode: focusNode,
       onChanged: onChanged,
@@ -116,7 +113,7 @@ class AppTextField extends StatefulWidget {
       key: semanticLabel,
       label: label,
       hint: hint,
-      variant: AppTextFieldVariant.disabled,
+      state: AppTextFieldState.disabled,
       isReadOnly: true,
       initialValue: value,
       semanticLabel: semanticLabel,
@@ -163,15 +160,15 @@ class _AppTextFieldState extends State<AppTextField> {
             widget.label,
             style: AppTypography.labelMedium.copyWith(color: _getLabelColor()),
           ),
-          const SizedBox(height: AppSpacing.spacingXs),
+          const SizedBox(height: AppSpacing.space1),
           TextField(
             key: widget.semanticLabel,
             controller: _controller,
             focusNode: _focusNode,
-            enabled: widget.variant != AppTextFieldVariant.disabled,
+            enabled: widget.state != AppTextFieldState.disabled,
             readOnly:
                 widget.isReadOnly ||
-                widget.variant == AppTextFieldVariant.disabled,
+                widget.state == AppTextFieldState.disabled,
             obscureText: widget.obscureText,
             keyboardType: widget.keyboardType,
             maxLines: widget.maxLines,
@@ -184,8 +181,8 @@ class _AppTextFieldState extends State<AppTextField> {
               filled: true,
               fillColor: _getFillColor(),
               contentPadding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.spacingMd,
-                vertical: AppSpacing.spacingSm,
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space2,
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppRadius.radiusMd),
@@ -198,36 +195,36 @@ class _AppTextFieldState extends State<AppTextField> {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppRadius.radiusMd),
                 borderSide: BorderSide(
-                  color: widget.variant == AppTextFieldVariant.error
-                      ? AppColors.stateError
-                      : AppColors.actionPrimary,
+                  color: widget.state == AppTextFieldState.error
+                      ? AppColors.stateErrorFgColor
+                      : AppColors.actionPrimaryBgColor,
                   width: 2,
                 ),
               ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-                borderSide: const BorderSide(color: AppColors.stateError),
+                borderSide: const BorderSide(color: AppColors.stateErrorFgColor),
               ),
               focusedErrorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppRadius.radiusMd),
                 borderSide: const BorderSide(
-                  color: AppColors.stateError,
+                  color: AppColors.stateErrorFgColor,
                   width: 2,
                 ),
               ),
               disabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-                borderSide: const BorderSide(color: AppColors.neutral200),
+                borderSide: const BorderSide(color: AppColors.actionDisabledBorderColor),
               ),
             ),
           ),
-          if (widget.variant == AppTextFieldVariant.error)
+          if (widget.state == AppTextFieldState.error)
             Padding(
-              padding: const EdgeInsets.only(top: AppSpacing.spacingXs),
+              padding: const EdgeInsets.only(top: AppSpacing.space1),
               child: Text(
                 'Error: Please check this field',
                 style: AppTypography.bodySmall.copyWith(
-                  color: AppColors.stateError,
+                  color: AppColors.stateErrorFgColor,
                 ),
               ),
             ),
@@ -237,44 +234,44 @@ class _AppTextFieldState extends State<AppTextField> {
   }
 
   Color _getLabelColor() {
-    switch (widget.variant) {
-      case AppTextFieldVariant.error:
-        return AppColors.stateError;
-      case AppTextFieldVariant.disabled:
-        return AppColors.textDisabled;
-      case AppTextFieldVariant.normal:
-        return AppColors.textPrimary;
+    switch (widget.state) {
+      case AppTextFieldState.error:
+        return AppColors.fgSecondaryColor;
+      case AppTextFieldState.disabled:
+        return AppColors.fgDisabledColor;
+      case AppTextFieldState.default_:
+        return AppColors.fgSecondaryColor;
     }
   }
 
   Color _getFillColor() {
-    switch (widget.variant) {
-      case AppTextFieldVariant.disabled:
-        return AppColors.neutral100;
-      case AppTextFieldVariant.error:
-        return AppColors.neutral50;
-      case AppTextFieldVariant.normal:
-        return AppColors.neutral50;
+    switch (widget.state) {
+      case AppTextFieldState.disabled:
+        return AppColors.actionDisabledBgColor;
+      case AppTextFieldState.error:
+        return AppColors.bgSurfaceColor;
+      case AppTextFieldState.default_:
+        return AppColors.bgSurfaceColor;
     }
   }
 
   Color _getBorderColor() {
-    switch (widget.variant) {
-      case AppTextFieldVariant.error:
-        return AppColors.stateError;
-      case AppTextFieldVariant.disabled:
-        return AppColors.neutral200;
-      case AppTextFieldVariant.normal:
-        return AppColors.divider;
+    switch (widget.state) {
+      case AppTextFieldState.error:
+        return AppColors.stateErrorFgColor;
+      case AppTextFieldState.disabled:
+        return AppColors.actionDisabledBorderColor;
+      case AppTextFieldState.default_:
+        return AppColors.borderDefaultColor;
     }
   }
 
   Widget? _buildSuffixIcon() {
-    if (widget.variant == AppTextFieldVariant.error &&
+    if (widget.state == AppTextFieldState.error &&
         widget.suffixIcon == null) {
       return const Icon(
         Icons.error_outline,
-        color: AppColors.stateError,
+        color: AppColors.stateErrorFgColor,
         size: 20,
       );
     }

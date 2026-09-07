@@ -22,31 +22,22 @@ void main() {
       expect(AppTypography.labelSmall.color, isNotNull);
     });
 
-    test('font sizes decrease through hierarchy levels', () {
-      expect(
-        AppTypography.displayLarge.fontSize,
-        greaterThan(AppTypography.headlineLarge.fontSize!),
-      );
-      expect(
-        AppTypography.headlineLarge.fontSize,
-        greaterThan(AppTypography.headlineSmall.fontSize!),
-      );
-      expect(
-        AppTypography.headlineSmall.fontSize,
-        greaterThan(AppTypography.titleLarge.fontSize!),
-      );
-      expect(
-        AppTypography.titleLarge.fontSize,
-        greaterThan(AppTypography.titleSmall.fontSize!),
-      );
-      expect(
-        AppTypography.bodyLarge.fontSize,
-        greaterThan(AppTypography.bodySmall.fontSize!),
-      );
-      expect(
-        AppTypography.labelLarge.fontSize,
-        greaterThan(AppTypography.labelSmall.fontSize!),
-      );
+    test('font sizes follow design token hierarchy', () {
+      expect(AppTypography.displayLarge.fontSize, 36);
+      expect(AppTypography.displayMedium.fontSize, 30);
+      expect(AppTypography.displaySmall.fontSize, 24);
+      expect(AppTypography.headlineLarge.fontSize, 24);
+      expect(AppTypography.headlineMedium.fontSize, 20);
+      expect(AppTypography.headlineSmall.fontSize, 18);
+      expect(AppTypography.titleLarge.fontSize, 18);
+      expect(AppTypography.titleMedium.fontSize, 16);
+      expect(AppTypography.titleSmall.fontSize, 14);
+      expect(AppTypography.bodyLarge.fontSize, 18);
+      expect(AppTypography.bodyMedium.fontSize, 16);
+      expect(AppTypography.bodySmall.fontSize, 14);
+      expect(AppTypography.labelLarge.fontSize, 14);
+      expect(AppTypography.labelMedium.fontSize, 12);
+      expect(AppTypography.labelSmall.fontSize, 12);
     });
   });
 }

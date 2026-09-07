@@ -26,6 +26,7 @@ void main() {
       expect(find.text('Category'), findsOneWidget);
       expect(find.text('Option A'), findsOneWidget);
     });
+
     testWidgets('select renders with label', (final tester) async {
       final options = [
         const AppSelectOption<String>(value: 'a', label: 'Option A'),
@@ -59,7 +60,7 @@ void main() {
             body: AppSelect<String>(
               label: 'Locked',
               options: options,
-              isDisabled: true,
+              state: AppSelectState.disabled,
               value: 'a',
               onChanged: (final value) {},
             ),
@@ -89,6 +90,27 @@ void main() {
       );
 
       expect(find.text('Select'), findsOneWidget);
+    });
+
+    testWidgets('error select renders', (final tester) async {
+      final options = [
+        const AppSelectOption<String>(value: 'a', label: 'Option A'),
+      ];
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: AppSelect<String>(
+              label: 'Error Select',
+              options: options,
+              state: AppSelectState.error,
+              onChanged: (final value) {},
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Error Select'), findsOneWidget);
     });
   });
 }

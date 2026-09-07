@@ -50,10 +50,10 @@ void main() {
     });
 
     test('spacer widgets are sized boxes', () {
-      expect(AppLayout.widthSm, isA<SizedBox>());
-      expect(AppLayout.widthMd, isA<SizedBox>());
-      expect(AppLayout.heightSm, isA<SizedBox>());
-      expect(AppLayout.heightMd, isA<SizedBox>());
+      expect(AppLayout.width2, isA<SizedBox>());
+      expect(AppLayout.width4, isA<SizedBox>());
+      expect(AppLayout.height2, isA<SizedBox>());
+      expect(AppLayout.height4, isA<SizedBox>());
     });
 
     test('divider returns a Divider', () {

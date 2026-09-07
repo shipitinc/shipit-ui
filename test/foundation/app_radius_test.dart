@@ -25,7 +25,7 @@ void main() {
     });
 
     test('radiusFull is a large value', () {
-      expect(AppRadius.radiusFull, greaterThan(1000));
+      expect(AppRadius.radiusFull, 999);
     });
   });
 }

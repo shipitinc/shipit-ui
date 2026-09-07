@@ -34,7 +34,7 @@ class AppLayout {
         child: Padding(
           padding:
               padding ??
-              const EdgeInsets.symmetric(horizontal: AppSpacing.spacingMd),
+              const EdgeInsets.symmetric(horizontal: AppSpacing.space4),
           child: child,
         ),
       ),
@@ -44,7 +44,7 @@ class AppLayout {
   /// Returns a responsive max-width for the current context.
   static double responsivePageWidth(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    if (width < AppBreakpoints.sm) {
+    if (width < AppBreakpoints.mobile) {
       return width;
     }
     return AppBreakpoints.pageWidth;
@@ -56,16 +56,18 @@ class AppLayout {
   static Widget responsivePadding({
     required Widget child,
     EdgeInsetsGeometry? compactPadding,
-    EdgeInsetsGeometry? mediumPadding,
-    EdgeInsetsGeometry? largePadding,
+    EdgeInsetsGeometry? mobilePadding,
+    EdgeInsetsGeometry? tabletPadding,
+    EdgeInsetsGeometry? desktopPadding,
   }) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final padding = _getPadding(
           constraints.maxWidth,
           compactPadding,
-          mediumPadding,
-          largePadding,
+          mobilePadding,
+          tabletPadding,
+          desktopPadding,
         );
         return Padding(padding: padding ?? EdgeInsets.zero, child: child);
       },
@@ -75,12 +77,14 @@ class AppLayout {
   static EdgeInsetsGeometry? _getPadding(
     double width,
     EdgeInsetsGeometry? compact,
-    EdgeInsetsGeometry? medium,
-    EdgeInsetsGeometry? large,
+    EdgeInsetsGeometry? mobile,
+    EdgeInsetsGeometry? tablet,
+    EdgeInsetsGeometry? desktop,
   ) {
-    if (width < AppBreakpoints.md) return compact;
-    if (width < AppBreakpoints.lg) return medium;
-    return large;
+    if (width < AppBreakpoints.mobile) return compact;
+    if (width < AppBreakpoints.tablet) return mobile;
+    if (width < AppBreakpoints.desktop) return tablet;
+    return desktop;
   }
 
   // MARK: - Flex layout helpers
@@ -88,7 +92,7 @@ class AppLayout {
   /// Returns a [Row] with standard spacing and alignment.
   static Widget hStack({
     required List<Widget> children,
-    double spacing = AppSpacing.spacingMd,
+    double spacing = AppSpacing.space4,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
     WrapAlignment wrapAlignment = WrapAlignment.start,
@@ -114,7 +118,7 @@ class AppLayout {
   /// Returns a [Column] with standard spacing and alignment.
   static Widget vStack({
     required List<Widget> children,
-    double spacing = AppSpacing.spacingMd,
+    double spacing = AppSpacing.space4,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.start,
     bool wrap = false,
@@ -137,30 +141,30 @@ class AppLayout {
 
   // MARK: - Spacer utilities
 
-  /// Returns a sized box with width [AppSpacing.spacingSm].
-  static Widget get widthSm => const SizedBox(width: AppSpacing.spacingSm);
+  /// Returns a sized box with width [AppSpacing.space2].
+  static Widget get width2 => const SizedBox(width: AppSpacing.space2);
 
-  /// Returns a sized box with width [AppSpacing.spacingMd].
-  static Widget get widthMd => const SizedBox(width: AppSpacing.spacingMd);
+  /// Returns a sized box with width [AppSpacing.space4].
+  static Widget get width4 => const SizedBox(width: AppSpacing.space4);
 
-  /// Returns a sized box with width [AppSpacing.spacingLg].
-  static Widget get widthLg => const SizedBox(width: AppSpacing.spacingLg);
+  /// Returns a sized box with width [AppSpacing.space6].
+  static Widget get width6 => const SizedBox(width: AppSpacing.space6);
 
-  /// Returns a sized box with height [AppSpacing.spacingSm].
-  static Widget get heightSm => const SizedBox(height: AppSpacing.spacingSm);
+  /// Returns a sized box with height [AppSpacing.space2].
+  static Widget get height2 => const SizedBox(height: AppSpacing.space2);
 
-  /// Returns a sized box with height [AppSpacing.spacingMd].
-  static Widget get heightMd => const SizedBox(height: AppSpacing.spacingMd);
+  /// Returns a sized box with height [AppSpacing.space4].
+  static Widget get height4 => const SizedBox(height: AppSpacing.space4);
 
-  /// Returns a sized box with height [AppSpacing.spacingLg].
-  static Widget get heightLg => const SizedBox(height: AppSpacing.spacingLg);
+  /// Returns a sized box with height [AppSpacing.space6].
+  static Widget get height6 => const SizedBox(height: AppSpacing.space6);
 
   /// Returns a divider with standard spacing.
   static Widget divider({Color? color, double? thickness}) {
     return Divider(
-      color: color ?? AppColors.divider,
+      color: color ?? AppColors.borderDefaultColor,
       thickness: thickness ?? 1,
-      height: AppSpacing.spacingMd,
+      height: AppSpacing.space4,
     );
   }
 }

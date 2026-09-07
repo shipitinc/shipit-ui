@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shipit_ui/src/components/app_button.dart';
 import 'package:shipit_ui/src/components/app_text_field.dart';
 import 'package:shipit_ui/src/components/app_card.dart';
-import 'package:shipit_ui/src/components/app_loading_state.dart';
-import 'package:shipit_ui/src/components/app_empty_state.dart';
-import 'package:shipit_ui/src/components/app_error_state.dart';
+import 'package:shipit_ui/src/components/app_state_view.dart';
 
 void main() {
   group('Golden tests - AppButton', () {
@@ -34,23 +32,11 @@ void main() {
       );
     });
 
-    testGoldens('destructive button', (tester) async {
-      await tester.pumpWidgetBuilder(
-        MaterialApp(
-          home: Scaffold(body: AppButton.destructive(label: 'Delete')),
-        ),
-      );
-      await expectLater(
-        find.byType(AppButton),
-        matchesGoldenFile('button_destructive.png'),
-      );
-    });
-
     testGoldens('disabled button', (tester) async {
       await tester.pumpWidgetBuilder(
         MaterialApp(
           home: Scaffold(
-            body: AppButton.primary(label: 'Disabled', isDisabled: true),
+            body: AppButton.primary(label: 'Disabled', state: AppButtonState.disabled),
           ),
         ),
       );
@@ -64,7 +50,7 @@ void main() {
       await tester.pumpWidgetBuilder(
         MaterialApp(
           home: Scaffold(
-            body: AppButton.primary(label: 'Loading', isLoading: true),
+            body: AppButton.primary(label: 'Loading', state: AppButtonState.loading),
           ),
         ),
       );
@@ -118,36 +104,36 @@ void main() {
   group('Golden tests - States', () {
     testGoldens('loading state', (tester) async {
       await tester.pumpWidgetBuilder(
-        const MaterialApp(
-          home: Scaffold(body: AppLoadingState(message: 'Loading...')),
+        MaterialApp(
+          home: Scaffold(body: AppStateView.loading(title: 'Loading', message: 'Loading...')),
         ),
       );
       await expectLater(
-        find.byType(AppLoadingState),
+        find.byType(AppStateView),
         matchesGoldenFile('loading_state.png'),
       );
     });
 
     testGoldens('empty state', (tester) async {
       await tester.pumpWidgetBuilder(
-        const MaterialApp(
-          home: Scaffold(body: AppEmptyState(title: 'No Items')),
+        MaterialApp(
+          home: Scaffold(body: AppStateView.empty(title: 'No Items')),
         ),
       );
       await expectLater(
-        find.byType(AppEmptyState),
+        find.byType(AppStateView),
         matchesGoldenFile('empty_state.png'),
       );
     });
 
     testGoldens('error state', (tester) async {
       await tester.pumpWidgetBuilder(
-        const MaterialApp(
-          home: Scaffold(body: AppErrorState(title: 'Error')),
+        MaterialApp(
+          home: Scaffold(body: AppStateView.error(title: 'Error')),
         ),
       );
       await expectLater(
-        find.byType(AppErrorState),
+        find.byType(AppStateView),
         matchesGoldenFile('error_state.png'),
       );
     });

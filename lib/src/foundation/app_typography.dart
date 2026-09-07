@@ -1,177 +1,219 @@
-// Provisional typography tokens.
-// Values are placeholders until Penpot design tokens are adopted.
-
+/// Semantic typography tokens for the shipit_ui design system.
+///
+/// Values are derived from approved Penpot design tokens.
+/// See docs/penpot-mapping.md for the mapping convention.
 import 'package:flutter/painting.dart';
 import 'app_colors.dart';
 
-/// Semantic typography tokens for the shipit_ui design system.
-///
-/// All values are provisional and must be replaced with approved
-/// Penpot tokens before shipping to production.
 class AppTypography {
   AppTypography._();
 
   // MARK: - Font Family
 
-  /// Default font family for the application.
+  /// token/typography/font/family/base → Inter
   static const String fontFamily = 'Inter';
 
-  // MARK: - Display
+  // MARK: - Font Weights
 
-  /// Extra large display text (48sp).
+  /// token/typography/font/weight/regular → 400
+  static const FontWeight fontWeightRegular = FontWeight.w400;
+
+  /// token/typography/font/weight/medium → 500
+  static const FontWeight fontWeightMedium = FontWeight.w500;
+
+  /// token/typography/font/weight/semibold → 600
+  static const FontWeight fontWeightSemibold = FontWeight.w600;
+
+  /// token/typography/font/weight/bold → 700
+  static const FontWeight fontWeightBold = FontWeight.w700;
+
+  // MARK: - Font Sizes
+
+  /// token/typography/font/size/xs → 12
+  static const double fontSizeXs = 12;
+
+  /// token/typography/font/size/sm → 14
+  static const double fontSizeSm = 14;
+
+  /// token/typography/font/size/md → 16
+  static const double fontSizeMd = 16;
+
+  /// token/typography/font/size/lg → 18
+  static const double fontSizeLg = 18;
+
+  /// token/typography/font/size/xl → 20
+  static const double fontSizeXl = 20;
+
+  /// token/typography/font/size/2xl → 24
+  static const double fontSize2xl = 24;
+
+  /// token/typography/font/size/3xl → 30
+  static const double fontSize3xl = 30;
+
+  /// token/typography/font/size/4xl → 36
+  static const double fontSize4xl = 36;
+
+  // MARK: - Letter Spacing
+
+  /// token/typography/letterSpacing/tight → -0.02em
+  static const double letterSpacingTight = -0.02;
+
+  /// token/typography/letterSpacing/normal → 0
+  static const double letterSpacingNormal = 0;
+
+  /// token/typography/letterSpacing/wide → 0.02em
+  static const double letterSpacingWide = 0.02;
+
+  // MARK: - Semantic Text Styles
+
+  // Display styles (largest)
   static const TextStyle displayLarge = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 48,
-    fontWeight: FontWeight.w300,
-    height: 1.15,
-    letterSpacing: -0.25,
-    color: AppColors.textPrimary,
+    fontSize: fontSize4xl,
+    fontWeight: fontWeightSemibold,
+    height: 1.2,
+    letterSpacing: letterSpacingTight,
+    color: AppColors.fgPrimaryColor,
   );
 
-  /// Large display text (36sp).
   static const TextStyle displayMedium = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 36,
-    fontWeight: FontWeight.w400,
+    fontSize: fontSize3xl,
+    fontWeight: fontWeightSemibold,
     height: 1.2,
-    letterSpacing: 0,
-    color: AppColors.textPrimary,
+    letterSpacing: letterSpacingTight,
+    color: AppColors.fgPrimaryColor,
   );
 
-  /// Small display text (28sp).
   static const TextStyle displaySmall = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 28,
-    fontWeight: FontWeight.w500,
-    height: 1.25,
-    letterSpacing: 0,
-    color: AppColors.textPrimary,
+    fontSize: fontSize2xl,
+    fontWeight: fontWeightSemibold,
+    height: 1.2,
+    letterSpacing: letterSpacingNormal,
+    color: AppColors.fgPrimaryColor,
   );
 
-  // MARK: - Headline
-
+  // Headline styles
   static const TextStyle headlineLarge = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 24,
-    fontWeight: FontWeight.w500,
-    height: 1.3,
-    letterSpacing: 0,
-    color: AppColors.textPrimary,
+    fontSize: fontSize2xl,
+    fontWeight: fontWeightSemibold,
+    height: 1.2,
+    letterSpacing: letterSpacingNormal,
+    color: AppColors.fgPrimaryColor,
   );
 
   static const TextStyle headlineMedium = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 20,
-    fontWeight: FontWeight.w500,
-    height: 1.35,
-    letterSpacing: 0,
-    color: AppColors.textPrimary,
+    fontSize: fontSizeXl,
+    fontWeight: fontWeightSemibold,
+    height: 1.3,
+    letterSpacing: letterSpacingNormal,
+    color: AppColors.fgPrimaryColor,
   );
 
   static const TextStyle headlineSmall = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 18,
-    fontWeight: FontWeight.w600,
+    fontSize: fontSizeLg,
+    fontWeight: fontWeightSemibold,
     height: 1.4,
-    letterSpacing: 0.1,
-    color: AppColors.textPrimary,
+    letterSpacing: letterSpacingNormal,
+    color: AppColors.fgPrimaryColor,
   );
 
-  // MARK: - Title
-
+  // Title styles
   static const TextStyle titleLarge = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 16,
-    fontWeight: FontWeight.w600,
+    fontSize: fontSizeLg,
+    fontWeight: fontWeightSemibold,
     height: 1.4,
-    letterSpacing: 0.15,
-    color: AppColors.textPrimary,
+    letterSpacing: letterSpacingNormal,
+    color: AppColors.fgPrimaryColor,
   );
 
   static const TextStyle titleMedium = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 14,
-    fontWeight: FontWeight.w600,
-    height: 1.43,
-    letterSpacing: 0.1,
-    color: AppColors.textPrimary,
+    fontSize: fontSizeMd,
+    fontWeight: fontWeightSemibold,
+    height: 1.4,
+    letterSpacing: letterSpacingNormal,
+    color: AppColors.fgPrimaryColor,
   );
 
   static const TextStyle titleSmall = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 13,
-    fontWeight: FontWeight.w600,
-    height: 1.46,
-    letterSpacing: 0.1,
-    color: AppColors.textPrimary,
+    fontSize: fontSizeSm,
+    fontWeight: fontWeightSemibold,
+    height: 1.4,
+    letterSpacing: letterSpacingNormal,
+    color: AppColors.fgPrimaryColor,
   );
 
-  // MARK: - Body
-
+  // Body styles
   static const TextStyle bodyLarge = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 16,
-    fontWeight: FontWeight.w400,
+    fontSize: fontSizeLg,
+    fontWeight: fontWeightRegular,
     height: 1.5,
-    letterSpacing: 0.5,
-    color: AppColors.textPrimary,
+    letterSpacing: letterSpacingNormal,
+    color: AppColors.fgPrimaryColor,
   );
 
   static const TextStyle bodyMedium = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    height: 1.43,
-    letterSpacing: 0.25,
-    color: AppColors.textPrimary,
+    fontSize: fontSizeMd,
+    fontWeight: fontWeightRegular,
+    height: 1.5,
+    letterSpacing: letterSpacingNormal,
+    color: AppColors.fgPrimaryColor,
   );
 
   static const TextStyle bodySmall = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
-    height: 1.33,
-    letterSpacing: 0.4,
-    color: AppColors.textSecondary,
+    fontSize: fontSizeSm,
+    fontWeight: fontWeightRegular,
+    height: 1.43,
+    letterSpacing: letterSpacingNormal,
+    color: AppColors.fgSecondaryColor,
   );
 
-  // MARK: - Label
-
+  // Label styles
   static const TextStyle labelLarge = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 14,
-    fontWeight: FontWeight.w500,
+    fontSize: fontSizeSm,
+    fontWeight: fontWeightMedium,
     height: 1.43,
-    letterSpacing: 0.1,
-    color: AppColors.textPrimary,
+    letterSpacing: letterSpacingWide,
+    color: AppColors.fgPrimaryColor,
   );
 
   static const TextStyle labelMedium = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 12,
-    fontWeight: FontWeight.w500,
+    fontSize: fontSizeXs,
+    fontWeight: fontWeightMedium,
     height: 1.33,
-    letterSpacing: 0.4,
-    color: AppColors.textPrimary,
+    letterSpacing: letterSpacingWide,
+    color: AppColors.fgPrimaryColor,
   );
 
   static const TextStyle labelSmall = TextStyle(
     fontFamily: fontFamily,
-    fontSize: 11,
-    fontWeight: FontWeight.w500,
-    height: 1.36,
-    letterSpacing: 0.5,
-    color: AppColors.textSecondary,
+    fontSize: fontSizeXs,
+    fontWeight: fontWeightMedium,
+    height: 1.33,
+    letterSpacing: letterSpacingWide,
+    color: AppColors.fgMutedColor,
   );
 
   // MARK: - Monospace
 
   static const TextStyle monoMedium = TextStyle(
     fontFamily: 'Menlo',
-    fontSize: 13,
-    fontWeight: FontWeight.w400,
+    fontSize: fontSizeSm,
+    fontWeight: fontWeightRegular,
     height: 1.4,
-    letterSpacing: 0,
-    color: AppColors.textPrimary,
+    letterSpacing: letterSpacingNormal,
+    color: AppColors.fgPrimaryColor,
   );
 }

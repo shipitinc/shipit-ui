@@ -7,13 +7,11 @@ import 'package:shipit_ui/src/components/app_button.dart';
 
 /// A reusable dialog widget following the shipit_ui design system.
 ///
+/// Based on approved Penpot design tokens.
+///
 /// ## Semantics
 ///
 /// Uses [Semantics] with `label` for accessibility automation.
-///
-/// ## Provisional
-///
-/// Visual values are provisional until approved Penpot tokens are adopted.
 class AppDialog extends StatelessWidget {
   final String title;
   final String? subtitle;
@@ -48,8 +46,14 @@ class AppDialog extends StatelessWidget {
       content: content,
       barrierDismissible: false,
       actions: [
-        AppButton.ghost(label: 'Cancel', onPressed: onCancel ?? () {}),
-        AppButton.destructive(label: confirmLabel, onPressed: onConfirm),
+        AppButton.secondary(
+          label: 'Cancel',
+          onPressed: onCancel ?? () {},
+        ),
+        AppButton.primary(
+          label: confirmLabel,
+          onPressed: onConfirm,
+        ),
       ],
       semanticLabel: semanticLabel,
     );
@@ -59,15 +63,14 @@ class AppDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       key: semanticLabel,
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.bgSurfaceColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadius.radiusXl),
-        side: const BorderSide(color: AppColors.divider),
       ),
       elevation: 0,
       insetPadding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.spacingMd,
-        vertical: AppSpacing.spacingMd,
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space4,
       ),
       child: Semantics(
         label: title,
@@ -78,10 +81,10 @@ class AppDialog extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(
-                AppSpacing.spacingXl,
-                AppSpacing.spacingLg,
-                AppSpacing.spacingXl,
-                AppSpacing.spacingXs,
+                AppSpacing.space6,
+                AppSpacing.space5,
+                AppSpacing.space6,
+                AppSpacing.space2,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,11 +92,11 @@ class AppDialog extends StatelessWidget {
                   Text(title, style: AppTypography.headlineMedium),
                   if (subtitle != null)
                     Padding(
-                      padding: const EdgeInsets.only(top: AppSpacing.spacingXs),
+                      padding: const EdgeInsets.only(top: AppSpacing.space1),
                       child: Text(
                         subtitle!,
                         style: AppTypography.bodyMedium.copyWith(
-                          color: AppColors.textSecondary,
+                          color: AppColors.fgSecondaryColor,
                         ),
                       ),
                     ),
@@ -103,22 +106,22 @@ class AppDialog extends StatelessWidget {
             if (content != null)
               Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.spacingXl,
-                  vertical: AppSpacing.spacingSm,
+                  horizontal: AppSpacing.space6,
+                  vertical: AppSpacing.space3,
                 ),
                 child: content!,
               ),
             if (actions != null && actions!.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.spacingXl,
-                  AppSpacing.spacingSm,
-                  AppSpacing.spacingXl,
-                  AppSpacing.spacingLg,
+                  AppSpacing.space6,
+                  AppSpacing.space3,
+                  AppSpacing.space6,
+                  AppSpacing.space5,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  spacing: AppSpacing.spacingSm,
+                  spacing: AppSpacing.space2,
                   children: actions!,
                 ),
               ),

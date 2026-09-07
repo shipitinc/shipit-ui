@@ -29,38 +29,14 @@ void main() {
       expect(find.text('Cancel'), findsOneWidget);
     });
 
-    testWidgets('destructive button renders', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: AppButton.destructive(label: 'Delete', onPressed: () {}),
-          ),
-        ),
-      );
-
-      expect(find.text('Delete'), findsOneWidget);
-    });
-
-    testWidgets('ghost button renders', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: AppButton.ghost(label: 'Skip', onPressed: () {}),
-          ),
-        ),
-      );
-
-      expect(find.text('Skip'), findsOneWidget);
-    });
-
     testWidgets('disabled button is not interactive', (tester) async {
       var pressed = false;
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: AppButton(
+            body: AppButton.primary(
               label: 'Disabled',
-              isDisabled: true,
+              state: AppButtonState.disabled,
               onPressed: () => pressed = true,
             ),
           ),
@@ -77,9 +53,9 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: AppButton(
+            body: AppButton.primary(
               label: 'Loading',
-              isLoading: true,
+              state: AppButtonState.loading,
               onPressed: () {},
             ),
           ),
@@ -101,24 +77,68 @@ void main() {
       expect(find.byType(AppButton), findsOneWidget);
     });
 
-    testWidgets('small, medium, large sizes render', (tester) async {
+    testWidgets('primary disabled button renders', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Scaffold(
-            body: Column(
-              children: [
-                AppButton(label: 'Small', size: AppButtonSize.small),
-                AppButton(label: 'Medium'),
-                AppButton(label: 'Large', size: AppButtonSize.large),
-              ],
+            body: AppButton.primary(
+              label: 'Disabled',
+              state: AppButtonState.disabled,
+              onPressed: () {},
             ),
           ),
         ),
       );
 
-      expect(find.text('Small'), findsOneWidget);
-      expect(find.text('Medium'), findsOneWidget);
-      expect(find.text('Large'), findsOneWidget);
+      expect(find.text('Disabled'), findsOneWidget);
+    });
+
+    testWidgets('secondary disabled button renders', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: AppButton.secondary(
+              label: 'Disabled',
+              state: AppButtonState.disabled,
+              onPressed: () {},
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Disabled'), findsOneWidget);
+    });
+
+    testWidgets('primary loading button renders', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: AppButton.primary(
+              label: 'Loading',
+              state: AppButtonState.loading,
+              onPressed: () {},
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    });
+
+    testWidgets('secondary loading button renders', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: AppButton.secondary(
+              label: 'Loading',
+              state: AppButtonState.loading,
+              onPressed: () {},
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
   });
 }

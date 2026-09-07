@@ -6,30 +6,24 @@ import 'package:shipit_ui/src/foundation/app_typography.dart';
 import 'package:shipit_ui/src/foundation/app_motion.dart';
 
 /// Button variant types for AppButton.
-enum AppButtonVariant { primary, secondary, destructive, ghost }
+enum AppButtonVariant { primary, secondary }
 
-/// Button size types for AppButton.
-enum AppButtonSize { small, medium, large }
+/// Button state types for AppButton.
+enum AppButtonState { default_, disabled, loading }
 
 /// A reusable button widget following the shipit_ui design system.
 ///
-/// Supports primary, secondary, destructive, and ghost variants.
-/// Includes loading and disabled states.
+/// Supports primary and secondary variants with default, disabled, and loading states.
+/// Based on approved Penpot design tokens.
 ///
 /// ## Semantics
 ///
 /// Uses [Semantics] with `button` label and `isButton: true` for
 /// accessibility automation.
-///
-/// ## Provisional
-///
-/// Visual values are provisional until approved Penpot tokens are adopted.
 class AppButton extends StatelessWidget {
   final String label;
   final AppButtonVariant variant;
-  final AppButtonSize size;
-  final bool isLoading;
-  final bool isDisabled;
+  final AppButtonState state;
   final VoidCallback? onPressed;
   final IconData? icon;
   final Key? semanticLabel;
@@ -38,9 +32,7 @@ class AppButton extends StatelessWidget {
     super.key,
     required this.label,
     this.variant = AppButtonVariant.primary,
-    this.size = AppButtonSize.medium,
-    this.isLoading = false,
-    this.isDisabled = false,
+    this.state = AppButtonState.default_,
     this.onPressed,
     this.icon,
     this.semanticLabel,
@@ -51,8 +43,7 @@ class AppButton extends StatelessWidget {
     final VoidCallback? onPressed,
     final IconData? icon,
     final Key? semanticLabel,
-    final bool isDisabled = false,
-    final bool isLoading = false,
+    final AppButtonState state = AppButtonState.default_,
   }) {
     return AppButton(
       key: semanticLabel,
@@ -60,8 +51,8 @@ class AppButton extends StatelessWidget {
       onPressed: onPressed,
       icon: icon,
       semanticLabel: semanticLabel,
-      isDisabled: isDisabled,
-      isLoading: isLoading,
+      variant: AppButtonVariant.primary,
+      state: state,
     );
   }
 
@@ -70,64 +61,22 @@ class AppButton extends StatelessWidget {
     final VoidCallback? onPressed,
     final IconData? icon,
     final Key? semanticLabel,
-    final bool isDisabled = false,
-    final bool isLoading = false,
+    final AppButtonState state = AppButtonState.default_,
   }) {
     return AppButton(
       key: semanticLabel,
       label: label,
+      onPressed: onPressed,
+      icon: icon,
+      semanticLabel: semanticLabel,
       variant: AppButtonVariant.secondary,
-      onPressed: onPressed,
-      icon: icon,
-      semanticLabel: semanticLabel,
-      isDisabled: isDisabled,
-      isLoading: isLoading,
-    );
-  }
-
-  factory AppButton.destructive({
-    required final String label,
-    final VoidCallback? onPressed,
-    final IconData? icon,
-    final Key? semanticLabel,
-    final bool isDisabled = false,
-    final bool isLoading = false,
-  }) {
-    return AppButton(
-      key: semanticLabel,
-      label: label,
-      variant: AppButtonVariant.destructive,
-      onPressed: onPressed,
-      icon: icon,
-      semanticLabel: semanticLabel,
-      isDisabled: isDisabled,
-      isLoading: isLoading,
-    );
-  }
-
-  factory AppButton.ghost({
-    required final String label,
-    final VoidCallback? onPressed,
-    final IconData? icon,
-    final Key? semanticLabel,
-    final bool isDisabled = false,
-    final bool isLoading = false,
-  }) {
-    return AppButton(
-      key: semanticLabel,
-      label: label,
-      variant: AppButtonVariant.ghost,
-      onPressed: onPressed,
-      icon: icon,
-      semanticLabel: semanticLabel,
-      isDisabled: isDisabled,
-      isLoading: isLoading,
+      state: state,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final isEnabled = !isDisabled && !isLoading;
+    final isEnabled = state != AppButtonState.disabled && state != AppButtonState.loading;
 
     Color backgroundColor;
     Color foregroundColor;
@@ -135,47 +84,57 @@ class AppButton extends StatelessWidget {
 
     switch (variant) {
       case AppButtonVariant.primary:
-        backgroundColor = isEnabled
-            ? AppColors.actionPrimary
-            : AppColors.neutral300;
-        foregroundColor = AppColors.textOnPrimary;
+        switch (state) {
+          case AppButtonState.default_:
+            backgroundColor = AppColors.actionPrimaryBgColor;
+            foregroundColor = AppColors.actionPrimaryFgColor;
+            break;
+          case AppButtonState.disabled:
+            backgroundColor = AppColors.actionDisabledBgColor;
+            foregroundColor = AppColors.actionDisabledFgColor;
+            break;
+          case AppButtonState.loading:
+            backgroundColor = AppColors.actionPrimaryBgColor;
+            foregroundColor = AppColors.actionPrimaryFgColor;
+            break;
+        }
         break;
       case AppButtonVariant.secondary:
-        backgroundColor = isEnabled
-            ? AppColors.neutral100
-            : AppColors.neutral50;
-        foregroundColor = isEnabled
-            ? AppColors.actionPrimary
-            : AppColors.textDisabled;
-        borderSide = const BorderSide(color: AppColors.neutral300);
-        break;
-      case AppButtonVariant.destructive:
-        backgroundColor = isEnabled
-            ? AppColors.actionDestructive
-            : AppColors.neutral300;
-        foregroundColor = AppColors.textOnPrimary;
-        break;
-      case AppButtonVariant.ghost:
-        backgroundColor = Colors.transparent;
-        foregroundColor = isEnabled
-            ? AppColors.actionPrimary
-            : AppColors.textDisabled;
+        switch (state) {
+          case AppButtonState.default_:
+            backgroundColor = AppColors.actionSecondaryBgColor;
+            foregroundColor = AppColors.actionSecondaryFgColor;
+            borderSide = const BorderSide(
+              color: AppColors.actionSecondaryBorderColor,
+            );
+            break;
+          case AppButtonState.disabled:
+            backgroundColor = AppColors.actionDisabledBgColor;
+            foregroundColor = AppColors.actionDisabledFgColor;
+            borderSide = const BorderSide(
+              color: AppColors.actionDisabledBorderColor,
+            );
+            break;
+          case AppButtonState.loading:
+            backgroundColor = AppColors.actionSecondaryBgColor;
+            foregroundColor = AppColors.actionSecondaryFgColor;
+            borderSide = const BorderSide(
+              color: AppColors.actionSecondaryBorderColor,
+            );
+            break;
+        }
         break;
     }
 
-    final padding = _getPadding(size);
-    final minSize = _getMinSize(size);
-
     return Semantics(
       button: true,
-      label: isLoading ? '$label, loading' : label,
+      label: state == AppButtonState.loading ? '$label, loading' : label,
       enabled: isEnabled,
       container: true,
       child: ConstrainedBox(
         key: semanticLabel,
-        constraints: BoxConstraints(
-          minWidth: minSize.toDouble(),
-          minHeight: minSize.toDouble(),
+        constraints: const BoxConstraints(
+          minHeight: 44,
         ),
         child: TextButton(
           onPressed: isEnabled ? onPressed : null,
@@ -183,7 +142,10 @@ class AppButton extends StatelessWidget {
             backgroundColor: backgroundColor,
             foregroundColor: foregroundColor,
             disabledForegroundColor: foregroundColor.withValues(alpha: 0.5),
-            padding: padding,
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space2,
+            ),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppRadius.radiusMd),
@@ -191,7 +153,7 @@ class AppButton extends StatelessWidget {
             ),
             animationDuration: AppMotion.buttonPress,
           ),
-          child: isLoading
+          child: state == AppButtonState.loading
               ? _buildLoadingIndicator(foregroundColor)
               : _buildContent(foregroundColor),
         ),
@@ -204,8 +166,8 @@ class AppButton extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (icon != null) ...[
-          Icon(icon, size: _getIconSize()),
-          const SizedBox(width: AppSpacing.spacingSm),
+          Icon(icon, size: 18),
+          const SizedBox(width: AppSpacing.space2),
         ],
         Text(
           label,
@@ -217,54 +179,12 @@ class AppButton extends StatelessWidget {
 
   Widget _buildLoadingIndicator(Color foregroundColor) {
     return SizedBox(
-      width: _getIconSize(),
-      height: _getIconSize(),
+      width: 18,
+      height: 18,
       child: CircularProgressIndicator(
         strokeWidth: 2,
         valueColor: AlwaysStoppedAnimation<Color>(foregroundColor),
       ),
     );
-  }
-
-  double _getIconSize() {
-    switch (size) {
-      case AppButtonSize.small:
-        return 16;
-      case AppButtonSize.medium:
-        return 18;
-      case AppButtonSize.large:
-        return 20;
-    }
-  }
-
-  EdgeInsetsGeometry _getPadding(AppButtonSize size) {
-    switch (size) {
-      case AppButtonSize.small:
-        return const EdgeInsets.symmetric(
-          horizontal: AppSpacing.spacingSm,
-          vertical: AppSpacing.spacingXs,
-        );
-      case AppButtonSize.medium:
-        return const EdgeInsets.symmetric(
-          horizontal: AppSpacing.spacingMd,
-          vertical: AppSpacing.spacingSm,
-        );
-      case AppButtonSize.large:
-        return const EdgeInsets.symmetric(
-          horizontal: AppSpacing.spacingLg,
-          vertical: AppSpacing.spacingMd,
-        );
-    }
-  }
-
-  double _getMinSize(AppButtonSize size) {
-    switch (size) {
-      case AppButtonSize.small:
-        return 32;
-      case AppButtonSize.medium:
-        return 40;
-      case AppButtonSize.large:
-        return 48;
-    }
   }
 }

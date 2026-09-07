@@ -1,99 +1,102 @@
-// Provisional breakpoint tokens.
-// Values are placeholders until Penpot design tokens are adopted.
-
-import 'package:flutter/material.dart';
-
 /// Breakpoint tokens for responsive design in the shipit_ui design system.
 ///
-/// All values are provisional and must be replaced with approved
-/// Penpot tokens before shipping to production.
-///
-/// Mapping convention:
-///   Penpot: token/breakpoint/{sm|md|lg|xl}
-///   Flutter: AppBreakpoints.{sm|md|lg|xl}
+/// Values are derived from approved Penpot design tokens.
+/// See docs/penpot-mapping.md for the mapping convention.
+import 'package:flutter/material.dart';
+
 class AppBreakpoints {
   AppBreakpoints._();
 
-  /// token/breakpoint/sm → 600
-  static const double sm = 600;
+  // MARK: - Breakpoint Tokens (Penpot breakpoint.mobile through breakpoint.wide)
 
-  /// token/breakpoint/md → 900
-  static const double md = 900;
+  /// token/breakpoint/mobile → 360
+  static const double mobile = 360;
 
-  /// token/breakpoint/lg → 1200
-  static const double lg = 1200;
+  /// token/breakpoint/tablet → 600
+  static const double tablet = 600;
 
-  /// token/breakpoint/xl → 1600
-  static const double xl = 1600;
+  /// token/breakpoint/desktop → 1024
+  static const double desktop = 1024;
 
-  // MARK: - Standard page/container widths
+  /// token/breakpoint/wide → 1440
+  static const double wide = 1440;
+
+  // MARK: - Standard Page/Container Widths
 
   /// Maximum width for standard page content.
   static const double pageWidth = 1200;
 
-  /// Maximum width for centered content on smaller screens.
-  static const double pageWidthSm = 600;
+  /// Maximum width for centered content on mobile screens.
+  static const double pageWidthMobile = 360;
 
-  /// Maximum width for centered content on medium screens.
-  static const double pageWidthMd = 960;
+  /// Maximum width for centered content on tablet screens.
+  static const double pageWidthTablet = 600;
 
-  /// Maximum width for centered content on large screens.
-  static const double pageWidthLg = 1200;
+  /// Maximum width for centered content on desktop screens.
+  static const double pageWidthDesktop = 1024;
 
-  // MARK: - Breakpoint detection helpers
+  /// Maximum width for centered content on wide desktop screens.
+  static const double pageWidthWide = 1440;
 
-  static bool isSm(BuildContext context) =>
-      MediaQuery.of(context).size.width >= sm;
+  // MARK: - Breakpoint Detection Helpers
 
-  static bool isMd(BuildContext context) =>
-      MediaQuery.of(context).size.width >= md;
+  static bool isMobile(BuildContext context) =>
+      MediaQuery.of(context).size.width >= mobile;
 
-  static bool isLg(BuildContext context) =>
-      MediaQuery.of(context).size.width >= lg;
+  static bool isTablet(BuildContext context) =>
+      MediaQuery.of(context).size.width >= tablet;
 
-  static bool isXl(BuildContext context) =>
-      MediaQuery.of(context).size.width >= xl;
+  static bool isDesktop(BuildContext context) =>
+      MediaQuery.of(context).size.width >= desktop;
 
-  static bool isSmOrLarger(BuildContext context) =>
-      MediaQuery.of(context).size.width >= sm;
+  static bool isWide(BuildContext context) =>
+      MediaQuery.of(context).size.width >= wide;
 
-  static bool isMdOrLarger(BuildContext context) =>
-      MediaQuery.of(context).size.width >= md;
+  static bool isMobileOrLarger(BuildContext context) =>
+      MediaQuery.of(context).size.width >= mobile;
 
-  static bool isLgOrLarger(BuildContext context) =>
-      MediaQuery.of(context).size.width >= lg;
+  static bool isTabletOrLarger(BuildContext context) =>
+      MediaQuery.of(context).size.width >= tablet;
 
-  static bool isXlOrLarger(BuildContext context) =>
-      MediaQuery.of(context).size.width >= xl;
+  static bool isDesktopOrLarger(BuildContext context) =>
+      MediaQuery.of(context).size.width >= desktop;
 
-  // MARK: - Layout type detection
+  static bool isWideOrLarger(BuildContext context) =>
+      MediaQuery.of(context).size.width >= wide;
+
+  // MARK: - Layout Type Detection
 
   /// Returns the current layout type based on screen width.
   static AppLayoutType getLayoutType(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    if (width < sm) return AppLayoutType.compact;
-    if (width < md) return AppLayoutType.medium;
-    if (width < lg) return AppLayoutType.large;
-    return AppLayoutType.extraLarge;
+    if (width < mobile) return AppLayoutType.compact;
+    if (width < tablet) return AppLayoutType.mobile;
+    if (width < desktop) return AppLayoutType.tablet;
+    if (width < wide) return AppLayoutType.desktop;
+    return AppLayoutType.wide;
   }
 }
 
 /// Enumeration of layout types based on breakpoints.
-enum AppLayoutType { compact, medium, large, extraLarge }
+enum AppLayoutType { compact, mobile, tablet, desktop, wide }
 
 /// Extension for convenient breakpoint-based layout switching.
 extension AppBreakpointExtension on BuildContext {
-  /// Whether the current layout is compact (mobile).
-  bool get isCompactLayout => !AppBreakpoints.isSm(this);
+  /// Whether the current layout is compact (smaller than mobile).
+  bool get isCompactLayout => !AppBreakpoints.isMobile(this);
 
-  /// Whether the current layout is medium (tablet).
-  bool get isMediumLayout =>
-      AppBreakpoints.isSm(this) && !AppBreakpoints.isMd(this);
+  /// Whether the current layout is mobile.
+  bool get isMobileLayout =>
+      AppBreakpoints.isMobile(this) && !AppBreakpoints.isTablet(this);
 
-  /// Whether the current layout is large (desktop).
-  bool get isLargeLayout =>
-      AppBreakpoints.isMd(this) && !AppBreakpoints.isLg(this);
+  /// Whether the current layout is tablet.
+  bool get isTabletLayout =>
+      AppBreakpoints.isTablet(this) && !AppBreakpoints.isDesktop(this);
 
-  /// Whether the current layout is extra large (wide desktop).
-  bool get isExtraLargeLayout => AppBreakpoints.isLg(this);
+  /// Whether the current layout is desktop.
+  bool get isDesktopLayout =>
+      AppBreakpoints.isDesktop(this) && !AppBreakpoints.isWide(this);
+
+  /// Whether the current layout is wide desktop.
+  bool get isWideLayout => AppBreakpoints.isWide(this);
 }

@@ -1,9 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:shipit_ui/src/components/app_card.dart';
-import 'package:shipit_ui/src/components/app_loading_state.dart';
-import 'package:shipit_ui/src/components/app_empty_state.dart';
-import 'package:shipit_ui/src/components/app_error_state.dart';
+import 'package:shipit_ui/src/components/app_state_view.dart';
 
 void main() {
   group('AppCard', () {
@@ -56,24 +54,22 @@ void main() {
     });
   });
 
-  group('AppLoadingState', () {
+  group('AppStateView', () {
     testWidgets('loading state renders with message', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: AppLoadingState(message: 'Loading data...')),
+        MaterialApp(
+          home: Scaffold(body: AppStateView.loading(title: 'Loading', message: 'Loading data...')),
         ),
       );
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
       expect(find.text('Loading data...'), findsOneWidget);
     });
-  });
 
-  group('AppEmptyState', () {
     testWidgets('empty state renders with title', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: AppEmptyState(title: 'No Items')),
+        MaterialApp(
+          home: Scaffold(body: AppStateView.empty(title: 'No Items')),
         ),
       );
 
@@ -82,9 +78,9 @@ void main() {
 
     testWidgets('empty state renders with message', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Scaffold(
-            body: AppEmptyState(
+            body: AppStateView.empty(
               title: 'No Items',
               message: 'Create one to get started',
             ),
@@ -99,7 +95,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: AppEmptyState(
+            body: AppStateView.empty(
               title: 'No Items',
               actionLabel: 'Create',
               onAction: () {},
@@ -110,13 +106,11 @@ void main() {
 
       expect(find.text('Create'), findsOneWidget);
     });
-  });
 
-  group('AppErrorState', () {
     testWidgets('error state renders with title', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: AppErrorState(title: 'Something Went Wrong')),
+        MaterialApp(
+          home: Scaffold(body: AppStateView.error(title: 'Something Went Wrong')),
         ),
       );
 
@@ -125,9 +119,9 @@ void main() {
 
     testWidgets('error state renders with message', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: Scaffold(
-            body: AppErrorState(title: 'Error', message: 'Failed to load'),
+            body: AppStateView.error(title: 'Error', message: 'Failed to load'),
           ),
         ),
       );
@@ -139,7 +133,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: AppErrorState(title: 'Error', onRetry: () {}),
+            body: AppStateView.error(title: 'Error', onRetry: () {}),
           ),
         ),
       );

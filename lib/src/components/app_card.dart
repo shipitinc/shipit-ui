@@ -6,13 +6,11 @@ import 'package:shipit_ui/src/foundation/app_typography.dart';
 
 /// A reusable card widget following the shipit_ui design system.
 ///
+/// Based on approved Penpot design tokens.
+///
 /// ## Semantics
 ///
 /// Uses [Semantics] with `container: true` for accessibility automation.
-///
-/// ## Provisional
-///
-/// Visual values are provisional until approved Penpot tokens are adopted.
 class AppCard extends StatelessWidget {
   final String? title;
   final String? subtitle;
@@ -42,18 +40,18 @@ class AppCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final card = Card(
-      color: color ?? AppColors.surface,
+      color: color ?? AppColors.bgSurfaceColor,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        side: const BorderSide(color: AppColors.divider),
-        borderRadius: BorderRadius.circular(AppRadius.radiusMd),
+        side: const BorderSide(color: AppColors.borderDefaultColor),
+        borderRadius: BorderRadius.circular(AppRadius.radiusLg),
       ),
       margin: EdgeInsets.zero,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.radiusMd),
+        borderRadius: BorderRadius.circular(AppRadius.radiusLg),
         child: Padding(
-          padding: padding ?? const EdgeInsets.all(AppSpacing.spacingMd),
+          padding: padding ?? const EdgeInsets.all(AppSpacing.space4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -62,7 +60,7 @@ class AppCard extends StatelessWidget {
                   children: [
                     if (leading != null) ...[
                       leading!,
-                      const SizedBox(width: AppSpacing.spacingSm),
+                      const SizedBox(width: AppSpacing.space2),
                     ],
                     Expanded(
                       child: Column(
@@ -71,7 +69,7 @@ class AppCard extends StatelessWidget {
                           if (title != null)
                             Text(
                               title!,
-                              style: AppTypography.titleMedium,
+                              style: AppTypography.headlineMedium,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -92,7 +90,7 @@ class AppCard extends StatelessWidget {
                   Text(subtitle!, style: AppTypography.bodySmall),
                 ],
                 if (children != null || child != null) ...[
-                  const SizedBox(height: AppSpacing.spacingSm),
+                  const SizedBox(height: AppSpacing.space2),
                   ?child,
                   ...?children,
                 ],
