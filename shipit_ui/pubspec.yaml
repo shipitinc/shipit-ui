@@ -1,0 +1,21 @@
+name: shipit_ui
+description: "Canonical Flutter design system package for ShipIt products."
+version: 0.1.0
+homepage:
+
+environment:
+  sdk: ^3.12.2
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  golden_toolkit: ^0.15.0
+
+flutter:
+  uses-material-design: true

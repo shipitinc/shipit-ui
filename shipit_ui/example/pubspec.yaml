@@ -1,0 +1,21 @@
+name: shipit_ui_example
+description: Catalog application for the shipit_ui design system.
+publish_to: none
+
+environment:
+  sdk: ^3.12.2
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  shipit_ui:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

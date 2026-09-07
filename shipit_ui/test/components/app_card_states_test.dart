@@ -1,0 +1,150 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/material.dart';
+import 'package:shipit_ui/src/components/app_card.dart';
+import 'package:shipit_ui/src/components/app_loading_state.dart';
+import 'package:shipit_ui/src/components/app_empty_state.dart';
+import 'package:shipit_ui/src/components/app_error_state.dart';
+
+void main() {
+  group('AppCard', () {
+    testWidgets('card renders with title', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(body: AppCard(title: 'Card Title')),
+        ),
+      );
+
+      expect(find.text('Card Title'), findsOneWidget);
+    });
+
+    testWidgets('card renders with subtitle', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: AppCard(title: 'Title', subtitle: 'Subtitle'),
+          ),
+        ),
+      );
+
+      expect(find.text('Subtitle'), findsOneWidget);
+    });
+
+    testWidgets('card renders with child', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(body: AppCard(child: Text('Card Content'))),
+        ),
+      );
+
+      expect(find.text('Card Content'), findsOneWidget);
+    });
+
+    testWidgets('card with onTap is tappable', (tester) async {
+      var tapped = false;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: AppCard(title: 'Tappable', onTap: () => tapped = true),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(AppCard));
+      await tester.pump();
+
+      expect(tapped, isTrue);
+    });
+  });
+
+  group('AppLoadingState', () {
+    testWidgets('loading state renders with message', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(body: AppLoadingState(message: 'Loading data...')),
+        ),
+      );
+
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.text('Loading data...'), findsOneWidget);
+    });
+  });
+
+  group('AppEmptyState', () {
+    testWidgets('empty state renders with title', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(body: AppEmptyState(title: 'No Items')),
+        ),
+      );
+
+      expect(find.text('No Items'), findsOneWidget);
+    });
+
+    testWidgets('empty state renders with message', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: AppEmptyState(
+              title: 'No Items',
+              message: 'Create one to get started',
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Create one to get started'), findsOneWidget);
+    });
+
+    testWidgets('empty state renders with action', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: AppEmptyState(
+              title: 'No Items',
+              actionLabel: 'Create',
+              onAction: () {},
+            ),
+          ),
+        ),
+      );
+
+      expect(find.text('Create'), findsOneWidget);
+    });
+  });
+
+  group('AppErrorState', () {
+    testWidgets('error state renders with title', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(body: AppErrorState(title: 'Something Went Wrong')),
+        ),
+      );
+
+      expect(find.text('Something Went Wrong'), findsOneWidget);
+    });
+
+    testWidgets('error state renders with message', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: AppErrorState(title: 'Error', message: 'Failed to load'),
+          ),
+        ),
+      );
+
+      expect(find.text('Failed to load'), findsOneWidget);
+    });
+
+    testWidgets('error state renders with retry action', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: AppErrorState(title: 'Error', onRetry: () {}),
+          ),
+        ),
+      );
+
+      expect(find.text('Retry'), findsOneWidget);
+    });
+  });
+}
