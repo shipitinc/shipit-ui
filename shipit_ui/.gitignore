@@ -1,8 +1,0 @@
-.dart_tool/
-build/
-example/.dart_tool/
-example/build/
-*.swp
-*.swo
-.idea/
-.vscode/
