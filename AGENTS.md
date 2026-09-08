@@ -44,6 +44,20 @@ padding: EdgeInsets.all(16)
 padding: EdgeInsets.all(AppSpacing.md)
 ```
 
+### 3a. Loading States Use Shimmer Skeletons
+
+The preferred loading indicator is an `AppShimmer` skeleton that mirrors the final layout. `AppStateView.loading` is reserved for full-screen/blocking loads where the layout is unknown. Raw `CircularProgressIndicator` / `LinearProgressIndicator` are **prohibited** in product UI.
+
+```dart
+// WRONG
+Center(child: CircularProgressIndicator())
+
+// CORRECT
+AppShimmer(child: /* placeholder boxes matching the loaded layout */)
+```
+
+See `docs/patterns.md` (Loading state) and Penpot **03 Patterns · pattern / loading-state**.
+
 ### 4. Golden Baselines Are Binding
 
 Changing an approved golden baseline is **not** an implementation fix. Any visual change to a golden-tested component requires:

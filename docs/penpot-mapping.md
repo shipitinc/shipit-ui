@@ -217,6 +217,14 @@ Penpot identifiers follow a hierarchical path format:
 | `token/motion/curve/sharp` | `AppMotion.curveSharp` | MISSING_IN_PENPOT |
 | `token/motion/curve/bouncy` | `AppMotion.curveBouncy` | MISSING_IN_PENPOT |
 
+#### Patterns (Penpot page "03 Patterns" → `docs/patterns.md`)
+
+| Penpot ID | Flutter guidance | Status |
+|-----------|------------------|--------|
+| `pattern/loading-state` | `AppShimmer` skeleton mirroring final layout; `AppStateView.loading` only for blocking loads | MATCHED |
+| `pattern/action-row` | `AppButton.secondary` left, `AppButton.primary` right, gap `AppSpacing.space2` | MATCHED |
+| `pattern/field-stack` | Fields fill width, vertical gap `AppSpacing.space4` | MATCHED |
+
 ## Status Legend
 
 | Status | Meaning |

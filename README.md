@@ -74,6 +74,11 @@ flutter test
 See [docs/penpot-mapping.md](docs/penpot-mapping.md) for the mapping convention
 between Penpot identifiers and Flutter APIs.
 
+## Patterns
+
+See [docs/patterns.md](docs/patterns.md) for composition rules (loading
+states use `AppShimmer` skeletons, action rows, field stacks).
+
 ## Agent Rules
 
 See [AGENTS.md](AGENTS.md) for rules governing product agent usage.
