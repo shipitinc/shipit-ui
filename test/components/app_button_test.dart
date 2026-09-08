@@ -140,5 +140,33 @@ void main() {
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
+
+    testWidgets('semanticLabel is applied to exactly one widget', (
+      tester,
+    ) async {
+      const key = Key('submit');
+      var tapped = false;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                AppButton.primary(
+                  label: 'Submit',
+                  semanticLabel: key,
+                  onPressed: () => tapped = true,
+                ),
+                const AppButton(label: 'Plain', semanticLabel: Key('plain')),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byKey(key), findsOneWidget);
+      expect(find.byKey(const Key('plain')), findsOneWidget);
+      await tester.tap(find.byKey(key));
+      expect(tapped, isTrue);
+    });
   });
 }

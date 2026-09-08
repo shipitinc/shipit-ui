@@ -46,7 +46,6 @@ class AppButton extends StatelessWidget {
     final AppButtonState state = AppButtonState.default_,
   }) {
     return AppButton(
-      key: semanticLabel,
       label: label,
       onPressed: onPressed,
       icon: icon,
@@ -63,7 +62,6 @@ class AppButton extends StatelessWidget {
     final AppButtonState state = AppButtonState.default_,
   }) {
     return AppButton(
-      key: semanticLabel,
       label: label,
       onPressed: onPressed,
       icon: icon,
@@ -127,12 +125,12 @@ class AppButton extends StatelessWidget {
     }
 
     return Semantics(
+      key: semanticLabel,
       button: true,
       label: state == AppButtonState.loading ? '$label, loading' : label,
       enabled: isEnabled,
       container: true,
       child: ConstrainedBox(
-        key: semanticLabel,
         constraints: const BoxConstraints(minHeight: 44),
         child: TextButton(
           onPressed: isEnabled ? onPressed : null,

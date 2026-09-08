@@ -156,15 +156,14 @@ class AppConfirmDialog extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 spacing: AppSpacing.space2,
                 children: [
-                  AppButton(
-                    key: cancelKey,
+                  AppButton.secondary(
                     label: cancelLabel,
-                    variant: AppButtonVariant.secondary,
+                    semanticLabel: cancelKey,
                     onPressed: onCancel,
                   ),
-                  AppButton(
-                    key: confirmKey,
+                  AppButton.primary(
                     label: confirmLabel,
+                    semanticLabel: confirmKey,
                     onPressed: onConfirm,
                   ),
                 ],
