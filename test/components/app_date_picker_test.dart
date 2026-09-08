@@ -287,4 +287,122 @@ void main() {
       );
     });
   });
+
+  group('AppDatePicker validation', () {
+    final march14 = DateTime(2026, 3, 14);
+
+    testWidgets('validator runs on Form.validate and shows the message', (
+      tester,
+    ) async {
+      final formKey = GlobalKey<FormState>();
+      await tester.pumpWidget(
+        _wrap(
+          Form(
+            key: formKey,
+            child: AppDatePicker(
+              label: 'Start date',
+              validator: (d) => d == null ? 'Start date is required' : null,
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+      expect(formKey.currentState!.validate(), isFalse);
+      await tester.pump();
+      expect(find.text('Start date is required'), findsOneWidget);
+      expect(find.byKey(const Key('date_picker_error')), findsOneWidget);
+    });
+
+    testWidgets('validator passes once a value is provided', (tester) async {
+      final formKey = GlobalKey<FormState>();
+      await tester.pumpWidget(
+        _wrap(
+          Form(
+            key: formKey,
+            child: AppDatePicker(
+              label: 'Start date',
+              value: march14,
+              validator: (d) => d == null ? 'Required' : null,
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+      expect(formKey.currentState!.validate(), isTrue);
+    });
+
+    testWidgets('rangeValidator is used in range mode', (tester) async {
+      final formKey = GlobalKey<FormState>();
+      await tester.pumpWidget(
+        _wrap(
+          Form(
+            key: formKey,
+            child: AppDatePicker(
+              label: 'Program dates',
+              mode: AppDatePickerMode.range,
+              rangeValue: AppDateRange(march14, march14),
+              rangeValidator: (r) => r != null && r.start == r.end
+                  ? 'Pick at least two days'
+                  : null,
+              validator: (_) => 'should not run',
+              onRangeChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+      expect(formKey.currentState!.validate(), isFalse);
+      await tester.pump();
+      expect(find.text('Pick at least two days'), findsOneWidget);
+      expect(find.text('should not run'), findsNothing);
+    });
+
+    testWidgets('errorText shows without isError and wins over validator', (
+      tester,
+    ) async {
+      final formKey = GlobalKey<FormState>();
+      await tester.pumpWidget(
+        _wrap(
+          Form(
+            key: formKey,
+            child: AppDatePicker(
+              label: 'Start date',
+              errorText: 'Date is in the past',
+              validator: (_) => 'validator message',
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+      expect(find.text('Date is in the past'), findsOneWidget);
+      formKey.currentState!.validate();
+      await tester.pump();
+      expect(find.text('validator message'), findsNothing);
+    });
+
+    testWidgets('preset tap marks interaction for onUserInteraction', (
+      tester,
+    ) async {
+      final preset = AppDatePreset(
+        label: 'Fixed',
+        resolve: (_) => AppDateRange(march14, march14),
+      );
+      await tester.pumpWidget(
+        _wrap(
+          Form(
+            child: AppDatePicker(
+              label: 'Start date',
+              presets: [preset],
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: (_) => 'Always invalid',
+              onChanged: (_) {},
+            ),
+          ),
+        ),
+      );
+      expect(find.byKey(const Key('date_picker_error')), findsNothing);
+      await tester.tap(find.byKey(const Key('date_picker_preset_0')));
+      await tester.pump();
+      expect(find.text('Always invalid'), findsOneWidget);
+    });
+  });
 }

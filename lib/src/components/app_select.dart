@@ -9,7 +9,12 @@ enum AppSelectState { default_, error, disabled }
 
 /// A reusable select/dropdown widget following the shipit_ui design system.
 ///
-/// Supports default, error, and disabled states.
+/// Supports default, error, and disabled states. Participates in an enclosing
+/// [Form]: [validator] receives the current [value] on `Form.validate()` /
+/// `FormState.save()` and per [autovalidateMode]. A failing validator or an
+/// explicit [errorText] switches the field into the error visual state and
+/// shows the message beneath it.
+///
 /// Based on approved Penpot design tokens.
 ///
 /// ## Semantics
@@ -23,6 +28,12 @@ class AppSelect<T> extends StatefulWidget {
   final String? hint;
   final AppSelectState state;
   final Widget? prefixIcon;
+
+  /// Explicit error message; takes precedence over a validator message.
+  final String? errorText;
+  final FormFieldValidator<T?>? validator;
+  final AutovalidateMode autovalidateMode;
+  final FormFieldSetter<T?>? onSaved;
   final Key? semanticLabel;
 
   const AppSelect({
@@ -34,6 +45,10 @@ class AppSelect<T> extends StatefulWidget {
     this.hint,
     this.state = AppSelectState.default_,
     this.prefixIcon,
+    this.errorText,
+    this.validator,
+    this.autovalidateMode = AutovalidateMode.disabled,
+    this.onSaved,
     this.semanticLabel,
   });
 
@@ -42,128 +57,132 @@ class AppSelect<T> extends StatefulWidget {
 }
 
 class _AppSelectState<T> extends State<AppSelect<T>> {
+  bool get _isDisabled => widget.state == AppSelectState.disabled;
+
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      label: widget.label,
-      button: true,
-      container: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.label,
-            style: AppTypography.labelMedium.copyWith(color: _getLabelColor()),
-          ),
-          const SizedBox(height: AppSpacing.space1),
-          InputDecorator(
-            decoration: InputDecoration(
-              hintText: widget.hint ?? 'Select ${widget.label.toLowerCase()}',
-              prefixIcon: widget.prefixIcon,
-              filled: true,
-              fillColor: _getFillColor(),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.space4,
-                vertical: AppSpacing.space2,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-                borderSide: BorderSide(color: _getBorderColor()),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-                borderSide: BorderSide(color: _getBorderColor()),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-                borderSide: BorderSide(
-                  color: widget.state == AppSelectState.error
-                      ? AppColors.stateErrorFgColor
-                      : AppColors.actionPrimaryBgColor,
-                  width: 2,
+    return FormField<T?>(
+      initialValue: widget.value,
+      validator: (_) => widget.validator?.call(widget.value),
+      onSaved: (_) => widget.onSaved?.call(widget.value),
+      autovalidateMode: widget.autovalidateMode,
+      enabled: !_isDisabled,
+      builder: (field) {
+        final String? errorText = widget.errorText ?? field.errorText;
+        final bool isError =
+            errorText != null || widget.state == AppSelectState.error;
+        return Semantics(
+          label: widget.label,
+          button: true,
+          container: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.label,
+                style: AppTypography.labelMedium.copyWith(
+                  color: _getLabelColor(),
                 ),
               ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-                borderSide: const BorderSide(
-                  color: AppColors.stateErrorFgColor,
+              const SizedBox(height: AppSpacing.space1),
+              InputDecorator(
+                decoration: InputDecoration(
+                  hintText:
+                      widget.hint ?? 'Select ${widget.label.toLowerCase()}',
+                  prefixIcon: widget.prefixIcon,
+                  filled: true,
+                  fillColor: _getFillColor(),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.space4,
+                    vertical: AppSpacing.space2,
+                  ),
+                  border: _border(_getBorderColor(isError)),
+                  enabledBorder: _border(_getBorderColor(isError)),
+                  focusedBorder: _border(
+                    isError
+                        ? AppColors.stateErrorFgColor
+                        : AppColors.actionPrimaryBgColor,
+                    width: 2,
+                  ),
+                  errorBorder: _border(AppColors.stateErrorFgColor),
+                  focusedErrorBorder: _border(
+                    AppColors.stateErrorFgColor,
+                    width: 2,
+                  ),
+                  disabledBorder: _border(AppColors.actionDisabledBorderColor),
                 ),
-              ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-                borderSide: const BorderSide(
-                  color: AppColors.stateErrorFgColor,
-                  width: 2,
-                ),
-              ),
-              disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-                borderSide: const BorderSide(
-                  color: AppColors.actionDisabledBorderColor,
-                ),
-              ),
-            ),
-            isEmpty: widget.value == null,
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<T>(
-                key: widget.semanticLabel,
-                value: widget.value,
-                isExpanded: true,
-                isDense: true,
-                hint: Text(
-                  widget.hint ?? 'Select ${widget.label.toLowerCase()}',
-                  style: AppTypography.bodyMedium.copyWith(
-                    color: AppColors.fgMutedColor,
+                isEmpty: widget.value == null,
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<T>(
+                    key: widget.semanticLabel,
+                    value: widget.value,
+                    isExpanded: true,
+                    isDense: true,
+                    hint: Text(
+                      widget.hint ?? 'Select ${widget.label.toLowerCase()}',
+                      style: AppTypography.bodyMedium.copyWith(
+                        color: AppColors.fgMutedColor,
+                      ),
+                    ),
+                    items: widget.options.map((option) {
+                      return DropdownMenuItem<T>(
+                        value: option.value,
+                        child: Text(
+                          option.label,
+                          style: AppTypography.bodyMedium,
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: _isDisabled
+                        ? null
+                        : (value) {
+                            field.didChange(value);
+                            widget.onChanged?.call(value);
+                          },
                   ),
                 ),
-                items: widget.options.map((option) {
-                  return DropdownMenuItem<T>(
-                    value: option.value,
-                    child: Text(option.label, style: AppTypography.bodyMedium),
-                  );
-                }).toList(),
-                onChanged: widget.state == AppSelectState.disabled
-                    ? null
-                    : widget.onChanged,
               ),
-            ),
+              if (errorText != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: AppSpacing.space1),
+                  child: Semantics(
+                    liveRegion: true,
+                    child: Text(
+                      errorText,
+                      key: const Key('select_error'),
+                      style: AppTypography.bodySmall.copyWith(
+                        color: AppColors.stateErrorFgColor,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
+    );
+  }
+
+  OutlineInputBorder _border(Color color, {double width = 1}) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(AppRadius.radiusMd),
+      borderSide: BorderSide(color: color, width: width),
     );
   }
 
   Color _getLabelColor() {
-    switch (widget.state) {
-      case AppSelectState.error:
-        return AppColors.fgSecondaryColor;
-      case AppSelectState.disabled:
-        return AppColors.fgDisabledColor;
-      case AppSelectState.default_:
-        return AppColors.fgSecondaryColor;
-    }
+    return _isDisabled ? AppColors.fgDisabledColor : AppColors.fgSecondaryColor;
   }
 
   Color _getFillColor() {
-    switch (widget.state) {
-      case AppSelectState.disabled:
-        return AppColors.actionDisabledBgColor;
-      case AppSelectState.error:
-        return AppColors.bgSurfaceColor;
-      case AppSelectState.default_:
-        return AppColors.bgSurfaceColor;
-    }
+    return _isDisabled
+        ? AppColors.actionDisabledBgColor
+        : AppColors.bgSurfaceColor;
   }
 
-  Color _getBorderColor() {
-    switch (widget.state) {
-      case AppSelectState.error:
-        return AppColors.stateErrorFgColor;
-      case AppSelectState.disabled:
-        return AppColors.actionDisabledBorderColor;
-      case AppSelectState.default_:
-        return AppColors.borderDefaultColor;
-    }
+  Color _getBorderColor(bool isError) {
+    if (_isDisabled) return AppColors.actionDisabledBorderColor;
+    return isError ? AppColors.stateErrorFgColor : AppColors.borderDefaultColor;
   }
 }
 

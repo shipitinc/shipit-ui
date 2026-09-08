@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shipit_ui/src/components/app_tooltip.dart';
 import 'package:shipit_ui/src/foundation/app_colors.dart';
 import 'package:shipit_ui/src/foundation/app_spacing.dart';
 import 'package:shipit_ui/src/foundation/app_radius.dart';
@@ -74,7 +75,11 @@ class AppDatePreset {
 /// A date picker field following the shipit_ui design system.
 ///
 /// Supports single-date and date-range selection, optional quick-select
-/// presets, and default, error, and disabled states.
+/// presets, and default, error, and disabled states. Participates in an
+/// enclosing [Form]: [validator] / [rangeValidator] run on `Form.validate()`
+/// and per [autovalidateMode]; a failing validator or an explicit [errorText]
+/// switches the field into the error state and shows the message.
+///
 /// Based on approved Penpot design tokens.
 ///
 /// ## Semantics
@@ -94,7 +99,17 @@ class AppDatePicker extends StatelessWidget {
   final List<AppDatePreset> presets;
   final bool isDisabled;
   final bool isError;
+
+  /// Explicit error message; takes precedence over a validator message and
+  /// switches the field into the error state.
   final String? errorText;
+
+  /// Validates [value] in single mode (ignored in range mode).
+  final FormFieldValidator<DateTime?>? validator;
+
+  /// Validates [rangeValue] in range mode (ignored in single mode).
+  final FormFieldValidator<AppDateRange?>? rangeValidator;
+  final AutovalidateMode autovalidateMode;
   final String Function(DateTime) formatDate;
   final bool allowClear;
   final Key? semanticLabel;
@@ -117,6 +132,9 @@ class AppDatePicker extends StatelessWidget {
     this.isDisabled = false,
     this.isError = false,
     this.errorText,
+    this.validator,
+    this.rangeValidator,
+    this.autovalidateMode = AutovalidateMode.disabled,
     this.formatDate = defaultFormat,
     this.allowClear = true,
     this.semanticLabel,
@@ -145,63 +163,86 @@ class AppDatePicker extends StatelessWidget {
   String get _displayText =>
       _displayValue ?? hint ?? (_isRange ? 'Select dates' : 'Select date');
 
+  String? _validate() =>
+      _isRange ? rangeValidator?.call(rangeValue) : validator?.call(value);
+
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      key: semanticLabel,
-      button: true,
+    return FormField<Object?>(
+      initialValue: _isRange ? rangeValue : value,
+      validator: (_) => _validate(),
+      autovalidateMode: autovalidateMode,
       enabled: !isDisabled,
-      label: label,
-      value: _displayText,
-      container: true,
-      explicitChildNodes: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            label,
-            style: AppTypography.labelMedium.copyWith(
-              color: isDisabled
-                  ? AppColors.fgDisabledColor
-                  : AppColors.fgSecondaryColor,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.space1),
-          _buildField(context),
-          if (isError && errorText != null)
-            Padding(
-              padding: const EdgeInsets.only(top: AppSpacing.space1),
-              child: Text(
-                errorText!,
-                style: AppTypography.bodySmall.copyWith(
-                  color: AppColors.stateErrorFgColor,
+      builder: (field) {
+        final String? message = errorText ?? field.errorText;
+        final bool showError = isError || message != null;
+        return Semantics(
+          key: semanticLabel,
+          button: true,
+          enabled: !isDisabled,
+          label: label,
+          value: _displayText,
+          container: true,
+          explicitChildNodes: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                label,
+                style: AppTypography.labelMedium.copyWith(
+                  color: isDisabled
+                      ? AppColors.fgDisabledColor
+                      : AppColors.fgSecondaryColor,
                 ),
               ),
-            ),
-          if (presets.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(top: AppSpacing.space2),
-              child: Wrap(
-                spacing: AppSpacing.space2,
-                runSpacing: AppSpacing.space2,
-                children: [
-                  for (var i = 0; i < presets.length; i++)
-                    _PresetChip(
-                      key: Key('date_picker_preset_$i'),
-                      label: presets[i].label,
-                      selected: _isPresetSelected(presets[i]),
-                      onTap: isDisabled ? null : () => _applyPreset(presets[i]),
+              const SizedBox(height: AppSpacing.space1),
+              _buildField(context, field, showError),
+              if (message != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: AppSpacing.space1),
+                  child: Semantics(
+                    liveRegion: true,
+                    child: Text(
+                      message,
+                      key: const Key('date_picker_error'),
+                      style: AppTypography.bodySmall.copyWith(
+                        color: AppColors.stateErrorFgColor,
+                      ),
                     ),
-                ],
-              ),
-            ),
-        ],
-      ),
+                  ),
+                ),
+              if (presets.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: AppSpacing.space2),
+                  child: Wrap(
+                    spacing: AppSpacing.space2,
+                    runSpacing: AppSpacing.space2,
+                    children: [
+                      for (var i = 0; i < presets.length; i++)
+                        _PresetChip(
+                          key: Key('date_picker_preset_$i'),
+                          label: presets[i].label,
+                          selected: _isPresetSelected(presets[i]),
+                          onTap: isDisabled
+                              ? null
+                              : () => _applyPreset(field, presets[i]),
+                        ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildField(BuildContext context) {
+  Widget _buildField(
+    BuildContext context,
+    FormFieldState<Object?> field,
+    bool showError,
+  ) {
     final textColor = isDisabled
         ? AppColors.fgDisabledColor
         : _hasValue
@@ -217,11 +258,11 @@ class AppDatePicker extends StatelessWidget {
           : AppColors.bgSurfaceColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-        side: BorderSide(color: _borderColor),
+        side: BorderSide(color: _borderColor(showError)),
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-        onTap: isDisabled ? null : () => _open(context),
+        onTap: isDisabled ? null : () => _open(context, field),
         child: ConstrainedBox(
           constraints: const BoxConstraints(minHeight: _fieldHeight),
           child: Padding(
@@ -245,15 +286,17 @@ class AppDatePicker extends StatelessWidget {
                   ),
                 ),
                 if (allowClear && _hasValue && !isDisabled)
-                  IconButton(
-                    key: const Key('date_picker_clear'),
-                    tooltip: 'Clear',
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    iconSize: _iconSize,
-                    color: AppColors.fgMutedColor,
-                    icon: const Icon(Icons.close),
-                    onPressed: _clear,
+                  AppTooltip(
+                    message: 'Clear',
+                    child: IconButton(
+                      key: const Key('date_picker_clear'),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      iconSize: _iconSize,
+                      color: AppColors.fgMutedColor,
+                      icon: const Icon(Icons.close),
+                      onPressed: () => _clear(field),
+                    ),
                   ),
               ],
             ),
@@ -263,17 +306,27 @@ class AppDatePicker extends StatelessWidget {
     );
   }
 
-  Color get _borderColor {
+  Color _borderColor(bool showError) {
     if (isDisabled) return AppColors.actionDisabledBorderColor;
-    if (isError) return AppColors.stateErrorFgColor;
+    if (showError) return AppColors.stateErrorFgColor;
     return AppColors.borderDefaultColor;
   }
 
-  void _clear() {
+  void _emitRange(FormFieldState<Object?> field, AppDateRange? r) {
+    field.didChange(r);
+    onRangeChanged?.call(r);
+  }
+
+  void _emitDate(FormFieldState<Object?> field, DateTime? d) {
+    field.didChange(d);
+    onChanged?.call(d);
+  }
+
+  void _clear(FormFieldState<Object?> field) {
     if (_isRange) {
-      onRangeChanged?.call(null);
+      _emitRange(field, null);
     } else {
-      onChanged?.call(null);
+      _emitDate(field, null);
     }
   }
 
@@ -287,12 +340,12 @@ class AppDatePicker extends StatelessWidget {
     return v != null && _sameDay(v, r.start);
   }
 
-  void _applyPreset(AppDatePreset preset) {
+  void _applyPreset(FormFieldState<Object?> field, AppDatePreset preset) {
     final r = preset.resolve(DateTime.now());
     if (_isRange) {
-      onRangeChanged?.call(r);
+      _emitRange(field, r);
     } else {
-      onChanged?.call(r.start);
+      _emitDate(field, r.start);
     }
   }
 
@@ -302,7 +355,10 @@ class AppDatePicker extends StatelessWidget {
   static DateTime _clamp(DateTime d, DateTime first, DateTime last) =>
       d.isBefore(first) ? first : (d.isAfter(last) ? last : d);
 
-  Future<void> _open(BuildContext context) async {
+  Future<void> _open(
+    BuildContext context,
+    FormFieldState<Object?> field,
+  ) async {
     final now = DateTime.now();
     final first = firstDate ?? DateTime(now.year - 100, now.month, now.day);
     final last = lastDate ?? DateTime(now.year + 100, now.month, now.day);
@@ -323,7 +379,7 @@ class AppDatePicker extends StatelessWidget {
         builder: themed,
       );
       if (result != null) {
-        onRangeChanged?.call(AppDateRange(result.start, result.end));
+        _emitRange(field, AppDateRange(result.start, result.end));
       }
       return;
     }
@@ -334,7 +390,7 @@ class AppDatePicker extends StatelessWidget {
       initialDate: _clamp(value ?? now, first, last),
       builder: themed,
     );
-    if (result != null) onChanged?.call(result);
+    if (result != null) _emitDate(field, result);
   }
 
   static ThemeData _pickerTheme(BuildContext context) {

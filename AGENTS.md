@@ -71,7 +71,7 @@ Use `AppTypography.*` styles (or the shipit themes). Hand-built `TextStyle`s mus
 
 ### 3c. Form Validation Is Field-Level
 
-`AppTextField` participates in `Form`: pass a `validator` (and optionally `autovalidateMode`), call `Form.validate()` on submit, and use `errorText` for server-side messages. Do not hand-roll error labels under fields or swap the form for an error screen.
+Every shipit_ui input is a real `FormField`: `AppTextField`, `AppSelect` and `AppDatePicker` (`validator` / `rangeValidator`) all accept `validator`, `autovalidateMode`, `onSaved` and `errorText`. Wrap forms in `Form`, call `Form.validate()` on submit, and use `errorText` for server-side messages. Do not hand-roll error labels under fields, wrap inputs in your own `FormField`, or swap the form for an error screen.
 
 ### 4. Golden Baselines Are Binding
 

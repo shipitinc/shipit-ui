@@ -42,7 +42,7 @@ Penpot identifiers follow a hierarchical path format:
 | `component/text_field/error` | `AppTextField.error(label: ..., errorText: ...)` or any `AppTextField` whose `validator` fails / `errorText` is set | MATCHED |
 | `component/text_field/disabled` | `AppTextField.disabled(label: ...)` | MATCHED |
 | `component/select/default` | `AppSelect(label: ..., options: ...)` | MATCHED |
-| `component/select/error` | `AppSelect(label: ..., options: ..., isError: true)` | MATCHED |
+| `component/select/error` | `AppSelect(state: AppSelectState.error)` or any `AppSelect` whose `validator` fails / `errorText` is set | MATCHED |
 | `component/select/disabled` | `AppSelect(label: ..., options: ..., isDisabled: true)` | MATCHED |
 | `component/card/default` | `AppCard(title: ..., children: ...)` | MATCHED |
 | `component/dialog/default` | `AppDialog(title: ..., content: ...)` | MATCHED |
@@ -70,7 +70,7 @@ Penpot identifiers follow a hierarchical path format:
 | `component/date_picker/single` | `AppDatePicker(value: ..., presets: ...)` | MATCHED |
 | `component/date_picker/range` | `AppDatePicker(mode: AppDatePickerMode.range, rangeValue: ...)` | MATCHED |
 | `component/date_picker/empty` | `AppDatePicker(label: ...)` | MATCHED |
-| `component/date_picker/error` | `AppDatePicker(isError: true, errorText: ...)` | MATCHED |
+| `component/date_picker/error` | `AppDatePicker(errorText: ...)` or any `AppDatePicker` whose `validator` / `rangeValidator` fails | MATCHED |
 | `component/date_picker/disabled` | `AppDatePicker(isDisabled: true)` | MATCHED |
 | `component/data_table/default` | `AppDataTable(columns: ..., rows: ...)` | MATCHED |
 | `component/data_table/paginated` | `AppDataTable(rowsPerPage: ...)` (rows > page) | MATCHED |
