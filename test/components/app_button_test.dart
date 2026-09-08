@@ -141,6 +141,26 @@ void main() {
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
     });
 
+    testWidgets('hugs its label with space4 horizontal padding', (
+      tester,
+    ) async {
+      for (final label in ['OK', 'Secondary']) {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: AppButton.secondary(label: label, onPressed: () {}),
+              ),
+            ),
+          ),
+        );
+        final textWidth = tester.getSize(find.text(label)).width;
+        final buttonSize = tester.getSize(find.byType(AppButton));
+        expect(buttonSize.width, closeTo(textWidth + 2 * 16, 0.5));
+        expect(buttonSize.height, 44);
+      }
+    });
+
     testWidgets('semanticLabel is applied to exactly one widget', (
       tester,
     ) async {

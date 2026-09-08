@@ -142,6 +142,7 @@ class AppButton extends StatelessWidget {
               horizontal: AppSpacing.space4,
               vertical: AppSpacing.space2,
             ),
+            minimumSize: Size.zero,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(AppRadius.radiusMd),
