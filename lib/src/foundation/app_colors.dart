@@ -181,6 +181,45 @@ class AppColors {
   /// token/color/tooltip/fg → #FFFFFF (neutral.0)
   static const int tooltipFg = _neutral0;
 
+  // MARK: - Avatar
+
+  /// token/color/avatar/bg → #E2E8F0 (neutral.200)
+  static const int avatarBg = _neutral200;
+
+  /// token/color/avatar/fg → #334155 (neutral.700)
+  static const int avatarFg = _neutral700;
+
+  // MARK: - Chip
+
+  /// token/color/chip/bg → #FFFFFF (neutral.0)
+  static const int chipBg = _neutral0;
+
+  /// token/color/chip/fg → #475569 (neutral.600)
+  static const int chipFg = _neutral600;
+
+  /// token/color/chip/border → #CBD5E1 (neutral.300)
+  static const int chipBorder = _neutral300;
+
+  /// token/color/chip/selected/bg → #EFF6FF (accent.50)
+  static const int chipSelectedBg = _accent50;
+
+  /// token/color/chip/selected/fg → #2563EB (accent.600)
+  static const int chipSelectedFg = _accent600;
+
+  /// token/color/chip/selected/border → #2563EB (accent.600)
+  static const int chipSelectedBorder = _accent600;
+
+  // MARK: - Table
+
+  /// token/color/table/header/bg → #F1F5F9 (neutral.100)
+  static const int tableHeaderBg = _neutral100;
+
+  /// token/color/table/row/hover → #F8FAFC (neutral.50)
+  static const int tableRowHover = _neutral50;
+
+  /// token/color/table/border → #E2E8F0 (neutral.200)
+  static const int tableBorder = _neutral200;
+
   // MARK: - Convenience Color Getters (Semantic Names)
 
   static const Color bgBaseColor = Color(bgBase);
@@ -230,6 +269,20 @@ class AppColors {
 
   static const Color tooltipBgColor = Color(tooltipBg);
   static const Color tooltipFgColor = Color(tooltipFg);
+
+  static const Color avatarBgColor = Color(avatarBg);
+  static const Color avatarFgColor = Color(avatarFg);
+
+  static const Color chipBgColor = Color(chipBg);
+  static const Color chipFgColor = Color(chipFg);
+  static const Color chipBorderColor = Color(chipBorder);
+  static const Color chipSelectedBgColor = Color(chipSelectedBg);
+  static const Color chipSelectedFgColor = Color(chipSelectedFg);
+  static const Color chipSelectedBorderColor = Color(chipSelectedBorder);
+
+  static const Color tableHeaderBgColor = Color(tableHeaderBg);
+  static const Color tableRowHoverColor = Color(tableRowHover);
+  static const Color tableBorderColor = Color(tableBorder);
 
   // MARK: - Neutral Scale Getters (for backward compatibility)
 

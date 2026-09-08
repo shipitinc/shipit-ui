@@ -16,7 +16,7 @@ Penpot identifiers follow a hierarchical path format:
 
 | Type | Values | Description |
 |------|--------|-------------|
-| `component` | button, text_field, select, card, dialog, state_view, shimmer, tooltip, navigation_rail, etc. | UI component |
+| `component` | button, text_field, select, card, dialog, confirm_dialog, state_view, shimmer, tooltip, navigation_rail, avatar, filter_chip, search_field, date_picker, data_table | UI component |
 | `token` | color, spacing, radius, typography, motion, breakpoint, elevation, opacity | Design token |
 | `theme` | light, dark | Theme variant |
 
@@ -54,6 +54,26 @@ Penpot identifiers follow a hierarchical path format:
 | `component/tooltip/default` | `AppTooltip(message: ..., child: ...)` | MATCHED |
 | `component/navigation_rail/extended` | `AppNavigationRail(items: ..., extended: true)` | MATCHED |
 | `component/navigation_rail/collapsed` | `AppNavigationRail(items: ..., extended: false)` | MATCHED |
+| `component/confirm_dialog/default` | `AppConfirmDialog(title: ..., onConfirm: ...)` | MATCHED |
+| `component/confirm_dialog/destructive` | `AppConfirmDialog.destructive(title: ..., onConfirm: ...)` | MATCHED |
+| `component/avatar/{sm,md,lg,xl}` | `AppAvatar(name: ..., size: AppAvatarSize.*)` | MATCHED |
+| `component/avatar/status/{online,busy,offline}` | `AppAvatar(name: ..., status: AppAvatarStatus.*)` | MATCHED |
+| `component/avatar/icon` | `AppAvatar()` (no name → person icon) | MATCHED |
+| `component/avatar/badge` | `AppAvatar(name: ..., badge: ...)` | MATCHED |
+| `component/filter_chip/default` | `AppFilterChip(label: ...)` | MATCHED |
+| `component/filter_chip/selected` | `AppFilterChip(label: ..., selected: true)` | MATCHED |
+| `component/search_field/default` | `AppSearchField(filters: ...)` | MATCHED |
+| `component/search_field/active` | `AppSearchField(controller: <non-empty>)` | MATCHED |
+| `component/search_field/recents` | `AppSearchField(recentSearches: ...)` (focused, empty) | MATCHED |
+| `component/date_picker/single` | `AppDatePicker(value: ..., presets: ...)` | MATCHED |
+| `component/date_picker/range` | `AppDatePicker(mode: AppDatePickerMode.range, rangeValue: ...)` | MATCHED |
+| `component/date_picker/empty` | `AppDatePicker(label: ...)` | MATCHED |
+| `component/date_picker/error` | `AppDatePicker(isError: true, errorText: ...)` | MATCHED |
+| `component/date_picker/disabled` | `AppDatePicker(isDisabled: true)` | MATCHED |
+| `component/data_table/default` | `AppDataTable(columns: ..., rows: ...)` | MATCHED |
+| `component/data_table/paginated` | `AppDataTable(rowsPerPage: ...)` (rows > page) | MATCHED |
+| `component/data_table/empty` | `AppDataTable(rows: [])` | MATCHED |
+| `component/data_table/loading` | `AppDataTable(isLoading: true)` | MATCHED |
 
 #### Tokens - Colors
 
@@ -97,6 +117,17 @@ Penpot identifiers follow a hierarchical path format:
 | `token/color/nav/unselected/fg` | `AppColors.navUnselectedFg` | MATCHED |
 | `token/color/tooltip/bg` | `AppColors.tooltipBg` | MATCHED |
 | `token/color/tooltip/fg` | `AppColors.tooltipFg` | MATCHED |
+| `token/color/avatar/bg` | `AppColors.avatarBg` | MATCHED |
+| `token/color/avatar/fg` | `AppColors.avatarFg` | MATCHED |
+| `token/color/chip/bg` | `AppColors.chipBg` | MATCHED |
+| `token/color/chip/fg` | `AppColors.chipFg` | MATCHED |
+| `token/color/chip/border` | `AppColors.chipBorder` | MATCHED |
+| `token/color/chip/selected/bg` | `AppColors.chipSelectedBg` | MATCHED |
+| `token/color/chip/selected/fg` | `AppColors.chipSelectedFg` | MATCHED |
+| `token/color/chip/selected/border` | `AppColors.chipSelectedBorder` | MATCHED |
+| `token/color/table/header/bg` | `AppColors.tableHeaderBg` | MATCHED |
+| `token/color/table/row/hover` | `AppColors.tableRowHover` | MATCHED |
+| `token/color/table/border` | `AppColors.tableBorder` | MATCHED |
 
 #### Tokens - Typography
 
