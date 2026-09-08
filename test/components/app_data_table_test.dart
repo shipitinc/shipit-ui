@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shipit_ui/src/components/app_data_table.dart';
 import 'package:shipit_ui/src/components/app_shimmer.dart';
-import 'package:shipit_ui/src/components/app_state_view.dart';
+import 'package:shipit_ui/src/components/app_empty_state.dart';
 
 class _Person {
   final String name;
@@ -272,7 +272,7 @@ void main() {
       expect(find.byKey(const Key('table_next')), findsNothing);
     });
 
-    testWidgets('empty rows shows AppStateView with emptyTitle', (
+    testWidgets('empty rows shows AppEmptyState with emptyTitle', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -286,7 +286,7 @@ void main() {
         ),
       );
 
-      expect(find.byType(AppStateView), findsOneWidget);
+      expect(find.byType(AppEmptyState), findsOneWidget);
       expect(find.text('Nothing here'), findsOneWidget);
       expect(find.text('Try a different filter'), findsOneWidget);
       expect(find.text('Name'), findsOneWidget);

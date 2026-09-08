@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shipit_ui/src/components/app_button.dart';
 import 'package:shipit_ui/src/components/app_text_field.dart';
 import 'package:shipit_ui/src/components/app_card.dart';
-import 'package:shipit_ui/src/components/app_state_view.dart';
+import 'package:shipit_ui/src/components/app_empty_state.dart';
 
 void main() {
   group('Golden tests - AppButton', () {
@@ -108,41 +108,15 @@ void main() {
   });
 
   group('Golden tests - States', () {
-    testGoldens('loading state', (tester) async {
-      await tester.pumpWidgetBuilder(
-        MaterialApp(
-          home: Scaffold(
-            body: AppStateView.loading(title: 'Loading', message: 'Loading...'),
-          ),
-        ),
-      );
-      await expectLater(
-        find.byType(AppStateView),
-        matchesGoldenFile('loading_state.png'),
-      );
-    });
-
     testGoldens('empty state', (tester) async {
       await tester.pumpWidgetBuilder(
-        MaterialApp(
-          home: Scaffold(body: AppStateView.empty(title: 'No Items')),
+        const MaterialApp(
+          home: Scaffold(body: AppEmptyState(title: 'No Items')),
         ),
       );
       await expectLater(
-        find.byType(AppStateView),
+        find.byType(AppEmptyState),
         matchesGoldenFile('empty_state.png'),
-      );
-    });
-
-    testGoldens('error state', (tester) async {
-      await tester.pumpWidgetBuilder(
-        MaterialApp(
-          home: Scaffold(body: AppStateView.error(title: 'Error')),
-        ),
-      );
-      await expectLater(
-        find.byType(AppStateView),
-        matchesGoldenFile('error_state.png'),
       );
     });
   });

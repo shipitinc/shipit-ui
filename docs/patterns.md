@@ -6,64 +6,85 @@ product-agnostic; product agents apply them rather than inventing layouts.
 
 ## Loading state (`pattern/loading-state`)
 
-**Prefer `AppShimmer` skeletons.** A loading view should mirror the final
-layout: same sizes, gaps and radii as the content that will replace it, with
-each placeholder wrapped in `AppShimmer` (or one `AppShimmer` around the whole
-skeleton).
+A loading state is a **shimmering silhouette of the content that is about to
+appear** — same sizes, gaps and radii. It never replaces the view with an
+icon + "Loading…" screen, and never uses a bare spinner.
+
+Compose `AppSkeleton.line` / `.circle` / `.block` to mirror the final layout
+(or use the `AppSkeleton.listTile` / `.card` presets) and wrap the composition
+in one `AppSkeleton.shimmer(...)`. Components that own their layout
+(`AppDataTable(isLoading: true)`) already do this.
 
 ```dart
-// CORRECT — skeleton that mirrors the loaded card
-AppShimmer(
+// CORRECT — silhouette of the card that will render once loaded
+AppSkeleton.shimmer(
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     spacing: AppSpacing.space3,
-    children: [
+    children: const [
       Row(
         spacing: AppSpacing.space3,
         children: [
-          Container(width: 40, height: 40, decoration: const BoxDecoration(color: AppColors.shimmerBaseColor, shape: BoxShape.circle)),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: AppSpacing.space2,
-            children: [
-              Container(width: 180, height: 14, decoration: const BoxDecoration(color: AppColors.shimmerBaseColor, borderRadius: AppRadius.borderRadiusSm)),
-              Container(width: 120, height: 12, decoration: const BoxDecoration(color: AppColors.shimmerBaseColor, borderRadius: AppRadius.borderRadiusSm)),
-            ],
+          AppSkeleton.circle(),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: AppSpacing.space2,
+              children: [
+                AppSkeleton.line(width: 180),
+                AppSkeleton.line(width: 120, height: AppSpacing.space3),
+              ],
+            ),
           ),
         ],
       ),
-      Container(height: 72, decoration: const BoxDecoration(color: AppColors.shimmerBaseColor, borderRadius: AppRadius.borderRadiusSm)),
+      AppSkeleton.block(height: AppSpacing.space16),
     ],
   ),
 )
 
-// WRONG — bare spinner in a content area
+// WRONG — replaces the content area
 Center(child: CircularProgressIndicator())
+AppEmptyState(title: 'Loading…')
 ```
-
-Rules:
 
 | Situation | Use |
 |-----------|-----|
-| Content area, list, card, table, detail view whose layout is known | `AppShimmer` skeleton (components such as `AppDataTable(isLoading: true)` already do this) |
-| Full-screen or blocking load where the layout is unknown (app boot, auth hand-off) | `AppStateView.loading(...)` |
-| Button/inline action in flight | `AppButton(state: AppButtonState.loading)` |
-| Anywhere | Never a raw `CircularProgressIndicator` / `LinearProgressIndicator` |
+| Any content area whose layout is known (list, card, table, detail, form) | `AppSkeleton` silhouette in place |
+| Button / inline action in flight | `AppButton(state: AppButtonState.loading)` |
+| Anywhere | Never `CircularProgressIndicator` / `LinearProgressIndicator`, never a full-view "Loading" screen |
 
-Tokens: `AppColors.shimmerBase` → `AppColors.shimmerHighlight`, animated with
-`AppMotion.shimmer` (1200 ms). Skeleton bars use `AppRadius.radiusSm`, avatar
-placeholders `AppRadius.radiusFull`.
+Tokens: `AppColors.shimmerBase` → `AppColors.shimmerHighlight`, `AppMotion.shimmer`
+(1200 ms); lines/blocks `AppRadius.radiusSm`/`radiusMd`, circles `radiusFull`.
 
-Penpot: `AppStateView` state=`loading` on **02 Components** is annotated as
-the full-screen fallback; the skeleton reference is `pattern / loading-state`
-on **03 Patterns**.
+## Error state (`pattern/error-state`)
+
+Errors are surfaced **on top of or next to** the affected content, never by
+replacing it. The content area keeps its last good state (or its skeleton)
+underneath.
+
+| Situation | Use |
+|-----------|-----|
+| Failed load or action, user can continue | `AppInlineAlert.error(title, message, actionLabel: 'Retry', onAction, onDismiss)` placed directly above the affected content |
+| User must make a blocking decision | `AppConfirmDialog` / `AppDialog.error` |
+| Field-level validation | `AppTextField.error`, `AppDatePicker(isError: true)` |
+| Anywhere | Never a full-view error icon screen |
+
+`AppInlineAlert` also has `.warning`, `.info` and `.success` severities for
+non-error feedback.
+
+## Empty state
+
+`AppEmptyState` is the **only** state that replaces a content area: icon,
+title, optional message and optional secondary action. Use it when a query
+legitimately returns nothing — not for loading and not for errors.
 
 ## Action row (`pattern/action-row`)
 
 Buttons are ordered least → most emphatic/destructive, left to right:
 `AppButton.secondary` on the left, `AppButton.primary` on the right, gap
 `AppSpacing.space2` (8 px), right-aligned. `AppDialog`, `AppConfirmDialog`
-and `AppStateView.error` already apply this.
+and `AppEmptyState` (single secondary action) already apply this.
 
 ## Field stack (`pattern/field-stack`)
 

@@ -16,7 +16,7 @@ Penpot identifiers follow a hierarchical path format:
 
 | Type | Values | Description |
 |------|--------|-------------|
-| `component` | button, text_field, select, card, dialog, confirm_dialog, state_view, shimmer, tooltip, navigation_rail, avatar, filter_chip, search_field, date_picker, data_table | UI component |
+| `component` | button, text_field, select, card, dialog, confirm_dialog, empty_state, skeleton, inline_alert, shimmer, tooltip, navigation_rail, avatar, filter_chip, search_field, date_picker, data_table | UI component |
 | `token` | color, spacing, radius, typography, motion, breakpoint, elevation, opacity | Design token |
 | `theme` | light, dark | Theme variant |
 
@@ -47,9 +47,9 @@ Penpot identifiers follow a hierarchical path format:
 | `component/card/default` | `AppCard(title: ..., children: ...)` | MATCHED |
 | `component/dialog/default` | `AppDialog(title: ..., content: ...)` | MATCHED |
 | `component/dialog/error` | `AppDialog.error(title: ...)` | MATCHED |
-| `component/state_view/loading` | `AppStateView.loading(message: ...)` | MATCHED |
-| `component/state_view/empty` | `AppStateView.empty(title: ...)` | MATCHED |
-| `component/state_view/error` | `AppStateView.error(title: ..., onRetry: ...)` | MATCHED |
+| `component/empty_state/default` | `AppEmptyState(title: ..., message: ..., actionLabel: ...)` | MATCHED |
+| `component/skeleton/{line,circle,block}` | `AppSkeleton.line()` / `.circle()` / `.block()` (wrap in `AppSkeleton.shimmer`) | MATCHED |
+| `component/inline_alert/{error,warning,info,success}` | `AppInlineAlert.error(...)` / `.warning` / `.info` / `.success` | MATCHED |
 | `component/shimmer/default` | `AppShimmer(child: ...)` | MATCHED |
 | `component/tooltip/default` | `AppTooltip(message: ..., child: ...)` | MATCHED |
 | `component/navigation_rail/extended` | `AppNavigationRail(items: ..., extended: true)` | MATCHED |
@@ -221,7 +221,8 @@ Penpot identifiers follow a hierarchical path format:
 
 | Penpot ID | Flutter guidance | Status |
 |-----------|------------------|--------|
-| `pattern/loading-state` | `AppShimmer` skeleton mirroring final layout; `AppStateView.loading` only for blocking loads | MATCHED |
+| `pattern/loading-state` | `AppSkeleton` shimmer silhouette rendered in place of the incoming content | MATCHED |
+| `pattern/error-state` | `AppInlineAlert.error` next to content; `AppConfirmDialog` for blocking decisions | MATCHED |
 | `pattern/action-row` | `AppButton.secondary` left, `AppButton.primary` right, gap `AppSpacing.space2` | MATCHED |
 | `pattern/field-stack` | Fields fill width, vertical gap `AppSpacing.space4` | MATCHED |
 

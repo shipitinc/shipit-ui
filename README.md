@@ -25,14 +25,23 @@ lib/
 │   ├── layout/                 # Layout primitives
 │   │   └── app_layout.dart     # Responsive layout helpers
 │   └── components/             # Reusable widgets
+│       ├── app_avatar.dart
 │       ├── app_button.dart
-│       ├── app_text_field.dart
-│       ├── app_select.dart
 │       ├── app_card.dart
+│       ├── app_confirm_dialog.dart
+│       ├── app_data_table.dart
+│       ├── app_date_picker.dart
 │       ├── app_dialog.dart
-│       ├── app_loading_state.dart
-│       ├── app_empty_state.dart
-│       └── app_error_state.dart
+│       ├── app_empty_state.dart     # the only view-replacing state
+│       ├── app_filter_chip.dart
+│       ├── app_inline_alert.dart    # error / warning / info / success feedback
+│       ├── app_navigation_rail.dart
+│       ├── app_search_field.dart
+│       ├── app_select.dart
+│       ├── app_shimmer.dart
+│       ├── app_skeleton.dart        # loading silhouettes
+│       ├── app_text_field.dart
+│       └── app_tooltip.dart
 ```
 
 ## Usage
@@ -76,8 +85,9 @@ between Penpot identifiers and Flutter APIs.
 
 ## Patterns
 
-See [docs/patterns.md](docs/patterns.md) for composition rules (loading
-states use `AppShimmer` skeletons, action rows, field stacks).
+See [docs/patterns.md](docs/patterns.md) for composition rules: loading =
+`AppSkeleton` silhouette in place, error = `AppInlineAlert` next to content,
+empty = `AppEmptyState`; plus action rows and field stacks.
 
 ## Agent Rules
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shipit_ui/src/components/app_shimmer.dart';
-import 'package:shipit_ui/src/components/app_state_view.dart';
+import 'package:shipit_ui/src/components/app_empty_state.dart';
 import 'package:shipit_ui/src/components/app_tooltip.dart';
 import 'package:shipit_ui/src/foundation/app_colors.dart';
 import 'package:shipit_ui/src/foundation/app_radius.dart';
@@ -58,7 +58,7 @@ class AppDataColumn<T> {
 /// Renders a header row, body rows and a pagination footer built from plain
 /// layout primitives. Filtering ([AppDataTable.rowFilter]), sorting and
 /// pagination are performed client-side. Shows shimmer placeholders while
-/// [isLoading] and an [AppStateView] when there are no rows to display.
+/// [isLoading] and an [AppEmptyState] when there are no rows to display.
 ///
 /// Based on approved Penpot design tokens.
 ///
@@ -192,7 +192,7 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
                 for (var i = 0; i < AppDataTable.loadingRowCount; i++)
                   _buildLoadingRow(i)
               else if (total == 0)
-                AppStateView.empty(
+                AppEmptyState(
                   title: widget.emptyTitle,
                   message: widget.emptyDescription,
                 )

@@ -16,7 +16,7 @@ ElevatedButton(onPressed: () {}, child: Text('Submit'))
 AppButton.primary(label: 'Submit', onPressed: () {})
 ```
 
-This applies to all Material fallbacks, including `Tooltip` (use `AppTooltip`), `NavigationRail` (use `AppNavigationRail`), `AlertDialog` confirmations (use `AppConfirmDialog`), `CircleAvatar` (use `AppAvatar`), `FilterChip` (use `AppFilterChip`), `SearchBar` (use `AppSearchField`), raw `showDatePicker` (use `AppDatePicker`) and `DataTable`/`PaginatedDataTable` (use `AppDataTable`).
+This applies to all Material fallbacks, including `Tooltip` (use `AppTooltip`), `NavigationRail` (use `AppNavigationRail`), `AlertDialog` confirmations (use `AppConfirmDialog`), `SnackBar`/`MaterialBanner` feedback (use `AppInlineAlert`), `CircleAvatar` (use `AppAvatar`), `FilterChip` (use `AppFilterChip`), `SearchBar` (use `AppSearchField`), raw `showDatePicker` (use `AppDatePicker`) and `DataTable`/`PaginatedDataTable` (use `AppDataTable`).
 
 ### 2. No Arbitrary Hex Colors
 
@@ -44,19 +44,26 @@ padding: EdgeInsets.all(16)
 padding: EdgeInsets.all(AppSpacing.md)
 ```
 
-### 3a. Loading States Use Shimmer Skeletons
+### 3a. Loading, Error and Empty States Are Not Interchangeable
 
-The preferred loading indicator is an `AppShimmer` skeleton that mirrors the final layout. `AppStateView.loading` is reserved for full-screen/blocking loads where the layout is unknown. Raw `CircularProgressIndicator` / `LinearProgressIndicator` are **prohibited** in product UI.
+- **Loading** = an `AppSkeleton` shimmer silhouette of the content about to appear, rendered *in place*. Never a spinner, never a full-view "Loading…" screen.
+- **Error** = an `AppInlineAlert.error` (dismissible, optional Retry) *next to* the content, or `AppConfirmDialog` / `AppDialog.error` for blocking decisions. Never a full-view error screen.
+- **Empty** = `AppEmptyState`, the only state that replaces a content area.
 
 ```dart
 // WRONG
-Center(child: CircularProgressIndicator())
+if (loading) return Center(child: CircularProgressIndicator());
+if (error != null) return AppEmptyState(title: 'Something went wrong');
 
 // CORRECT
-AppShimmer(child: /* placeholder boxes matching the loaded layout */)
+if (loading) return AppSkeleton.card();
+return Column(children: [
+  if (error != null) AppInlineAlert.error(title: error!, actionLabel: 'Retry', onAction: reload, onDismiss: clearError),
+  content,
+]);
 ```
 
-See `docs/patterns.md` (Loading state) and Penpot **03 Patterns · pattern / loading-state**.
+Raw `CircularProgressIndicator` / `LinearProgressIndicator` are **prohibited** in product UI. See `docs/patterns.md` and Penpot **03 Patterns** (`pattern / loading-state`, `pattern / error-state`).
 
 ### 4. Golden Baselines Are Binding
 
