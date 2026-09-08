@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:shipit_ui/src/components/app_card.dart';
+import 'package:shipit_ui/src/components/app_shimmer.dart';
 import 'package:shipit_ui/src/components/app_state_view.dart';
 
 void main() {
@@ -58,11 +59,16 @@ void main() {
     testWidgets('loading state renders with message', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(body: AppStateView.loading(title: 'Loading', message: 'Loading data...')),
+          home: Scaffold(
+            body: AppStateView.loading(
+              title: 'Loading',
+              message: 'Loading data...',
+            ),
+          ),
         ),
       );
 
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.byType(AppShimmer), findsOneWidget);
       expect(find.text('Loading data...'), findsOneWidget);
     });
 
@@ -110,7 +116,9 @@ void main() {
     testWidgets('error state renders with title', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(body: AppStateView.error(title: 'Something Went Wrong')),
+          home: Scaffold(
+            body: AppStateView.error(title: 'Something Went Wrong'),
+          ),
         ),
       );
 

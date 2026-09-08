@@ -167,8 +167,7 @@ class _AppTextFieldState extends State<AppTextField> {
             focusNode: _focusNode,
             enabled: widget.state != AppTextFieldState.disabled,
             readOnly:
-                widget.isReadOnly ||
-                widget.state == AppTextFieldState.disabled,
+                widget.isReadOnly || widget.state == AppTextFieldState.disabled,
             obscureText: widget.obscureText,
             keyboardType: widget.keyboardType,
             maxLines: widget.maxLines,
@@ -203,7 +202,9 @@ class _AppTextFieldState extends State<AppTextField> {
               ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-                borderSide: const BorderSide(color: AppColors.stateErrorFgColor),
+                borderSide: const BorderSide(
+                  color: AppColors.stateErrorFgColor,
+                ),
               ),
               focusedErrorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppRadius.radiusMd),
@@ -214,7 +215,9 @@ class _AppTextFieldState extends State<AppTextField> {
               ),
               disabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-                borderSide: const BorderSide(color: AppColors.actionDisabledBorderColor),
+                borderSide: const BorderSide(
+                  color: AppColors.actionDisabledBorderColor,
+                ),
               ),
             ),
           ),
@@ -267,8 +270,7 @@ class _AppTextFieldState extends State<AppTextField> {
   }
 
   Widget? _buildSuffixIcon() {
-    if (widget.state == AppTextFieldState.error &&
-        widget.suffixIcon == null) {
+    if (widget.state == AppTextFieldState.error && widget.suffixIcon == null) {
       return const Icon(
         Icons.error_outline,
         color: AppColors.stateErrorFgColor,

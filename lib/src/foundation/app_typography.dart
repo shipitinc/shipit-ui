@@ -2,6 +2,8 @@
 ///
 /// Values are derived from approved Penpot design tokens.
 /// See docs/penpot-mapping.md for the mapping convention.
+library;
+
 import 'package:flutter/painting.dart';
 import 'app_colors.dart';
 

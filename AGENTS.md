@@ -16,6 +16,8 @@ ElevatedButton(onPressed: () {}, child: Text('Submit'))
 AppButton.primary(label: 'Submit', onPressed: () {})
 ```
 
+This applies to all Material fallbacks, including `Tooltip` (use `AppTooltip`) and `NavigationRail` (use `AppNavigationRail`).
+
 ### 2. No Arbitrary Hex Colors
 
 Arbitrary hex colors are **prohibited** in product UI unless explicitly justified:

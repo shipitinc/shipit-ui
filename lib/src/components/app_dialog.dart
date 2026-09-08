@@ -46,14 +46,8 @@ class AppDialog extends StatelessWidget {
       content: content,
       barrierDismissible: false,
       actions: [
-        AppButton.secondary(
-          label: 'Cancel',
-          onPressed: onCancel ?? () {},
-        ),
-        AppButton.primary(
-          label: confirmLabel,
-          onPressed: onConfirm,
-        ),
+        AppButton.secondary(label: 'Cancel', onPressed: onCancel ?? () {}),
+        AppButton.primary(label: confirmLabel, onPressed: onConfirm),
       ],
       semanticLabel: semanticLabel,
     );

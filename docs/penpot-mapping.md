@@ -16,7 +16,7 @@ Penpot identifiers follow a hierarchical path format:
 
 | Type | Values | Description |
 |------|--------|-------------|
-| `component` | button, text_field, select, card, dialog, state_view, etc. | UI component |
+| `component` | button, text_field, select, card, dialog, state_view, shimmer, tooltip, navigation_rail, etc. | UI component |
 | `token` | color, spacing, radius, typography, motion, breakpoint, elevation, opacity | Design token |
 | `theme` | light, dark | Theme variant |
 
@@ -50,6 +50,10 @@ Penpot identifiers follow a hierarchical path format:
 | `component/state_view/loading` | `AppStateView.loading(message: ...)` | MATCHED |
 | `component/state_view/empty` | `AppStateView.empty(title: ...)` | MATCHED |
 | `component/state_view/error` | `AppStateView.error(title: ..., onRetry: ...)` | MATCHED |
+| `component/shimmer/default` | `AppShimmer(child: ...)` | MATCHED |
+| `component/tooltip/default` | `AppTooltip(message: ..., child: ...)` | MATCHED |
+| `component/navigation_rail/extended` | `AppNavigationRail(items: ..., extended: true)` | MATCHED |
+| `component/navigation_rail/collapsed` | `AppNavigationRail(items: ..., extended: false)` | MATCHED |
 
 #### Tokens - Colors
 
@@ -86,6 +90,13 @@ Penpot identifiers follow a hierarchical path format:
 | `token/color/state/info/fg` | `AppColors.stateInfoFg` | MATCHED |
 | `token/color/state/info/bg` | `AppColors.stateInfoBg` | MATCHED |
 | `token/color/scrim` | `AppColors.scrim` | MATCHED |
+| `token/color/shimmer/base` | `AppColors.shimmerBase` | MATCHED |
+| `token/color/shimmer/highlight` | `AppColors.shimmerHighlight` | MATCHED |
+| `token/color/nav/selected/bg` | `AppColors.navSelectedBg` | MATCHED |
+| `token/color/nav/selected/fg` | `AppColors.navSelectedFg` | MATCHED |
+| `token/color/nav/unselected/fg` | `AppColors.navUnselectedFg` | MATCHED |
+| `token/color/tooltip/bg` | `AppColors.tooltipBg` | MATCHED |
+| `token/color/tooltip/fg` | `AppColors.tooltipFg` | MATCHED |
 
 #### Tokens - Typography
 
@@ -168,6 +179,7 @@ Penpot identifiers follow a hierarchical path format:
 | `token/motion/duration/normal` | `AppMotion.normal` | MISSING_IN_PENPOT |
 | `token/motion/duration/slow` | `AppMotion.slow` | MISSING_IN_PENPOT |
 | `token/motion/duration/slower` | `AppMotion.slower` | MISSING_IN_PENPOT |
+| `token/motion/duration/shimmer` | `AppMotion.shimmer` | MATCHED |
 | `token/motion/curve/standard` | `AppMotion.curveStandard` | MISSING_IN_PENPOT |
 | `token/motion/curve/decelerate` | `AppMotion.curveDecelerate` | MISSING_IN_PENPOT |
 | `token/motion/curve/accelerate` | `AppMotion.curveAccelerate` | MISSING_IN_PENPOT |

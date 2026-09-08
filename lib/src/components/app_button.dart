@@ -51,7 +51,6 @@ class AppButton extends StatelessWidget {
       onPressed: onPressed,
       icon: icon,
       semanticLabel: semanticLabel,
-      variant: AppButtonVariant.primary,
       state: state,
     );
   }
@@ -76,7 +75,8 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isEnabled = state != AppButtonState.disabled && state != AppButtonState.loading;
+    final isEnabled =
+        state != AppButtonState.disabled && state != AppButtonState.loading;
 
     Color backgroundColor;
     Color foregroundColor;
@@ -133,9 +133,7 @@ class AppButton extends StatelessWidget {
       container: true,
       child: ConstrainedBox(
         key: semanticLabel,
-        constraints: const BoxConstraints(
-          minHeight: 44,
-        ),
+        constraints: const BoxConstraints(minHeight: 44),
         child: TextButton(
           onPressed: isEnabled ? onPressed : null,
           style: TextButton.styleFrom(

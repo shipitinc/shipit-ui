@@ -2,7 +2,8 @@
 ///
 /// Values are derived from approved Penpot design tokens.
 /// See docs/penpot-mapping.md for the mapping convention.
-import 'dart:ui';
+library;
+
 import 'package:flutter/painting.dart';
 
 class AppElevation {
@@ -19,7 +20,6 @@ class AppElevation {
       color: Color.fromRGBO(15, 23, 42, 0.08),
       offset: Offset(0, 1),
       blurRadius: 2,
-      spreadRadius: 0,
     ),
   ];
 
@@ -29,7 +29,6 @@ class AppElevation {
       color: Color.fromRGBO(15, 23, 42, 0.10),
       offset: Offset(0, 2),
       blurRadius: 8,
-      spreadRadius: 0,
     ),
   ];
 
@@ -39,7 +38,6 @@ class AppElevation {
       color: Color.fromRGBO(15, 23, 42, 0.16),
       offset: Offset(0, 8),
       blurRadius: 24,
-      spreadRadius: 0,
     ),
   ];
 }

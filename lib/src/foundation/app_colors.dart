@@ -2,6 +2,8 @@
 ///
 /// Values are derived from approved Penpot design tokens.
 /// See docs/penpot-mapping.md for the mapping convention.
+library;
+
 import 'dart:ui';
 
 class AppColors {
@@ -25,7 +27,6 @@ class AppColors {
   // MARK: - Primitive Accent Scale
 
   static const int _accent50 = 0xFFEFF6FF;
-  static const int _accent100 = 0xFFDBEAFE;
   static const int _accent600 = 0xFF2563EB;
   static const int _accent700 = 0xFF1D4ED8;
 
@@ -33,7 +34,6 @@ class AppColors {
 
   static const int _red50 = 0xFFFEF2F2;
   static const int _red600 = 0xFFDC2626;
-  static const int _red700 = 0xFFB91C1C;
 
   // MARK: - Primitive Green Scale
 
@@ -154,6 +154,33 @@ class AppColors {
   /// token/color/scrim → #020617 (neutral.950)
   static const int scrim = _neutral950;
 
+  // MARK: - Shimmer
+
+  /// token/color/shimmer/base → #E2E8F0 (neutral.200)
+  static const int shimmerBase = _neutral200;
+
+  /// token/color/shimmer/highlight → #F8FAFC (neutral.50)
+  static const int shimmerHighlight = _neutral50;
+
+  // MARK: - Navigation
+
+  /// token/color/nav/selected/bg → #EFF6FF (accent.50)
+  static const int navSelectedBg = _accent50;
+
+  /// token/color/nav/selected/fg → #2563EB (accent.600)
+  static const int navSelectedFg = _accent600;
+
+  /// token/color/nav/unselected/fg → #475569 (neutral.600)
+  static const int navUnselectedFg = _neutral600;
+
+  // MARK: - Tooltip
+
+  /// token/color/tooltip/bg → #0F172A (neutral.900)
+  static const int tooltipBg = _neutral900;
+
+  /// token/color/tooltip/fg → #FFFFFF (neutral.0)
+  static const int tooltipFg = _neutral0;
+
   // MARK: - Convenience Color Getters (Semantic Names)
 
   static const Color bgBaseColor = Color(bgBase);
@@ -194,6 +221,15 @@ class AppColors {
   static const Color stateInfoBgColor = Color(stateInfoBg);
 
   static const Color scrimColor = Color(scrim);
+  static const Color shimmerBaseColor = Color(shimmerBase);
+  static const Color shimmerHighlightColor = Color(shimmerHighlight);
+
+  static const Color navSelectedBgColor = Color(navSelectedBg);
+  static const Color navSelectedFgColor = Color(navSelectedFg);
+  static const Color navUnselectedFgColor = Color(navUnselectedFg);
+
+  static const Color tooltipBgColor = Color(tooltipBg);
+  static const Color tooltipFgColor = Color(tooltipFg);
 
   // MARK: - Neutral Scale Getters (for backward compatibility)
 

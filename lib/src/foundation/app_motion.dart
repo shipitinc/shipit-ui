@@ -27,6 +27,9 @@ class AppMotion {
   /// token/motion/duration/slower → 600ms
   static const Duration slower = Duration(milliseconds: 600);
 
+  /// token/motion/duration/shimmer → 1200ms
+  static const Duration shimmer = Duration(milliseconds: 1200);
+
   // MARK: - Curves
 
   /// token/motion/curve/standard → ease-in-out

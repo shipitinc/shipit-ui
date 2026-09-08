@@ -36,7 +36,10 @@ void main() {
       await tester.pumpWidgetBuilder(
         MaterialApp(
           home: Scaffold(
-            body: AppButton.primary(label: 'Disabled', state: AppButtonState.disabled),
+            body: AppButton.primary(
+              label: 'Disabled',
+              state: AppButtonState.disabled,
+            ),
           ),
         ),
       );
@@ -50,7 +53,10 @@ void main() {
       await tester.pumpWidgetBuilder(
         MaterialApp(
           home: Scaffold(
-            body: AppButton.primary(label: 'Loading', state: AppButtonState.loading),
+            body: AppButton.primary(
+              label: 'Loading',
+              state: AppButtonState.loading,
+            ),
           ),
         ),
       );
@@ -105,7 +111,9 @@ void main() {
     testGoldens('loading state', (tester) async {
       await tester.pumpWidgetBuilder(
         MaterialApp(
-          home: Scaffold(body: AppStateView.loading(title: 'Loading', message: 'Loading...')),
+          home: Scaffold(
+            body: AppStateView.loading(title: 'Loading', message: 'Loading...'),
+          ),
         ),
       );
       await expectLater(

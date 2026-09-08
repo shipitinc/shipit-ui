@@ -82,7 +82,10 @@ ThemeData shipitLightTheme() {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-        borderSide: const BorderSide(color: AppColors.actionPrimaryBgColor, width: 2),
+        borderSide: const BorderSide(
+          color: AppColors.actionPrimaryBgColor,
+          width: 2,
+        ),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppRadius.radiusMd),
@@ -90,17 +93,24 @@ ThemeData shipitLightTheme() {
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-        borderSide: const BorderSide(color: AppColors.stateErrorFgColor, width: 2),
+        borderSide: const BorderSide(
+          color: AppColors.stateErrorFgColor,
+          width: 2,
+        ),
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-        borderSide: const BorderSide(color: AppColors.actionDisabledBorderColor),
+        borderSide: const BorderSide(
+          color: AppColors.actionDisabledBorderColor,
+        ),
       ),
       hintStyle: AppTypography.bodyMedium.copyWith(
         color: AppColors.fgSecondaryColor,
       ),
       labelStyle: AppTypography.labelMedium,
-      errorStyle: AppTypography.bodySmall.copyWith(color: AppColors.stateErrorFgColor),
+      errorStyle: AppTypography.bodySmall.copyWith(
+        color: AppColors.stateErrorFgColor,
+      ),
     ),
     chipTheme: ChipThemeData(
       backgroundColor: AppColors.bgSubtleColor,
@@ -139,7 +149,6 @@ ThemeData shipitDarkTheme() {
       onError: AppColors.actionPrimaryFgColor,
       error: AppColors.stateErrorFgColor,
       surface: AppColors.bgSubtleColor,
-      onSurface: AppColors.fgInverseColor,
     ),
     useMaterial3: true,
     brightness: Brightness.dark,
@@ -211,7 +220,10 @@ ThemeData shipitDarkTheme() {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-        borderSide: const BorderSide(color: AppColors.actionPrimaryBgColor, width: 2),
+        borderSide: const BorderSide(
+          color: AppColors.actionPrimaryBgColor,
+          width: 2,
+        ),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppRadius.radiusMd),
@@ -219,11 +231,16 @@ ThemeData shipitDarkTheme() {
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-        borderSide: const BorderSide(color: AppColors.stateErrorFgColor, width: 2),
+        borderSide: const BorderSide(
+          color: AppColors.stateErrorFgColor,
+          width: 2,
+        ),
       ),
       disabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-        borderSide: const BorderSide(color: AppColors.actionDisabledBorderColor),
+        borderSide: const BorderSide(
+          color: AppColors.actionDisabledBorderColor,
+        ),
       ),
       hintStyle: AppTypography.bodyMedium.copyWith(
         color: AppColors.fgMutedColor,
@@ -231,7 +248,9 @@ ThemeData shipitDarkTheme() {
       labelStyle: AppTypography.labelMedium.copyWith(
         color: AppColors.fgInverseColor,
       ),
-      errorStyle: AppTypography.bodySmall.copyWith(color: AppColors.stateErrorFgColor),
+      errorStyle: AppTypography.bodySmall.copyWith(
+        color: AppColors.stateErrorFgColor,
+      ),
     ),
     chipTheme: ChipThemeData(
       backgroundColor: AppColors.bgSubtleColor,

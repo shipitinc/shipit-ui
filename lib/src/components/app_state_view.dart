@@ -4,6 +4,7 @@ import 'package:shipit_ui/src/foundation/app_spacing.dart';
 import 'package:shipit_ui/src/foundation/app_radius.dart';
 import 'package:shipit_ui/src/foundation/app_typography.dart';
 import 'package:shipit_ui/src/components/app_button.dart';
+import 'package:shipit_ui/src/components/app_shimmer.dart';
 
 /// State view type for AppStateView.
 enum AppStateViewType { loading, empty, error }
@@ -114,10 +115,7 @@ class AppStateView extends StatelessWidget {
               ],
               if (onAction != null && actionLabel != null) ...[
                 const SizedBox(height: AppSpacing.space4),
-                AppButton.secondary(
-                  label: actionLabel!,
-                  onPressed: onAction!,
-                ),
+                AppButton.secondary(label: actionLabel!, onPressed: onAction!),
               ],
             ],
           ),
@@ -140,13 +138,14 @@ class AppStateView extends StatelessWidget {
   Widget _buildIcon() {
     switch (type) {
       case AppStateViewType.loading:
-        return SizedBox(
-          width: 48,
-          height: 48,
-          child: CircularProgressIndicator(
-            strokeWidth: 3,
-            valueColor: const AlwaysStoppedAnimation<Color>(
-              AppColors.actionPrimaryBgColor,
+        return AppShimmer(
+          initialProgress: 0.5,
+          child: Container(
+            width: 48,
+            height: 48,
+            decoration: const BoxDecoration(
+              color: AppColors.shimmerBaseColor,
+              shape: BoxShape.circle,
             ),
           ),
         );

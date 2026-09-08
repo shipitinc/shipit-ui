@@ -53,9 +53,7 @@ class _AppSelectState<T> extends State<AppSelect<T>> {
         children: [
           Text(
             widget.label,
-            style: AppTypography.labelMedium.copyWith(
-              color: _getLabelColor(),
-            ),
+            style: AppTypography.labelMedium.copyWith(color: _getLabelColor()),
           ),
           const SizedBox(height: AppSpacing.space1),
           InputDecorator(
@@ -87,7 +85,9 @@ class _AppSelectState<T> extends State<AppSelect<T>> {
               ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-                borderSide: const BorderSide(color: AppColors.stateErrorFgColor),
+                borderSide: const BorderSide(
+                  color: AppColors.stateErrorFgColor,
+                ),
               ),
               focusedErrorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppRadius.radiusMd),
@@ -98,7 +98,9 @@ class _AppSelectState<T> extends State<AppSelect<T>> {
               ),
               disabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-                borderSide: const BorderSide(color: AppColors.actionDisabledBorderColor),
+                borderSide: const BorderSide(
+                  color: AppColors.actionDisabledBorderColor,
+                ),
               ),
             ),
             isEmpty: widget.value == null,
