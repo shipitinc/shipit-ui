@@ -15,6 +15,14 @@ class AppTypography {
   /// token/typography/font/family/base → Inter
   static const String fontFamily = 'Inter';
 
+  /// Package that bundles the [fontFamily] assets (see `pubspec.yaml`).
+  /// Pass as `TextStyle(package: AppTypography.fontPackage)` when building
+  /// styles outside this class so the bundled Inter TTFs are resolved.
+  static const String fontPackage = 'shipit_ui';
+
+  /// Fully qualified family name as registered by the Flutter engine.
+  static const String resolvedFontFamily = 'packages/$fontPackage/$fontFamily';
+
   // MARK: - Font Weights
 
   /// token/typography/font/weight/regular → 400
@@ -71,6 +79,7 @@ class AppTypography {
   // Display styles (largest)
   static const TextStyle displayLarge = TextStyle(
     fontFamily: fontFamily,
+    package: fontPackage,
     fontSize: fontSize4xl,
     fontWeight: fontWeightSemibold,
     height: 1.2,
@@ -80,6 +89,7 @@ class AppTypography {
 
   static const TextStyle displayMedium = TextStyle(
     fontFamily: fontFamily,
+    package: fontPackage,
     fontSize: fontSize3xl,
     fontWeight: fontWeightSemibold,
     height: 1.2,
@@ -89,6 +99,7 @@ class AppTypography {
 
   static const TextStyle displaySmall = TextStyle(
     fontFamily: fontFamily,
+    package: fontPackage,
     fontSize: fontSize2xl,
     fontWeight: fontWeightSemibold,
     height: 1.2,
@@ -99,6 +110,7 @@ class AppTypography {
   // Headline styles
   static const TextStyle headlineLarge = TextStyle(
     fontFamily: fontFamily,
+    package: fontPackage,
     fontSize: fontSize2xl,
     fontWeight: fontWeightSemibold,
     height: 1.2,
@@ -108,6 +120,7 @@ class AppTypography {
 
   static const TextStyle headlineMedium = TextStyle(
     fontFamily: fontFamily,
+    package: fontPackage,
     fontSize: fontSizeXl,
     fontWeight: fontWeightSemibold,
     height: 1.3,
@@ -117,6 +130,7 @@ class AppTypography {
 
   static const TextStyle headlineSmall = TextStyle(
     fontFamily: fontFamily,
+    package: fontPackage,
     fontSize: fontSizeLg,
     fontWeight: fontWeightSemibold,
     height: 1.4,
@@ -127,6 +141,7 @@ class AppTypography {
   // Title styles
   static const TextStyle titleLarge = TextStyle(
     fontFamily: fontFamily,
+    package: fontPackage,
     fontSize: fontSizeLg,
     fontWeight: fontWeightSemibold,
     height: 1.4,
@@ -136,6 +151,7 @@ class AppTypography {
 
   static const TextStyle titleMedium = TextStyle(
     fontFamily: fontFamily,
+    package: fontPackage,
     fontSize: fontSizeMd,
     fontWeight: fontWeightSemibold,
     height: 1.4,
@@ -145,6 +161,7 @@ class AppTypography {
 
   static const TextStyle titleSmall = TextStyle(
     fontFamily: fontFamily,
+    package: fontPackage,
     fontSize: fontSizeSm,
     fontWeight: fontWeightSemibold,
     height: 1.4,
@@ -155,6 +172,7 @@ class AppTypography {
   // Body styles
   static const TextStyle bodyLarge = TextStyle(
     fontFamily: fontFamily,
+    package: fontPackage,
     fontSize: fontSizeLg,
     fontWeight: fontWeightRegular,
     height: 1.5,
@@ -164,6 +182,7 @@ class AppTypography {
 
   static const TextStyle bodyMedium = TextStyle(
     fontFamily: fontFamily,
+    package: fontPackage,
     fontSize: fontSizeMd,
     fontWeight: fontWeightRegular,
     height: 1.5,
@@ -173,6 +192,7 @@ class AppTypography {
 
   static const TextStyle bodySmall = TextStyle(
     fontFamily: fontFamily,
+    package: fontPackage,
     fontSize: fontSizeSm,
     fontWeight: fontWeightRegular,
     height: 1.43,
@@ -183,6 +203,7 @@ class AppTypography {
   // Label styles
   static const TextStyle labelLarge = TextStyle(
     fontFamily: fontFamily,
+    package: fontPackage,
     fontSize: fontSizeSm,
     fontWeight: fontWeightMedium,
     height: 1.43,
@@ -192,6 +213,7 @@ class AppTypography {
 
   static const TextStyle labelMedium = TextStyle(
     fontFamily: fontFamily,
+    package: fontPackage,
     fontSize: fontSizeXs,
     fontWeight: fontWeightMedium,
     height: 1.33,
@@ -201,6 +223,7 @@ class AppTypography {
 
   static const TextStyle labelSmall = TextStyle(
     fontFamily: fontFamily,
+    package: fontPackage,
     fontSize: fontSizeXs,
     fontWeight: fontWeightMedium,
     height: 1.33,

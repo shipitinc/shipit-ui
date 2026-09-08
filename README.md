@@ -70,6 +70,19 @@ MaterialApp(
 );
 ```
 
+## Fonts
+
+`shipit_ui` bundles **Inter** (400 / 500 / 600 / 700, SIL OFL 1.1 — see
+`assets/fonts/LICENSE-Inter.txt`). Every `AppTypography` style and the
+`shipitLightTheme()` / `shipitDarkTheme()` text themes already resolve to it;
+consuming apps do not need to declare the font. If you build a `TextStyle`
+by hand, pass `package: AppTypography.fontPackage` (or use
+`AppTypography.resolvedFontFamily`, i.e. `packages/shipit_ui/Inter`).
+
+Widget/golden tests render with Flutter's Ahem test font unless you load the
+family yourself, e.g. `FontLoader(AppTypography.resolvedFontFamily)` with the
+four `packages/shipit_ui/assets/fonts/Inter-*.ttf` assets.
+
 ## Testing
 
 ```bash

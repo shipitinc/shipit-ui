@@ -65,6 +65,10 @@ return Column(children: [
 
 Raw `CircularProgressIndicator` / `LinearProgressIndicator` are **prohibited** in product UI. See `docs/patterns.md` and Penpot **02 Components** (`state / loading`, `state / error`).
 
+### 3b. Typography Uses the Bundled Inter
+
+Use `AppTypography.*` styles (or the shipit themes). Hand-built `TextStyle`s must pass `package: AppTypography.fontPackage` so the bundled Inter resolves; never set `fontFamily: 'Inter'` bare and never ship a second copy of Inter in a product.
+
 ### 4. Golden Baselines Are Binding
 
 Changing an approved golden baseline is **not** an implementation fix. Any visual change to a golden-tested component requires:

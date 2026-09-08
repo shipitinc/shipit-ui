@@ -135,7 +135,7 @@ Penpot identifiers follow a hierarchical path format:
 
 | Penpot ID | Flutter API | Status |
 |-----------|------------|--------|
-| `token/typography/font/family/base` | `AppTypography.fontFamily` | MATCHED |
+| `token/typography/font/family/base` | `AppTypography.fontFamily` (Inter 400/500/600/700 bundled in `assets/fonts/`, resolved as `AppTypography.resolvedFontFamily`) | MATCHED |
 | `token/typography/font/weight/regular` | `AppTypography.fontWeightRegular` | MATCHED |
 | `token/typography/font/weight/medium` | `AppTypography.fontWeightMedium` | MATCHED |
 | `token/typography/font/weight/semibold` | `AppTypography.fontWeightSemibold` | MATCHED |
