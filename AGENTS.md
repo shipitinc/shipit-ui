@@ -63,7 +63,7 @@ return Column(children: [
 ]);
 ```
 
-Raw `CircularProgressIndicator` / `LinearProgressIndicator` are **prohibited** in product UI. See `docs/patterns.md` and Penpot **03 Patterns** (`pattern / loading-state`, `pattern / error-state`).
+Raw `CircularProgressIndicator` / `LinearProgressIndicator` are **prohibited** in product UI. See `docs/patterns.md` and Penpot **02 Components** (`state / loading`, `state / error`).
 
 ### 4. Golden Baselines Are Binding
 

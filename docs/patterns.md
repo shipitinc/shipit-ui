@@ -1,10 +1,15 @@
 # shipit_ui Patterns
 
-Composition rules built from `shipit_ui` components. Each pattern mirrors a
-board on the Penpot page **03 Patterns** (`pattern/<name>`). Patterns are
-product-agnostic; product agents apply them rather than inventing layouts.
+Composition rules built from `shipit_ui` components. Product agents apply
+them rather than inventing layouts.
 
-## Loading state (`pattern/loading-state`)
+- **App states** (loading / error / empty) are component behaviour and live on
+  the Penpot page **02 Components** as `state / loading`, `state / error` and
+  the `AppEmptyState`, `AppSkeleton`, `AppInlineAlert` components.
+- **Layout patterns** (action row, field stack) live on **03 Patterns** as
+  `pattern / <name>`.
+
+## Loading state (`state/loading`, Penpot 02 Components)
 
 A loading state is a **shimmering silhouette of the content that is about to
 appear** — same sizes, gaps and radii. It never replaces the view with an
@@ -57,7 +62,7 @@ AppEmptyState(title: 'Loading…')
 Tokens: `AppColors.shimmerBase` → `AppColors.shimmerHighlight`, `AppMotion.shimmer`
 (1200 ms); lines/blocks `AppRadius.radiusSm`/`radiusMd`, circles `radiusFull`.
 
-## Error state (`pattern/error-state`)
+## Error state (`state/error`, Penpot 02 Components)
 
 Errors are surfaced **on top of or next to** the affected content, never by
 replacing it. The content area keeps its last good state (or its skeleton)
@@ -73,7 +78,7 @@ underneath.
 `AppInlineAlert` also has `.warning`, `.info` and `.success` severities for
 non-error feedback.
 
-## Empty state
+## Empty state (`component/empty_state`, Penpot 02 Components)
 
 `AppEmptyState` is the **only** state that replaces a content area: icon,
 title, optional message and optional secondary action. Use it when a query

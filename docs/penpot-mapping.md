@@ -50,6 +50,8 @@ Penpot identifiers follow a hierarchical path format:
 | `component/empty_state/default` | `AppEmptyState(title: ..., message: ..., actionLabel: ...)` | MATCHED |
 | `component/skeleton/{line,circle,block}` | `AppSkeleton.line()` / `.circle()` / `.block()` (wrap in `AppSkeleton.shimmer`) | MATCHED |
 | `component/inline_alert/{error,warning,info,success}` | `AppInlineAlert.error(...)` / `.warning` / `.info` / `.success` | MATCHED |
+| `state/loading` (guidance board) | `AppSkeleton` shimmer silhouette rendered in place of the incoming content | MATCHED |
+| `state/error` (guidance board) | `AppInlineAlert.error` next to content; `AppConfirmDialog` for blocking decisions | MATCHED |
 | `component/shimmer/default` | `AppShimmer(child: ...)` | MATCHED |
 | `component/tooltip/default` | `AppTooltip(message: ..., child: ...)` | MATCHED |
 | `component/navigation_rail/extended` | `AppNavigationRail(items: ..., extended: true)` | MATCHED |
@@ -221,8 +223,6 @@ Penpot identifiers follow a hierarchical path format:
 
 | Penpot ID | Flutter guidance | Status |
 |-----------|------------------|--------|
-| `pattern/loading-state` | `AppSkeleton` shimmer silhouette rendered in place of the incoming content | MATCHED |
-| `pattern/error-state` | `AppInlineAlert.error` next to content; `AppConfirmDialog` for blocking decisions | MATCHED |
 | `pattern/action-row` | `AppButton.secondary` left, `AppButton.primary` right, gap `AppSpacing.space2` | MATCHED |
 | `pattern/field-stack` | Fields fill width, vertical gap `AppSpacing.space4` | MATCHED |
 
