@@ -72,7 +72,7 @@ underneath.
 |-----------|-----|
 | Failed load or action, user can continue | `AppInlineAlert.error(title, message, actionLabel: 'Retry', onAction, onDismiss)` placed directly above the affected content |
 | User must make a blocking decision | `AppConfirmDialog` / `AppDialog.error` |
-| Field-level validation | `AppTextField.error`, `AppDatePicker(isError: true)` |
+| Field-level validation | `AppTextField(validator: ..., errorText: ...)` inside a `Form` (message comes from the validator or `errorText`), `AppDatePicker(isError: true, errorText: ...)` |
 | Anywhere | Never a full-view error icon screen |
 
 `AppInlineAlert` also has `.warning`, `.info` and `.success` severities for
@@ -96,3 +96,9 @@ and `AppEmptyState` (single secondary action) already apply this.
 Vertical gap between form fields is `AppSpacing.space4` (16 px); fields fill
 the container width. Applies to `AppTextField`, `AppSelect`, `AppDatePicker`
 and `AppSearchField`.
+
+Wrap the stack in a `Form` and give each `AppTextField` a `validator`; call
+`formKey.currentState!.validate()` on submit (or set
+`autovalidateMode: AutovalidateMode.onUserInteraction`). Server-side errors
+are surfaced per field with `errorText`, which always wins over the validator
+message. Never show validation failures as a full-view error state.

@@ -69,6 +69,10 @@ Raw `CircularProgressIndicator` / `LinearProgressIndicator` are **prohibited** i
 
 Use `AppTypography.*` styles (or the shipit themes). Hand-built `TextStyle`s must pass `package: AppTypography.fontPackage` so the bundled Inter resolves; never set `fontFamily: 'Inter'` bare and never ship a second copy of Inter in a product.
 
+### 3c. Form Validation Is Field-Level
+
+`AppTextField` participates in `Form`: pass a `validator` (and optionally `autovalidateMode`), call `Form.validate()` on submit, and use `errorText` for server-side messages. Do not hand-roll error labels under fields or swap the form for an error screen.
+
 ### 4. Golden Baselines Are Binding
 
 Changing an approved golden baseline is **not** an implementation fix. Any visual change to a golden-tested component requires:

@@ -39,7 +39,7 @@ Penpot identifiers follow a hierarchical path format:
 | `component/button/secondary/disabled` | `AppButton.secondary(label: ..., isDisabled: true)` | MATCHED |
 | `component/button/secondary/loading` | `AppButton.secondary(label: ..., isLoading: true)` | MATCHED |
 | `component/text_field/default` | `AppTextField.normal(label: ...)` | MATCHED |
-| `component/text_field/error` | `AppTextField.error(label: ...)` | MATCHED |
+| `component/text_field/error` | `AppTextField.error(label: ..., errorText: ...)` or any `AppTextField` whose `validator` fails / `errorText` is set | MATCHED |
 | `component/text_field/disabled` | `AppTextField.disabled(label: ...)` | MATCHED |
 | `component/select/default` | `AppSelect(label: ..., options: ...)` | MATCHED |
 | `component/select/error` | `AppSelect(label: ..., options: ..., isError: true)` | MATCHED |
