@@ -32,16 +32,16 @@ Penpot identifiers follow a hierarchical path format:
 
 | Penpot ID | Flutter API | Status |
 |-----------|------------|--------|
-| `component/button/primary/default` | `AppButton.primary(label: ...)` | MATCHED |
+| `component/button/primary/base` | `AppButton.primary(label: ...)` | MATCHED |
 | `component/button/primary/disabled` | `AppButton.primary(label: ..., isDisabled: true)` | MATCHED |
 | `component/button/primary/loading` | `AppButton.primary(label: ..., isLoading: true)` | MATCHED |
-| `component/button/secondary/default` | `AppButton.secondary(label: ...)` | MATCHED |
+| `component/button/secondary/base` | `AppButton.secondary(label: ...)` | MATCHED |
 | `component/button/secondary/disabled` | `AppButton.secondary(label: ..., isDisabled: true)` | MATCHED |
 | `component/button/secondary/loading` | `AppButton.secondary(label: ..., isLoading: true)` | MATCHED |
-| `component/text_field/default` | `AppTextField.normal(label: ...)` | MATCHED |
+| `component/text_field/base` | `AppTextField.normal(label: ...)` | MATCHED |
 | `component/text_field/error` | `AppTextField.error(label: ..., errorText: ...)` or any `AppTextField` whose `validator` fails / `errorText` is set | MATCHED |
 | `component/text_field/disabled` | `AppTextField.disabled(label: ...)` | MATCHED |
-| `component/select/default` | `AppSelect(label: ..., options: ...)` | MATCHED |
+| `component/select/base` | `AppSelect(label: ..., options: ...)` | MATCHED |
 | `component/select/error` | `AppSelect(state: AppSelectState.error)` or any `AppSelect` whose `validator` fails / `errorText` is set | MATCHED |
 | `component/select/disabled` | `AppSelect(label: ..., options: ..., isDisabled: true)` | MATCHED |
 | `component/card/default` | `AppCard(title: ..., children: ...)` | MATCHED |
@@ -56,15 +56,15 @@ Penpot identifiers follow a hierarchical path format:
 | `component/tooltip/default` | `AppTooltip(message: ..., child: ...)` | MATCHED |
 | `component/navigation_rail/extended` | `AppNavigationRail(items: ..., extended: true)` | MATCHED |
 | `component/navigation_rail/collapsed` | `AppNavigationRail(items: ..., extended: false)` | MATCHED |
-| `component/confirm_dialog/default` | `AppConfirmDialog(title: ..., onConfirm: ...)` | MATCHED |
+| `component/confirm_dialog/base` | `AppConfirmDialog(title: ..., onConfirm: ...)` | MATCHED |
 | `component/confirm_dialog/destructive` | `AppConfirmDialog.destructive(title: ..., onConfirm: ...)` | MATCHED |
 | `component/avatar/{sm,md,lg,xl}` | `AppAvatar(name: ..., size: AppAvatarSize.*)` | MATCHED |
 | `component/avatar/status/{online,busy,offline}` | `AppAvatar(name: ..., status: AppAvatarStatus.*)` | MATCHED |
 | `component/avatar/icon` | `AppAvatar()` (no name → person icon) | MATCHED |
 | `component/avatar/badge` | `AppAvatar(name: ..., badge: ...)` | MATCHED |
-| `component/filter_chip/default` | `AppFilterChip(label: ...)` | MATCHED |
+| `component/filter_chip/base` | `AppFilterChip(label: ...)` | MATCHED |
 | `component/filter_chip/selected` | `AppFilterChip(label: ..., selected: true)` | MATCHED |
-| `component/search_field/default` | `AppSearchField(filters: ...)` | MATCHED |
+| `component/search_field/base` | `AppSearchField(filters: ...)` | MATCHED |
 | `component/search_field/active` | `AppSearchField(controller: <non-empty>)` | MATCHED |
 | `component/search_field/recents` | `AppSearchField(recentSearches: ...)` (focused, empty) | MATCHED |
 | `component/date_picker/single` | `AppDatePicker(value: ..., presets: ...)` | MATCHED |
@@ -72,168 +72,168 @@ Penpot identifiers follow a hierarchical path format:
 | `component/date_picker/empty` | `AppDatePicker(label: ...)` | MATCHED |
 | `component/date_picker/error` | `AppDatePicker(errorText: ...)` or any `AppDatePicker` whose `validator` / `rangeValidator` fails | MATCHED |
 | `component/date_picker/disabled` | `AppDatePicker(isDisabled: true)` | MATCHED |
-| `component/data_table/default` | `AppDataTable(columns: ..., rows: ...)` | MATCHED |
+| `component/data_table/base` | `AppDataTable(columns: ..., rows: ...)` | MATCHED |
 | `component/data_table/paginated` | `AppDataTable(rowsPerPage: ...)` (rows > page) | MATCHED |
 | `component/data_table/empty` | `AppDataTable(rows: [])` | MATCHED |
 | `component/data_table/loading` | `AppDataTable(isLoading: true)` | MATCHED |
 
 #### Tokens - Colors
 
-Light values live in the Penpot set `shipit/color` (theme **ShipIt / Light**) and map to `AppColors.*`. Every token also has a dark counterpart in `shipit/color-dark` (theme **ShipIt / Dark**) that maps to `AppColorsDark.*` with the same name; both are exposed brightness-aware through `AppPalette.light` / `AppPalette.dark` and consumed by `shipitLightTheme()` / `shipitDarkTheme()`.
+Light values live in the Penpot set `shipit/color` (theme **ShipIt / Light**, `AppColorTokens.light`) and dark values in `shipit/color-dark` (theme **ShipIt / Dark**, `AppColorTokens.dark`) with identical names. In code read them as `context.color.<path>`; the path is the Penpot name minus the `color.` prefix (`color.border.base` → `context.color.border.base`, `color.state.error.fg` → `context.color.state.error.fg`).
 
 | Penpot ID | Flutter API | Status |
 |-----------|------------|--------|
-| `token/color/bg/base` | `AppColors.bgBase` | MATCHED |
-| `token/color/bg/surface` | `AppColors.bgSurface` | MATCHED |
-| `token/color/bg/subtle` | `AppColors.bgSubtle` | MATCHED |
-| `token/color/bg/disabled` | `AppColors.bgDisabled` | MATCHED |
-| `token/color/fg/primary` | `AppColors.fgPrimary` | MATCHED |
-| `token/color/fg/secondary` | `AppColors.fgSecondary` | MATCHED |
-| `token/color/fg/muted` | `AppColors.fgMuted` | MATCHED |
-| `token/color/fg/inverse` | `AppColors.fgInverse` | MATCHED |
-| `token/color/fg/disabled` | `AppColors.fgDisabled` | MATCHED |
-| `token/color/border/default` | `AppColors.borderDefault` | MATCHED |
-| `token/color/border/strong` | `AppColors.borderStrong` | MATCHED |
-| `token/color/border/focus` | `AppColors.borderFocus` | MATCHED |
-| `token/color/border/error` | `AppColors.borderError` | MATCHED |
-| `token/color/action/primary/bg` | `AppColors.actionPrimaryBg` | MATCHED |
-| `token/color/action/primary/bgHover` | `AppColors.actionPrimaryBgHover` | MATCHED |
-| `token/color/action/primary/fg` | `AppColors.actionPrimaryFg` | MATCHED |
-| `token/color/action/secondary/bg` | `AppColors.actionSecondaryBg` | MATCHED |
-| `token/color/action/secondary/border` | `AppColors.actionSecondaryBorder` | MATCHED |
-| `token/color/action/secondary/fg` | `AppColors.actionSecondaryFg` | MATCHED |
-| `token/color/action/disabled/bg` | `AppColors.actionDisabledBg` | MATCHED |
-| `token/color/action/disabled/border` | `AppColors.actionDisabledBorder` | MATCHED |
-| `token/color/action/disabled/fg` | `AppColors.actionDisabledFg` | MATCHED |
-| `token/color/state/error/fg` | `AppColors.stateErrorFg` | MATCHED |
-| `token/color/state/error/bg` | `AppColors.stateErrorBg` | MATCHED |
-| `token/color/state/success/fg` | `AppColors.stateSuccessFg` | MATCHED |
-| `token/color/state/success/bg` | `AppColors.stateSuccessBg` | MATCHED |
-| `token/color/state/warning/fg` | `AppColors.stateWarningFg` | MATCHED |
-| `token/color/state/warning/bg` | `AppColors.stateWarningBg` | MATCHED |
-| `token/color/state/info/fg` | `AppColors.stateInfoFg` | MATCHED |
-| `token/color/state/info/bg` | `AppColors.stateInfoBg` | MATCHED |
-| `token/color/scrim` | `AppColors.scrim` | MATCHED |
-| `token/color/shimmer/base` | `AppColors.shimmerBase` | MATCHED |
-| `token/color/shimmer/highlight` | `AppColors.shimmerHighlight` | MATCHED |
-| `token/color/nav/selected/bg` | `AppColors.navSelectedBg` | MATCHED |
-| `token/color/nav/selected/fg` | `AppColors.navSelectedFg` | MATCHED |
-| `token/color/nav/unselected/fg` | `AppColors.navUnselectedFg` | MATCHED |
-| `token/color/tooltip/bg` | `AppColors.tooltipBg` | MATCHED |
-| `token/color/tooltip/fg` | `AppColors.tooltipFg` | MATCHED |
-| `token/color/avatar/bg` | `AppColors.avatarBg` | MATCHED |
-| `token/color/avatar/fg` | `AppColors.avatarFg` | MATCHED |
-| `token/color/chip/bg` | `AppColors.chipBg` | MATCHED |
-| `token/color/chip/fg` | `AppColors.chipFg` | MATCHED |
-| `token/color/chip/border` | `AppColors.chipBorder` | MATCHED |
-| `token/color/chip/selected/bg` | `AppColors.chipSelectedBg` | MATCHED |
-| `token/color/chip/selected/fg` | `AppColors.chipSelectedFg` | MATCHED |
-| `token/color/chip/selected/border` | `AppColors.chipSelectedBorder` | MATCHED |
-| `token/color/table/header/bg` | `AppColors.tableHeaderBg` | MATCHED |
-| `token/color/table/row/hover` | `AppColors.tableRowHover` | MATCHED |
-| `token/color/table/border` | `AppColors.tableBorder` | MATCHED |
+| `token/color/bg/base` | `context.color.bg.base` | MATCHED |
+| `token/color/bg/surface` | `context.color.bg.surface` | MATCHED |
+| `token/color/bg/subtle` | `context.color.bg.subtle` | MATCHED |
+| `token/color/bg/disabled` | `context.color.bg.disabled` | MATCHED |
+| `token/color/fg/primary` | `context.color.fg.primary` | MATCHED |
+| `token/color/fg/secondary` | `context.color.fg.secondary` | MATCHED |
+| `token/color/fg/muted` | `context.color.fg.muted` | MATCHED |
+| `token/color/fg/inverse` | `context.color.fg.inverse` | MATCHED |
+| `token/color/fg/disabled` | `context.color.fg.disabled` | MATCHED |
+| `token/color/border/base` | `context.color.border.base` | MATCHED |
+| `token/color/border/strong` | `context.color.border.strong` | MATCHED |
+| `token/color/border/focus` | `context.color.border.focus` | MATCHED |
+| `token/color/border/error` | `context.color.border.error` | MATCHED |
+| `token/color/action/primary/bg` | `context.color.action.primary.bg` | MATCHED |
+| `token/color/action/primary/bgHover` | `context.color.action.primary.bgHover` | MATCHED |
+| `token/color/action/primary/fg` | `context.color.action.primary.fg` | MATCHED |
+| `token/color/action/secondary/bg` | `context.color.action.secondary.bg` | MATCHED |
+| `token/color/action/secondary/border` | `context.color.action.secondary.border` | MATCHED |
+| `token/color/action/secondary/fg` | `context.color.action.secondary.fg` | MATCHED |
+| `token/color/action/disabled/bg` | `context.color.action.disabled.bg` | MATCHED |
+| `token/color/action/disabled/border` | `context.color.action.disabled.border` | MATCHED |
+| `token/color/action/disabled/fg` | `context.color.action.disabled.fg` | MATCHED |
+| `token/color/state/error/fg` | `context.color.state.error.fg` | MATCHED |
+| `token/color/state/error/bg` | `context.color.state.error.bg` | MATCHED |
+| `token/color/state/success/fg` | `context.color.state.success.fg` | MATCHED |
+| `token/color/state/success/bg` | `context.color.state.success.bg` | MATCHED |
+| `token/color/state/warning/fg` | `context.color.state.warning.fg` | MATCHED |
+| `token/color/state/warning/bg` | `context.color.state.warning.bg` | MATCHED |
+| `token/color/state/info/fg` | `context.color.state.info.fg` | MATCHED |
+| `token/color/state/info/bg` | `context.color.state.info.bg` | MATCHED |
+| `token/color/scrim` | `context.color.scrim` | MATCHED |
+| `token/color/shimmer/base` | `context.color.shimmer.base` | MATCHED |
+| `token/color/shimmer/highlight` | `context.color.shimmer.highlight` | MATCHED |
+| `token/color/nav/selected/bg` | `context.color.nav.selected.bg` | MATCHED |
+| `token/color/nav/selected/fg` | `context.color.nav.selected.fg` | MATCHED |
+| `token/color/nav/unselected/fg` | `context.color.nav.unselected.fg` | MATCHED |
+| `token/color/tooltip/bg` | `context.color.tooltip.bg` | MATCHED |
+| `token/color/tooltip/fg` | `context.color.tooltip.fg` | MATCHED |
+| `token/color/avatar/bg` | `context.color.avatar.bg` | MATCHED |
+| `token/color/avatar/fg` | `context.color.avatar.fg` | MATCHED |
+| `token/color/chip/bg` | `context.color.chip.bg` | MATCHED |
+| `token/color/chip/fg` | `context.color.chip.fg` | MATCHED |
+| `token/color/chip/border` | `context.color.chip.border` | MATCHED |
+| `token/color/chip/selected/bg` | `context.color.chip.selected.bg` | MATCHED |
+| `token/color/chip/selected/fg` | `context.color.chip.selected.fg` | MATCHED |
+| `token/color/chip/selected/border` | `context.color.chip.selected.border` | MATCHED |
+| `token/color/table/header/bg` | `context.color.table.header.bg` | MATCHED |
+| `token/color/table/row/hover` | `context.color.table.row.hover` | MATCHED |
+| `token/color/table/border` | `context.color.table.border` | MATCHED |
 
 #### Tokens - Typography
 
 | Penpot ID | Flutter API | Status |
 |-----------|------------|--------|
-| `token/typography/font/family/base` | `AppTypography.fontFamily` (Inter 400/500/600/700 bundled in `assets/fonts/`, resolved as `AppTypography.resolvedFontFamily`) | MATCHED |
-| `token/typography/font/weight/regular` | `AppTypography.fontWeightRegular` | MATCHED |
-| `token/typography/font/weight/medium` | `AppTypography.fontWeightMedium` | MATCHED |
-| `token/typography/font/weight/semibold` | `AppTypography.fontWeightSemibold` | MATCHED |
-| `token/typography/font/weight/bold` | `AppTypography.fontWeightBold` | MATCHED |
-| `token/typography/font/size/xs` | `AppTypography.fontSizeXs` | MATCHED |
-| `token/typography/font/size/sm` | `AppTypography.fontSizeSm` | MATCHED |
-| `token/typography/font/size/md` | `AppTypography.fontSizeMd` | MATCHED |
-| `token/typography/font/size/lg` | `AppTypography.fontSizeLg` | MATCHED |
-| `token/typography/font/size/xl` | `AppTypography.fontSizeXl` | MATCHED |
-| `token/typography/font/size/2xl` | `AppTypography.fontSize2xl` | MATCHED |
-| `token/typography/font/size/3xl` | `AppTypography.fontSize3xl` | MATCHED |
-| `token/typography/font/size/4xl` | `AppTypography.fontSize4xl` | MATCHED |
-| `token/typography/letterSpacing/tight` | `AppTypography.letterSpacingTight` | MATCHED |
-| `token/typography/letterSpacing/normal` | `AppTypography.letterSpacingNormal` | MATCHED |
-| `token/typography/letterSpacing/wide` | `AppTypography.letterSpacingWide` | MATCHED |
+| `token/typography/font/family/base` | `context.font.family` (Inter 400/500/600/700 bundled in `assets/fonts/`, resolved as `context.font.resolvedFamily`) | MATCHED |
+| `token/typography/font/weight/regular` | `context.font.weight.regular` | MATCHED |
+| `token/typography/font/weight/medium` | `context.font.weight.medium` | MATCHED |
+| `token/typography/font/weight/semibold` | `context.font.weight.semibold` | MATCHED |
+| `token/typography/font/weight/bold` | `context.font.weight.bold` | MATCHED |
+| `token/typography/font/size/xs` | `context.font.size.xs` | MATCHED |
+| `token/typography/font/size/sm` | `context.font.size.sm` | MATCHED |
+| `token/typography/font/size/md` | `context.font.size.md` | MATCHED |
+| `token/typography/font/size/lg` | `context.font.size.lg` | MATCHED |
+| `token/typography/font/size/xl` | `context.font.size.xl` | MATCHED |
+| `token/typography/font/size/2xl` | `context.font.size.xxl` | MATCHED |
+| `token/typography/font/size/3xl` | `context.font.size.xxxl` | MATCHED |
+| `token/typography/font/size/4xl` | `context.font.size.xxxxl` | MATCHED |
+| `token/typography/letterSpacing/tight` | `context.font.letterSpacing.tight` | MATCHED |
+| `token/typography/letterSpacing/normal` | `context.font.letterSpacing.normal` | MATCHED |
+| `token/typography/letterSpacing/wide` | `context.font.letterSpacing.wide` | MATCHED |
 
 #### Tokens - Spacing
 
 | Penpot ID | Flutter API | Status |
 |-----------|------------|--------|
-| `token/spacing/0` | `AppSpacing.space0` | MATCHED |
-| `token/spacing/1` | `AppSpacing.space1` | MATCHED |
-| `token/spacing/2` | `AppSpacing.space2` | MATCHED |
-| `token/spacing/3` | `AppSpacing.space3` | MATCHED |
-| `token/spacing/4` | `AppSpacing.space4` | MATCHED |
-| `token/spacing/5` | `AppSpacing.space5` | MATCHED |
-| `token/spacing/6` | `AppSpacing.space6` | MATCHED |
-| `token/spacing/8` | `AppSpacing.space8` | MATCHED |
-| `token/spacing/10` | `AppSpacing.space10` | MATCHED |
-| `token/spacing/12` | `AppSpacing.space12` | MATCHED |
-| `token/spacing/16` | `AppSpacing.space16` | MATCHED |
+| `token/spacing/0` | `context.space.s0` | MATCHED |
+| `token/spacing/1` | `context.space.s1` | MATCHED |
+| `token/spacing/2` | `context.space.s2` | MATCHED |
+| `token/spacing/3` | `context.space.s3` | MATCHED |
+| `token/spacing/4` | `context.space.s4` | MATCHED |
+| `token/spacing/5` | `context.space.s5` | MATCHED |
+| `token/spacing/6` | `context.space.s6` | MATCHED |
+| `token/spacing/8` | `context.space.s8` | MATCHED |
+| `token/spacing/10` | `context.space.s10` | MATCHED |
+| `token/spacing/12` | `context.space.s12` | MATCHED |
+| `token/spacing/16` | `context.space.s16` | MATCHED |
 
 #### Tokens - Radius
 
 | Penpot ID | Flutter API | Status |
 |-----------|------------|--------|
-| `token/radius/none` | `AppRadius.radiusNone` | MATCHED |
-| `token/radius/sm` | `AppRadius.radiusSm` | MATCHED |
-| `token/radius/md` | `AppRadius.radiusMd` | MATCHED |
-| `token/radius/lg` | `AppRadius.radiusLg` | MATCHED |
-| `token/radius/xl` | `AppRadius.radiusXl` | MATCHED |
-| `token/radius/full` | `AppRadius.radiusFull` | MATCHED |
+| `token/radius/none` | `context.radius.none` | MATCHED |
+| `token/radius/sm` | `context.radius.sm` | MATCHED |
+| `token/radius/md` | `context.radius.md` | MATCHED |
+| `token/radius/lg` | `context.radius.lg` | MATCHED |
+| `token/radius/xl` | `context.radius.xl` | MATCHED |
+| `token/radius/full` | `context.radius.full` | MATCHED |
 
 #### Tokens - Breakpoints
 
 | Penpot ID | Flutter API | Status |
 |-----------|------------|--------|
-| `token/breakpoint/mobile` | `AppBreakpoints.mobile` | MATCHED |
-| `token/breakpoint/tablet` | `AppBreakpoints.tablet` | MATCHED |
-| `token/breakpoint/desktop` | `AppBreakpoints.desktop` | MATCHED |
-| `token/breakpoint/wide` | `AppBreakpoints.wide` | MATCHED |
+| `token/breakpoint/mobile` | `context.breakpoint.mobile` | MATCHED |
+| `token/breakpoint/tablet` | `context.breakpoint.tablet` | MATCHED |
+| `token/breakpoint/desktop` | `context.breakpoint.desktop` | MATCHED |
+| `token/breakpoint/wide` | `context.breakpoint.wide` | MATCHED |
 
 #### Tokens - Elevation
 
 | Penpot ID | Flutter API | Status |
 |-----------|------------|--------|
-| `token/elevation/0` | `AppElevation.elevation0` | MATCHED |
-| `token/elevation/1` | `AppElevation.elevation1` | MATCHED |
-| `token/elevation/2` | `AppElevation.elevation2` | MATCHED |
-| `token/elevation/3` | `AppElevation.elevation3` | MATCHED |
+| `token/elevation/0` | `context.elevation.e0` | MATCHED |
+| `token/elevation/1` | `context.elevation.e1` | MATCHED |
+| `token/elevation/2` | `context.elevation.e2` | MATCHED |
+| `token/elevation/3` | `context.elevation.e3` | MATCHED |
 
 #### Tokens - Opacity
 
 | Penpot ID | Flutter API | Status |
 |-----------|------------|--------|
-| `token/opacity/scrim` | `AppOpacity.scrim` | MATCHED |
+| `token/opacity/scrim` | `context.opacity.scrim` | MATCHED |
 
 #### Tokens - Motion (Provisional)
 
 | Penpot ID | Flutter API | Status |
 |-----------|------------|--------|
-| `token/motion/duration/instant` | `AppMotion.instant` | MISSING_IN_PENPOT |
-| `token/motion/duration/fast` | `AppMotion.fast` | MISSING_IN_PENPOT |
-| `token/motion/duration/normal` | `AppMotion.normal` | MISSING_IN_PENPOT |
-| `token/motion/duration/slow` | `AppMotion.slow` | MISSING_IN_PENPOT |
-| `token/motion/duration/slower` | `AppMotion.slower` | MISSING_IN_PENPOT |
-| `token/motion/duration/shimmer` | `AppMotion.shimmer` | MATCHED |
-| `token/motion/curve/standard` | `AppMotion.curveStandard` | MISSING_IN_PENPOT |
-| `token/motion/curve/decelerate` | `AppMotion.curveDecelerate` | MISSING_IN_PENPOT |
-| `token/motion/curve/accelerate` | `AppMotion.curveAccelerate` | MISSING_IN_PENPOT |
-| `token/motion/curve/sharp` | `AppMotion.curveSharp` | MISSING_IN_PENPOT |
-| `token/motion/curve/bouncy` | `AppMotion.curveBouncy` | MISSING_IN_PENPOT |
+| `token/motion/duration/instant` | `context.motion.duration.instant` | MISSING_IN_PENPOT |
+| `token/motion/duration/fast` | `context.motion.duration.fast` | MISSING_IN_PENPOT |
+| `token/motion/duration/normal` | `context.motion.duration.normal` | MISSING_IN_PENPOT |
+| `token/motion/duration/slow` | `context.motion.duration.slow` | MISSING_IN_PENPOT |
+| `token/motion/duration/slower` | `context.motion.duration.slower` | MISSING_IN_PENPOT |
+| `token/motion/duration/shimmer` | `context.motion.duration.shimmer` | MATCHED |
+| `token/motion/curve/standard` | `context.motion.curve.standard` | MISSING_IN_PENPOT |
+| `token/motion/curve/decelerate` | `context.motion.curve.decelerate` | MISSING_IN_PENPOT |
+| `token/motion/curve/accelerate` | `context.motion.curve.accelerate` | MISSING_IN_PENPOT |
+| `token/motion/curve/sharp` | `context.motion.curve.sharp` | MISSING_IN_PENPOT |
+| `token/motion/curve/bouncy` | `context.motion.curve.bouncy` | MISSING_IN_PENPOT |
 
 #### Patterns (Penpot page "03 Patterns" → `docs/patterns.md`)
 
 | Penpot ID | Flutter guidance | Status |
 |-----------|------------------|--------|
-| `pattern/action-row` | `AppButton.secondary` left, `AppButton.primary` right, gap `AppSpacing.space2` | MATCHED |
-| `pattern/field-stack` | Fields fill width, vertical gap `AppSpacing.space4` | MATCHED |
+| `pattern/action-row` | `AppButton.secondary` left, `AppButton.primary` right, gap `context.space.s2` | MATCHED |
+| `pattern/field-stack` | Fields fill width, vertical gap `context.space.s4` | MATCHED |
 
 #### Themes
 
 | Penpot theme | Flutter API | Status |
 |--------------|-------------|--------|
-| `ShipIt / Light` (sets: primitives + `shipit/color` + shared) | `shipitLightTheme()` / `AppPalette.light` | MATCHED |
-| `ShipIt / Dark` (sets: primitives + `shipit/color-dark` + shared) | `shipitDarkTheme()` / `AppPalette.dark` | MATCHED |
+| `ShipIt / Light` (sets: primitives + `shipit/color` + shared) | `shipitLightTheme()` / `AppTheme.light` | MATCHED |
+| `ShipIt / Dark` (sets: primitives + `shipit/color-dark` + shared) | `shipitDarkTheme()` / `AppTheme.dark` | MATCHED |
 
 **Previewing dark mode in Penpot:** Tokens panel → Themes → activate **ShipIt / Dark**. Every component, state board and pattern is bound to semantic tokens, so the whole file re-colours; switch back to **ShipIt / Light** when done (Light is the committed default). Section labels on the canvas are intentionally static. When adding shapes, always bind fills/strokes with tokens (never raw hex) or they will not follow the theme; note that the plugin API only persists token bindings on the *active* page.
 
@@ -260,7 +260,7 @@ When using `shipit_ui` components in product code:
 
 - Use `AppButton.primary()` instead of raw `ElevatedButton`
 - Use `AppTextField.normal()` instead of raw `TextField`
-- Use `AppSpacing.space4` instead of literal `EdgeInsets.all(16)`
-- Use `AppColors.actionPrimaryBg` instead of literal hex colors
-- Use `AppBreakpoints.tablet` for responsive layout decisions
+- Use `context.space.s4` instead of literal `EdgeInsets.all(16)`
+- Use `context.color.action.primary.bg` instead of literal hex colors
+- Use `context.breakpoint.tablet` for responsive layout decisions
 - See [AGENTS.md](../AGENTS.md) for additional rules

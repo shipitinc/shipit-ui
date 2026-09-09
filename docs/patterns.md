@@ -25,25 +25,25 @@ in one `AppSkeleton.shimmer(...)`. Components that own their layout
 AppSkeleton.shimmer(
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
-    spacing: AppSpacing.space3,
+    spacing: context.space.s3,
     children: const [
       Row(
-        spacing: AppSpacing.space3,
+        spacing: context.space.s3,
         children: [
           AppSkeleton.circle(),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: AppSpacing.space2,
+              spacing: context.space.s2,
               children: [
                 AppSkeleton.line(width: 180),
-                AppSkeleton.line(width: 120, height: AppSpacing.space3),
+                AppSkeleton.line(width: 120, height: context.space.s3),
               ],
             ),
           ),
         ],
       ),
-      AppSkeleton.block(height: AppSpacing.space16),
+      AppSkeleton.block(height: context.space.s16),
     ],
   ),
 )
@@ -59,8 +59,8 @@ AppEmptyState(title: 'Loading…')
 | Button / inline action in flight | `AppButton(state: AppButtonState.loading)` |
 | Anywhere | Never `CircularProgressIndicator` / `LinearProgressIndicator`, never a full-view "Loading" screen |
 
-Tokens: `AppColors.shimmerBase` → `AppColors.shimmerHighlight`, `AppMotion.shimmer`
-(1200 ms); lines/blocks `AppRadius.radiusSm`/`radiusMd`, circles `radiusFull`.
+Tokens: `context.color.shimmer.base` → `context.color.shimmer.highlight`, `context.motion.duration.shimmer`
+(1200 ms); lines/blocks `context.radius.sm`/`radiusMd`, circles `radiusFull`.
 
 ## Error state (`state/error`, Penpot 02 Components)
 
@@ -88,12 +88,12 @@ legitimately returns nothing — not for loading and not for errors.
 
 Buttons are ordered least → most emphatic/destructive, left to right:
 `AppButton.secondary` on the left, `AppButton.primary` on the right, gap
-`AppSpacing.space2` (8 px), right-aligned. `AppDialog`, `AppConfirmDialog`
+`context.space.s2` (8 px), right-aligned. `AppDialog`, `AppConfirmDialog`
 and `AppEmptyState` (single secondary action) already apply this.
 
 ## Field stack (`pattern/field-stack`)
 
-Vertical gap between form fields is `AppSpacing.space4` (16 px); fields fill
+Vertical gap between form fields is `context.space.s4` (16 px); fields fill
 the container width. Applies to `AppTextField`, `AppSelect`, `AppDatePicker`
 and `AppSearchField`.
 

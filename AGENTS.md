@@ -18,33 +18,62 @@ AppButton.primary(label: 'Submit', onPressed: () {})
 
 This applies to all Material fallbacks, including `Tooltip` (use `AppTooltip`), `NavigationRail` (use `AppNavigationRail`), `AlertDialog` confirmations (use `AppConfirmDialog`), `SnackBar`/`MaterialBanner` feedback (use `AppInlineAlert`), `CircleAvatar` (use `AppAvatar`), `FilterChip` (use `AppFilterChip`), `SearchBar` (use `AppSearchField`), raw `showDatePicker` (use `AppDatePicker`) and `DataTable`/`PaginatedDataTable` (use `AppDataTable`).
 
-### 2. No Arbitrary Hex Colors
+### 2. All Design Values Come From `context.*`
 
-Arbitrary hex colors are **prohibited** in product UI unless explicitly justified:
+The **only** sanctioned way to read a design value in product code is the token tree on `BuildContext`, whose paths mirror the Penpot token names 1:1:
 
 ```dart
-// WRONG
-Container(color: Color(0xFF3A7BD5))
-
-// CORRECT (brightness-aware — preferred in product code)
-Container(color: AppPalette.of(context).actionPrimaryBg)
-
-// CORRECT (light-only constant)
-Container(color: AppColors.actionPrimaryBgColor)
+context.color.bg.base            // color.bg.base
+context.color.state.error.fg     // color.state.error.fg
+context.space.s4                 // space.4  (16px)
+context.radius.md                // radius.md (8)  · context.radius.all.md → BorderRadius
+context.text.body.medium         // brightness-aware TextStyle
+context.font.weight.semibold     // font.weight.semibold
+context.elevation.e2             // elevation.2
+context.motion.duration.fast     // motion.duration.fast · context.motion.curve.standard
+context.breakpoint.desktop       // breakpoint.desktop · context.isDesktopOrLarger
+context.opacity.scrim
 ```
 
-If a color does not exist in `AppColors`, add it to the foundation first — and add its dark counterpart to `AppColorsDark`, `AppPalette` and the Penpot `shipit/color-dark` set in the same change. Never branch on `Theme.of(context).brightness` to pick colors by hand.
+Prohibited in product UI:
+
+```dart
+// WRONG — raw values
+Container(color: Color(0xFF3A7BD5), padding: EdgeInsets.all(16))
+// WRONG — no static token classes exist any more (AppColors, AppSpacing, AppRadius, AppTypography, … were removed)
+// WRONG — branching on brightness by hand
+color: Theme.of(context).brightness == Brightness.dark ? a : b
+
+// CORRECT
+Container(
+  color: context.color.action.primary.bg,
+  padding: EdgeInsets.all(context.space.s4),
+)
+```
+
+Tokens resolve through the `AppTheme` `ThemeExtension` registered by `shipitLightTheme()` / `shipitDarkTheme()`, so the same call site is correct in both modes. Outside a `build` method (tests, pure functions) use `AppTheme.light` / `AppTheme.dark` directly.
+
+**Adding a token:** add it to the node class under `lib/src/theme/tokens/`, to both `AppColorTokens.light` and `.dark` (for colours), and to the Penpot sets `shipit/color` and `shipit/color-dark` in the same change. Update `docs/penpot-mapping.md`.
+
+**Customising a theme (consumers):** every node has `copyWith`; override a segment and pass it to the theme builder — never fork values:
+
+```dart
+final tokens = AppTheme.light.copyWith(
+  radius: AppTheme.light.radius.copyWith(md: 12),
+);
+MaterialApp(theme: shipitLightTheme(tokens: tokens), ...)
+```
 
 ### 3. No Arbitrary Spacing Literals
 
-Arbitrary spacing literals should be **avoided** when a token exists:
+Arbitrary spacing literals are **prohibited** when a token exists:
 
 ```dart
 // WRONG
 padding: EdgeInsets.all(16)
 
 // CORRECT
-padding: EdgeInsets.all(AppSpacing.md)
+padding: EdgeInsets.all(context.space.s4)
 ```
 
 ### 3a. Loading, Error and Empty States Are Not Interchangeable
@@ -70,7 +99,7 @@ Raw `CircularProgressIndicator` / `LinearProgressIndicator` are **prohibited** i
 
 ### 3b. Typography Uses the Bundled Inter
 
-Use `AppTypography.*` styles (or the shipit themes). Hand-built `TextStyle`s must pass `package: AppTypography.fontPackage` so the bundled Inter resolves; never set `fontFamily: 'Inter'` bare and never ship a second copy of Inter in a product.
+Use `context.text.*` styles (or the shipit themes). Hand-built `TextStyle`s must set `fontFamily: context.font.family, package: context.font.package` so the bundled Inter resolves; never set `fontFamily: 'Inter'` bare and never ship a second copy of Inter in a product.
 
 ### 3c. Form Validation Is Field-Level
 

@@ -50,9 +50,9 @@ lib/
 import 'package:shipit_ui/shipit_ui.dart';
 
 // Use semantic tokens
-final color = AppColors.actionPrimary;
-final spacing = AppSpacing.md;
-final style = AppTypography.titleMedium;
+final color = context.color.action.primary.bg;
+final spacing = context.space.s4;
+final style = context.text.title.medium;
 
 // Use components
 AppButton.primary(label: 'Submit', onPressed: () {});
@@ -70,22 +70,37 @@ MaterialApp(
 );
 ```
 
-Both themes register an `AppPalette` `ThemeExtension`; read
-`AppPalette.of(context)` for brightness-aware semantic colors instead of the
-light-only `AppColors` constants. Dark tokens come from `AppColorsDark`
-(Penpot set `shipit/color-dark`, theme **ShipIt / Dark**).
+Both themes register the `AppTheme` token tree as a `ThemeExtension`. Read
+every design value through `BuildContext` — `context.color.bg.base`,
+`context.space.s4`, `context.radius.all.md`, `context.text.body.medium`,
+`context.motion.duration.fast` — and it resolves correctly for the active
+brightness. Paths mirror the Penpot token names.
+
+Every node supports `copyWith`, so a consuming app can override one segment:
+
+```dart
+final tokens = AppTheme.light.copyWith(
+  radius: AppTheme.light.radius.copyWith(md: 12),
+  color: AppTheme.light.color.copyWith(
+    action: AppTheme.light.color.action.copyWith(
+      primary: AppTheme.light.color.action.primary.copyWith(bg: brandBlue),
+    ),
+  ),
+);
+MaterialApp(theme: shipitLightTheme(tokens: tokens), ...);
+```
 
 ## Fonts
 
 `shipit_ui` bundles **Inter** (400 / 500 / 600 / 700, SIL OFL 1.1 — see
-`assets/fonts/LICENSE-Inter.txt`). Every `AppTypography` style and the
+`assets/fonts/LICENSE-Inter.txt`). Every `context.text.*` style and the
 `shipitLightTheme()` / `shipitDarkTheme()` text themes already resolve to it;
 consuming apps do not need to declare the font. If you build a `TextStyle`
-by hand, pass `package: AppTypography.fontPackage` (or use
-`AppTypography.resolvedFontFamily`, i.e. `packages/shipit_ui/Inter`).
+by hand, pass `package: context.font.package` (or use
+`context.font.resolvedFamily`, i.e. `packages/shipit_ui/Inter`).
 
 Widget/golden tests render with Flutter's Ahem test font unless you load the
-family yourself, e.g. `FontLoader(AppTypography.resolvedFontFamily)` with the
+family yourself, e.g. `FontLoader(context.font.resolvedFamily)` with the
 four `packages/shipit_ui/assets/fonts/Inter-*.ttf` assets.
 
 ## Testing
