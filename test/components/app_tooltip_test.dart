@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shipit_ui/src/components/app_tooltip.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 void main() {
   group('AppTooltip', () {
@@ -36,8 +36,8 @@ void main() {
           .widgetList<Container>(find.byType(Container))
           .map((c) => c.decoration)
           .whereType<BoxDecoration>()
-          .firstWhere((d) => d.color == AppColors.tooltipBgColor);
-      expect(decorated.color, AppColors.tooltipBgColor);
+          .firstWhere((d) => d.color == AppTheme.light.color.tooltip.bg);
+      expect(decorated.color, AppTheme.light.color.tooltip.bg);
 
       await tester.pumpAndSettle(const Duration(seconds: 2));
     });

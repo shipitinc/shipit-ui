@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:shipit_ui/src/components/app_data_table.dart';
+import 'package:shipit_ui/src/theme/app_theme.dart';
 
 class _Person {
   final String name;
@@ -34,8 +35,9 @@ final _columns = [
   ),
 ];
 
-Widget _surface(Widget table) {
+Widget _surface(Widget table, {ThemeData? theme}) {
   return MaterialApp(
+    theme: theme,
     debugShowCheckedModeBanner: false,
     home: Scaffold(
       body: Align(
@@ -65,6 +67,24 @@ void main() {
       await expectLater(
         find.byType(AppDataTable<_Person>),
         matchesGoldenFile('data_table_default.png'),
+      );
+    });
+
+    testGoldens('default sorted table (dark)', (tester) async {
+      await tester.pumpWidgetBuilder(
+        _surface(
+          AppDataTable<_Person>(
+            columns: _columns,
+            rows: _people,
+            sortColumnIndex: 0,
+          ),
+          theme: shipitDarkTheme(),
+        ),
+        surfaceSize: const Size(640, 400),
+      );
+      await expectLater(
+        find.byType(AppDataTable<_Person>),
+        matchesGoldenFile('data_table_default_dark.png'),
       );
     });
 

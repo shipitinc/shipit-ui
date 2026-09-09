@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shipit_ui/src/components/app_shimmer.dart';
 import 'package:shipit_ui/src/components/app_skeleton.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 Widget _wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
 
@@ -21,7 +21,10 @@ void main() {
         matching: find.byType(Container),
       );
       expect(tester.getSize(finder).width, 300);
-      expect(_decoration(tester, finder).color, AppColors.shimmerBaseColor);
+      expect(
+        _decoration(tester, finder).color,
+        AppTheme.light.color.shimmer.base,
+      );
     });
 
     testWidgets('circle renders with given diameter', (tester) async {

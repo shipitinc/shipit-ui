@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shipit_ui/src/components/app_tooltip.dart';
-import 'package:shipit_ui/src/foundation/app_breakpoints.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
-import 'package:shipit_ui/src/foundation/app_motion.dart';
-import 'package:shipit_ui/src/foundation/app_radius.dart';
-import 'package:shipit_ui/src/foundation/app_spacing.dart';
-import 'package:shipit_ui/src/foundation/app_typography.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 /// A single destination in an [AppNavigationRail].
 class AppNavigationRailItem {
@@ -28,7 +23,8 @@ class AppNavigationRailItem {
 /// Intended for tablet and desktop layouts. Shows icon + label per
 /// destination when [extended] is true and collapses to icon-only (with
 /// [AppTooltip] labels) when false. When [extended] is null the rail
-/// collapses automatically below [AppBreakpoints.desktop].
+/// collapses automatically below the desktop breakpoint
+/// (`context.breakpoint.desktop`).
 ///
 /// Based on approved Penpot design tokens.
 ///
@@ -61,45 +57,45 @@ class AppNavigationRail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isExtended = extended ?? AppBreakpoints.isDesktop(context);
+    final bool isExtended = extended ?? context.isDesktopOrLarger;
+    final space = context.space;
+    final color = context.color;
 
     return Semantics(
       key: semanticLabel,
       container: true,
       label: 'Navigation',
       child: AnimatedContainer(
-        duration: AppMotion.normal,
-        curve: AppMotion.curveStandard,
+        duration: context.motion.duration.normal,
+        curve: context.motion.curve.standard,
         width: isExtended ? extendedWidth : collapsedWidth,
-        decoration: const BoxDecoration(
-          color: AppColors.bgSurfaceColor,
-          border: Border(
-            right: BorderSide(color: AppColors.borderDefaultColor),
-          ),
+        decoration: BoxDecoration(
+          color: color.bg.surface,
+          border: Border(right: BorderSide(color: color.border.base)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             if (leading != null)
               Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.space3,
-                  AppSpacing.space4,
-                  AppSpacing.space3,
-                  AppSpacing.space2,
+                padding: EdgeInsets.fromLTRB(
+                  space.s3,
+                  space.s4,
+                  space.s3,
+                  space.s2,
                 ),
                 child: leading,
               ),
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space3,
-                  vertical: AppSpacing.space2,
+                padding: EdgeInsets.symmetric(
+                  horizontal: space.s3,
+                  vertical: space.s2,
                 ),
                 children: [
                   for (var i = 0; i < items.length; i++)
                     Padding(
-                      padding: const EdgeInsets.only(bottom: AppSpacing.space1),
+                      padding: EdgeInsets.only(bottom: space.s1),
                       child: _AppNavigationRailDestination(
                         item: items[i],
                         selected: i == selectedIndex,
@@ -112,11 +108,11 @@ class AppNavigationRail extends StatelessWidget {
             ),
             if (trailing != null)
               Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.space3,
-                  AppSpacing.space2,
-                  AppSpacing.space3,
-                  AppSpacing.space4,
+                padding: EdgeInsets.fromLTRB(
+                  space.s3,
+                  space.s2,
+                  space.s3,
+                  space.s4,
                 ),
                 child: trailing,
               ),
@@ -142,45 +138,38 @@ class _AppNavigationRailDestination extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color fg = selected
-        ? AppColors.navSelectedFgColor
-        : AppColors.navUnselectedFgColor;
-    final Color bg = selected
-        ? AppColors.navSelectedBgColor
-        : AppColors.bgSurfaceColor;
+    final color = context.color;
+    final space = context.space;
+    final Color fg = selected ? color.nav.selected.fg : color.nav.unselected.fg;
+    final Color bg = selected ? color.nav.selected.bg : color.bg.surface;
 
     final Widget icon = Icon(
       selected ? (item.selectedIcon ?? item.icon) : item.icon,
-      size: AppSpacing.space6,
+      size: space.s6,
       color: fg,
     );
 
     Widget content = AnimatedContainer(
-      duration: AppMotion.fast,
-      curve: AppMotion.curveStandard,
-      height: AppSpacing.space12,
-      padding: EdgeInsets.symmetric(
-        horizontal: extended ? AppSpacing.space3 : AppSpacing.space0,
-      ),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: AppRadius.borderRadiusMd,
-      ),
+      duration: context.motion.duration.fast,
+      curve: context.motion.curve.standard,
+      height: space.s12,
+      padding: EdgeInsets.symmetric(horizontal: extended ? space.s3 : space.s0),
+      decoration: BoxDecoration(color: bg, borderRadius: context.radius.all.md),
       child: extended
           ? Row(
               children: [
                 icon,
-                const SizedBox(width: AppSpacing.space3),
+                SizedBox(width: space.s3),
                 Expanded(
                   child: ExcludeSemantics(
                     child: Text(
                       item.label,
                       overflow: TextOverflow.ellipsis,
-                      style: AppTypography.labelLarge.copyWith(
+                      style: context.text.label.large.copyWith(
                         color: fg,
                         fontWeight: selected
-                            ? AppTypography.fontWeightSemibold
-                            : AppTypography.fontWeightMedium,
+                            ? context.font.weight.semibold
+                            : context.font.weight.medium,
                       ),
                     ),
                   ),
@@ -208,8 +197,8 @@ class _AppNavigationRailDestination extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          borderRadius: AppRadius.borderRadiusMd,
-          hoverColor: AppColors.bgSubtleColor,
+          borderRadius: context.radius.all.md,
+          hoverColor: color.bg.subtle,
           child: content,
         ),
       ),

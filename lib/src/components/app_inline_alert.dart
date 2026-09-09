@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
-import 'package:shipit_ui/src/foundation/app_radius.dart';
-import 'package:shipit_ui/src/foundation/app_spacing.dart';
-import 'package:shipit_ui/src/foundation/app_typography.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 /// Severity of an [AppInlineAlert].
 enum AppInlineAlertSeverity { error, warning, info, success }
@@ -83,18 +80,18 @@ class AppInlineAlert extends StatelessWidget {
     this.semanticLabel,
   }) : severity = AppInlineAlertSeverity.success;
 
-  Color get _fg => switch (severity) {
-    AppInlineAlertSeverity.error => AppColors.stateErrorFgColor,
-    AppInlineAlertSeverity.warning => AppColors.stateWarningFgColor,
-    AppInlineAlertSeverity.info => AppColors.stateInfoFgColor,
-    AppInlineAlertSeverity.success => AppColors.stateSuccessFgColor,
+  Color _fg(AppColorTokens color) => switch (severity) {
+    AppInlineAlertSeverity.error => color.state.error.fg,
+    AppInlineAlertSeverity.warning => color.state.warning.fg,
+    AppInlineAlertSeverity.info => color.state.info.fg,
+    AppInlineAlertSeverity.success => color.state.success.fg,
   };
 
-  Color get _bg => switch (severity) {
-    AppInlineAlertSeverity.error => AppColors.stateErrorBgColor,
-    AppInlineAlertSeverity.warning => AppColors.stateWarningBgColor,
-    AppInlineAlertSeverity.info => AppColors.stateInfoBgColor,
-    AppInlineAlertSeverity.success => AppColors.stateSuccessBgColor,
+  Color _bg(AppColorTokens color) => switch (severity) {
+    AppInlineAlertSeverity.error => color.state.error.bg,
+    AppInlineAlertSeverity.warning => color.state.warning.bg,
+    AppInlineAlertSeverity.info => color.state.info.bg,
+    AppInlineAlertSeverity.success => color.state.success.bg,
   };
 
   IconData get _icon => switch (severity) {
@@ -106,45 +103,49 @@ class AppInlineAlert extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = context.color;
+    final space = context.space;
+    final Color fg = _fg(color);
+    final Color bg = _bg(color);
     return Semantics(
       key: semanticLabel,
       container: true,
       liveRegion: true,
       label: '${severity.name}. $title${message == null ? '' : '. $message'}',
       child: Container(
-        padding: const EdgeInsets.all(AppSpacing.space3),
+        padding: EdgeInsets.all(space.s3),
         decoration: BoxDecoration(
-          color: _bg,
-          borderRadius: AppRadius.borderRadiusMd,
-          border: Border.all(color: _fg),
+          color: bg,
+          borderRadius: context.radius.all.md,
+          border: Border.all(color: fg),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: AppSpacing.space3,
+          spacing: space.s3,
           children: [
-            Icon(_icon, size: AppSpacing.space5, color: _fg),
+            Icon(_icon, size: space.s5, color: fg),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: AppSpacing.space1,
+                spacing: space.s1,
                 children: [
                   ExcludeSemantics(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: AppSpacing.space1,
+                      spacing: space.s1,
                       children: [
                         Text(
                           title,
-                          style: AppTypography.labelLarge.copyWith(
-                            color: AppColors.fgPrimaryColor,
-                            fontWeight: AppTypography.fontWeightSemibold,
+                          style: context.text.label.large.copyWith(
+                            color: color.fg.primary,
+                            fontWeight: context.font.weight.semibold,
                           ),
                         ),
                         if (message != null)
                           Text(
                             message!,
-                            style: AppTypography.bodySmall.copyWith(
-                              color: AppColors.fgSecondaryColor,
+                            style: context.text.body.small.copyWith(
+                              color: color.fg.secondary,
                             ),
                           ),
                       ],
@@ -159,16 +160,14 @@ class AppInlineAlert extends StatelessWidget {
                       child: InkWell(
                         key: actionKey,
                         onTap: onAction,
-                        borderRadius: AppRadius.borderRadiusSm,
+                        borderRadius: context.radius.all.sm,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: AppSpacing.space1,
-                          ),
+                          padding: EdgeInsets.symmetric(vertical: space.s1),
                           child: Text(
                             actionLabel!,
-                            style: AppTypography.labelLarge.copyWith(
-                              color: _fg,
-                              fontWeight: AppTypography.fontWeightSemibold,
+                            style: context.text.label.large.copyWith(
+                              color: fg,
+                              fontWeight: context.font.weight.semibold,
                             ),
                           ),
                         ),
@@ -184,11 +183,11 @@ class AppInlineAlert extends StatelessWidget {
                 child: InkWell(
                   key: dismissKey,
                   onTap: onDismiss,
-                  borderRadius: AppRadius.borderRadiusSm,
-                  child: const Icon(
+                  borderRadius: context.radius.all.sm,
+                  child: Icon(
                     Icons.close,
-                    size: AppSpacing.space5,
-                    color: AppColors.fgSecondaryColor,
+                    size: space.s5,
+                    color: color.fg.secondary,
                   ),
                 ),
               ),

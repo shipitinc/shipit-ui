@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
-import 'package:shipit_ui/src/foundation/app_spacing.dart';
-import 'package:shipit_ui/src/foundation/app_radius.dart';
-import 'package:shipit_ui/src/foundation/app_typography.dart';
 import 'package:shipit_ui/src/components/app_button.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 /// A reusable dialog widget following the shipit_ui design system.
 ///
@@ -55,16 +52,16 @@ class AppDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final space = context.space;
+    final text = context.text;
     return Dialog(
       key: semanticLabel,
-      backgroundColor: AppColors.bgSurfaceColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.radiusXl),
-      ),
+      backgroundColor: context.color.bg.surface,
+      shape: RoundedRectangleBorder(borderRadius: context.radius.all.xl),
       elevation: 0,
-      insetPadding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.space4,
-        vertical: AppSpacing.space4,
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: space.s4,
+        vertical: space.s4,
       ),
       child: Semantics(
         label: title,
@@ -74,23 +71,23 @@ class AppDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.space6,
-                AppSpacing.space5,
-                AppSpacing.space6,
-                AppSpacing.space2,
+              padding: EdgeInsets.fromLTRB(
+                space.s6,
+                space.s5,
+                space.s6,
+                space.s2,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: AppTypography.headlineMedium),
+                  Text(title, style: text.headline.medium),
                   if (subtitle != null)
                     Padding(
-                      padding: const EdgeInsets.only(top: AppSpacing.space1),
+                      padding: EdgeInsets.only(top: space.s1),
                       child: Text(
                         subtitle!,
-                        style: AppTypography.bodyMedium.copyWith(
-                          color: AppColors.fgSecondaryColor,
+                        style: text.body.medium.copyWith(
+                          color: context.color.fg.secondary,
                         ),
                       ),
                     ),
@@ -99,23 +96,23 @@ class AppDialog extends StatelessWidget {
             ),
             if (content != null)
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space6,
-                  vertical: AppSpacing.space3,
+                padding: EdgeInsets.symmetric(
+                  horizontal: space.s6,
+                  vertical: space.s3,
                 ),
                 child: content!,
               ),
             if (actions != null && actions!.isNotEmpty)
               Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.space6,
-                  AppSpacing.space3,
-                  AppSpacing.space6,
-                  AppSpacing.space5,
+                padding: EdgeInsets.fromLTRB(
+                  space.s6,
+                  space.s3,
+                  space.s6,
+                  space.s5,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  spacing: AppSpacing.space2,
+                  spacing: space.s2,
                   children: actions!,
                 ),
               ),

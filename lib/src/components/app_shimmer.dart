@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
-import 'package:shipit_ui/src/foundation/app_motion.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 /// Direction of the shimmer sweep.
 enum AppShimmerDirection {
@@ -23,9 +22,9 @@ enum AppShimmerDirection {
 /// the child will be filled with an animated gradient. Product packages can use
 /// this to build skeleton screens while content loads.
 ///
-/// The [child] should be opaque and typically filled with [AppColors.shimmerBaseColor]
-/// so the gradient is visible. Custom [baseColor] and [highlightColor] can be
-/// supplied for other contexts.
+/// The [child] should be opaque and typically filled with
+/// `context.color.shimmer.base` so the gradient is visible. Custom [baseColor]
+/// and [highlightColor] can be supplied for other contexts.
 ///
 /// ## Semantics
 ///
@@ -37,18 +36,20 @@ class AppShimmer extends StatefulWidget {
   /// The placeholder widget to apply the shimmer effect to. Should be opaque.
   final Widget child;
 
-  /// The base color of the shimmer. Defaults to [AppColors.shimmerBaseColor].
-  final Color baseColor;
+  /// The base color of the shimmer. Defaults to `context.color.shimmer.base`.
+  final Color? baseColor;
 
   /// The highlight color of the shimmer. Defaults to
-  /// [AppColors.shimmerHighlightColor].
-  final Color highlightColor;
+  /// `context.color.shimmer.highlight`.
+  final Color? highlightColor;
 
-  /// The duration of one full shimmer sweep. Defaults to [AppMotion.shimmer].
-  final Duration duration;
+  /// The duration of one full shimmer sweep. Defaults to
+  /// `context.motion.duration.shimmer`.
+  final Duration? duration;
 
-  /// The easing curve of the shimmer sweep. Defaults to [AppMotion.curveStandard].
-  final Curve curve;
+  /// The easing curve of the shimmer sweep. Defaults to
+  /// `context.motion.curve.standard`.
+  final Curve? curve;
 
   /// The direction of the sweep. Defaults to [AppShimmerDirection.ltr].
   final AppShimmerDirection direction;
@@ -68,10 +69,10 @@ class AppShimmer extends StatefulWidget {
   const AppShimmer({
     super.key,
     required this.child,
-    this.baseColor = AppColors.shimmerBaseColor,
-    this.highlightColor = AppColors.shimmerHighlightColor,
-    this.duration = AppMotion.shimmer,
-    this.curve = AppMotion.curveStandard,
+    this.baseColor,
+    this.highlightColor,
+    this.duration,
+    this.curve,
     this.direction = AppShimmerDirection.ltr,
     this.autoplay = true,
     this.initialProgress = 0.0,
@@ -84,59 +85,81 @@ class AppShimmer extends StatefulWidget {
 
 class _AppShimmerState extends State<AppShimmer>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _animation;
+  AnimationController? _controller;
+  late Animation<double> _animation;
+  Curve? _curve;
 
   static const double _gradientStart = -2.0;
   static const double _gradientEnd = 2.0;
 
   @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-      value: widget.initialProgress.clamp(0.0, 1.0),
-    );
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final motion = context.motion;
+    final duration = widget.duration ?? motion.duration.shimmer;
+    final curve = widget.curve ?? motion.curve.standard;
+
+    final controller = _controller;
+    if (controller == null) {
+      final created = AnimationController(
+        vsync: this,
+        duration: duration,
+        value: widget.initialProgress.clamp(0.0, 1.0),
+      );
+      _controller = created;
+      _setCurve(created, curve);
+      if (widget.autoplay) {
+        created.repeat();
+      }
+      return;
+    }
+
+    if (controller.duration != duration) {
+      controller.duration = duration;
+    }
+    if (_curve != curve) {
+      _setCurve(controller, curve);
+    }
+  }
+
+  void _setCurve(AnimationController controller, Curve curve) {
+    _curve = curve;
     _animation = Tween<double>(
       begin: _gradientStart,
       end: _gradientEnd,
-    ).animate(CurvedAnimation(parent: _controller, curve: widget.curve));
-
-    if (widget.autoplay) {
-      _controller.repeat();
-    }
+    ).animate(CurvedAnimation(parent: controller, curve: curve));
   }
 
   @override
   void didUpdateWidget(covariant AppShimmer oldWidget) {
     super.didUpdateWidget(oldWidget);
+    final controller = _controller!;
     if (widget.duration != oldWidget.duration) {
-      _controller.duration = widget.duration;
+      controller.duration = widget.duration ?? context.motion.duration.shimmer;
     }
     if (widget.curve != oldWidget.curve) {
-      _animation = Tween<double>(
-        begin: _gradientStart,
-        end: _gradientEnd,
-      ).animate(CurvedAnimation(parent: _controller, curve: widget.curve));
+      _setCurve(controller, widget.curve ?? context.motion.curve.standard);
     }
     if (widget.autoplay != oldWidget.autoplay) {
       if (widget.autoplay) {
-        _controller.repeat();
+        controller.repeat();
       } else {
-        _controller.stop();
+        controller.stop();
       }
     }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final baseColor = widget.baseColor ?? context.color.shimmer.base;
+    final highlightColor =
+        widget.highlightColor ?? context.color.shimmer.highlight;
     return Semantics(
       key: widget.semanticLabel,
       container: true,
@@ -153,11 +176,11 @@ class _AppShimmerState extends State<AppShimmer>
                 begin: begin,
                 end: end,
                 colors: [
-                  widget.baseColor,
-                  widget.baseColor,
-                  widget.highlightColor,
-                  widget.baseColor,
-                  widget.baseColor,
+                  baseColor,
+                  baseColor,
+                  highlightColor,
+                  baseColor,
+                  baseColor,
                 ],
                 stops: const [0.0, 0.4, 0.5, 0.6, 1.0],
               ).createShader(bounds);

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:shipit_ui/src/components/app_navigation_rail.dart';
+import 'package:shipit_ui/src/theme/app_theme.dart';
 
 const _items = [
   AppNavigationRailItem(
@@ -21,8 +22,9 @@ const _items = [
   ),
 ];
 
-Widget _rail({required bool extended}) {
+Widget _rail({required bool extended, ThemeData? theme}) {
   return MaterialApp(
+    theme: theme,
     home: Scaffold(
       body: Row(
         children: [
@@ -49,6 +51,17 @@ void main() {
       await expectLater(
         find.byType(AppNavigationRail),
         matchesGoldenFile('navigation_rail_extended.png'),
+      );
+    });
+
+    testGoldens('extended rail (dark)', (tester) async {
+      await tester.pumpWidgetBuilder(
+        _rail(extended: true, theme: shipitDarkTheme()),
+        surfaceSize: const Size(320, 320),
+      );
+      await expectLater(
+        find.byType(AppNavigationRail),
+        matchesGoldenFile('navigation_rail_extended_dark.png'),
       );
     });
 

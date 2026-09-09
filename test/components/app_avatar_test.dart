@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shipit_ui/src/components/app_avatar.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 Widget _harness(Widget child) {
   return MaterialApp(
@@ -77,10 +77,11 @@ void main() {
     });
 
     testWidgets('renders status dot with correct color', (tester) async {
-      const expected = {
-        AppAvatarStatus.online: AppColors.stateSuccessFgColor,
-        AppAvatarStatus.offline: AppColors.fgMutedColor,
-        AppAvatarStatus.busy: AppColors.stateErrorFgColor,
+      final color = AppTheme.light.color;
+      final expected = {
+        AppAvatarStatus.online: color.state.success.fg,
+        AppAvatarStatus.offline: color.fg.muted,
+        AppAvatarStatus.busy: color.state.error.fg,
       };
       for (final entry in expected.entries) {
         await tester.pumpWidget(
@@ -89,7 +90,7 @@ void main() {
         final decoration = _statusDot(tester).decoration! as BoxDecoration;
         expect(decoration.color, entry.value);
         expect(decoration.shape, BoxShape.circle);
-        expect(decoration.border!.top.color, AppColors.bgSurfaceColor);
+        expect(decoration.border!.top.color, color.bg.surface);
       }
     });
 

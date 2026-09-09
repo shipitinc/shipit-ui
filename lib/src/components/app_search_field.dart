@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shipit_ui/src/components/app_filter_chip.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
-import 'package:shipit_ui/src/foundation/app_elevation.dart';
-import 'package:shipit_ui/src/foundation/app_radius.dart';
-import 'package:shipit_ui/src/foundation/app_spacing.dart';
-import 'package:shipit_ui/src/foundation/app_typography.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 /// A single filter shown beneath an [AppSearchField].
 class AppSearchFilter {
@@ -119,7 +115,7 @@ class _AppSearchFieldState extends State<AppSearchField> {
 
   OutlineInputBorder _border(Color color, {double width = 1}) {
     return OutlineInputBorder(
-      borderRadius: AppRadius.borderRadiusMd,
+      borderRadius: context.radius.all.md,
       borderSide: BorderSide(color: color, width: width),
     );
   }
@@ -134,6 +130,8 @@ class _AppSearchFieldState extends State<AppSearchField> {
       child: ListenableBuilder(
         listenable: Listenable.merge([_controller, _focusNode]),
         builder: (context, _) {
+          final color = context.color;
+          final space = context.space;
           final bool hasText = _controller.text.isNotEmpty;
           final bool showRecents =
               _focusNode.hasFocus &&
@@ -152,49 +150,46 @@ class _AppSearchFieldState extends State<AppSearchField> {
                 textInputAction: TextInputAction.search,
                 onChanged: widget.onChanged,
                 onSubmitted: widget.onSubmitted,
-                style: AppTypography.bodyMedium.copyWith(
-                  color: AppColors.fgPrimaryColor,
+                style: context.text.body.medium.copyWith(
+                  color: color.fg.primary,
                 ),
                 decoration: InputDecoration(
                   hintText: widget.hint,
-                  hintStyle: AppTypography.bodyMedium.copyWith(
-                    color: AppColors.fgMutedColor,
+                  hintStyle: context.text.body.medium.copyWith(
+                    color: color.fg.muted,
                   ),
-                  prefixIcon: const Icon(
+                  prefixIcon: Icon(
                     Icons.search,
-                    size: AppSpacing.space5,
-                    color: AppColors.fgMutedColor,
+                    size: space.s5,
+                    color: color.fg.muted,
                   ),
                   suffixIcon: hasText
                       ? IconButton(
                           key: AppSearchField.clearKey,
                           tooltip: 'Clear',
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.close,
-                            size: AppSpacing.space5,
-                            color: AppColors.fgMutedColor,
+                            size: space.s5,
+                            color: color.fg.muted,
                           ),
                           onPressed: widget.enabled ? _clear : null,
                         )
                       : null,
                   filled: true,
-                  fillColor: AppColors.bgSurfaceColor,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.space4,
-                    vertical: AppSpacing.space2,
+                  fillColor: color.bg.surface,
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: space.s4,
+                    vertical: space.s2,
                   ),
-                  border: _border(AppColors.borderDefaultColor),
-                  enabledBorder: _border(AppColors.borderDefaultColor),
-                  focusedBorder: _border(
-                    AppColors.actionPrimaryBgColor,
-                    width: 2,
-                  ),
-                  disabledBorder: _border(AppColors.actionDisabledBorderColor),
+                  border: _border(color.border.base),
+                  enabledBorder: _border(color.border.base),
+                  focusedBorder: _border(color.action.primary.bg, width: 2),
+                  disabledBorder: _border(color.action.disabled.border),
                 ),
               ),
               if (showRecents)
                 Padding(
-                  padding: const EdgeInsets.only(top: AppSpacing.space1),
+                  padding: EdgeInsets.only(top: space.s1),
                   child: _RecentSearchesPanel(
                     recents: widget.recentSearches
                         .take(AppSearchField.maxRecents)
@@ -204,10 +199,10 @@ class _AppSearchFieldState extends State<AppSearchField> {
                 ),
               if (widget.filters.isNotEmpty)
                 Padding(
-                  padding: const EdgeInsets.only(top: AppSpacing.space2),
+                  padding: EdgeInsets.only(top: space.s2),
                   child: Wrap(
-                    spacing: AppSpacing.space2,
-                    runSpacing: AppSpacing.space2,
+                    spacing: space.s2,
+                    runSpacing: space.s2,
                     children: [
                       for (var i = 0; i < widget.filters.length; i++)
                         AppFilterChip(
@@ -238,13 +233,15 @@ class _RecentSearchesPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final color = context.color;
+    final space = context.space;
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: AppColors.bgSurfaceColor,
-        borderRadius: AppRadius.borderRadiusMd,
-        border: Border.all(color: AppColors.borderDefaultColor),
-        boxShadow: AppElevation.elevation1,
+        color: color.bg.surface,
+        borderRadius: context.radius.all.md,
+        border: Border.all(color: color.border.base),
+        boxShadow: context.elevation.e1,
       ),
       child: Material(
         color: Colors.transparent,
@@ -258,28 +255,26 @@ class _RecentSearchesPanel extends StatelessWidget {
                 label: recents[i],
                 child: InkWell(
                   onTap: () => onSelected(recents[i]),
-                  hoverColor: AppColors.bgSubtleColor,
+                  hoverColor: color.bg.subtle,
                   child: SizedBox(
-                    height: AppSpacing.space10,
+                    height: space.s10,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.space4,
-                      ),
+                      padding: EdgeInsets.symmetric(horizontal: space.s4),
                       child: Row(
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.history,
-                            size: AppSpacing.space4,
-                            color: AppColors.fgMutedColor,
+                            size: space.s4,
+                            color: color.fg.muted,
                           ),
-                          const SizedBox(width: AppSpacing.space3),
+                          SizedBox(width: space.s3),
                           Expanded(
                             child: ExcludeSemantics(
                               child: Text(
                                 recents[i],
                                 overflow: TextOverflow.ellipsis,
-                                style: AppTypography.bodyMedium.copyWith(
-                                  color: AppColors.fgPrimaryColor,
+                                style: context.text.body.medium.copyWith(
+                                  color: color.fg.primary,
                                 ),
                               ),
                             ),

@@ -5,6 +5,7 @@ import 'package:shipit_ui/src/components/app_button.dart';
 import 'package:shipit_ui/src/components/app_text_field.dart';
 import 'package:shipit_ui/src/components/app_card.dart';
 import 'package:shipit_ui/src/components/app_empty_state.dart';
+import 'package:shipit_ui/src/theme/app_theme.dart';
 
 void main() {
   group('Golden tests - AppButton', () {
@@ -65,6 +66,19 @@ void main() {
         matchesGoldenFile('button_loading.png'),
       );
     });
+
+    testGoldens('primary button (dark)', (tester) async {
+      await tester.pumpWidgetBuilder(
+        MaterialApp(
+          theme: shipitDarkTheme(),
+          home: Scaffold(body: AppButton.primary(label: 'Primary')),
+        ),
+      );
+      await expectLater(
+        find.byType(AppButton),
+        matchesGoldenFile('button_primary_dark.png'),
+      );
+    });
   });
 
   group('Golden tests - AppTextField', () {
@@ -103,6 +117,19 @@ void main() {
       await expectLater(
         find.byType(AppTextField),
         matchesGoldenFile('textfield_disabled.png'),
+      );
+    });
+
+    testGoldens('normal text field (dark)', (tester) async {
+      await tester.pumpWidgetBuilder(
+        MaterialApp(
+          theme: shipitDarkTheme(),
+          home: Scaffold(body: AppTextField.normal(label: 'Name')),
+        ),
+      );
+      await expectLater(
+        find.byType(AppTextField),
+        matchesGoldenFile('textfield_normal_dark.png'),
       );
     });
   });
@@ -147,6 +174,21 @@ void main() {
       await expectLater(
         find.byType(AppCard),
         matchesGoldenFile('card_children.png'),
+      );
+    });
+
+    testGoldens('card with title (dark)', (tester) async {
+      await tester.pumpWidgetBuilder(
+        MaterialApp(
+          theme: shipitDarkTheme(),
+          home: const Scaffold(
+            body: AppCard(title: 'Card Title', subtitle: 'Subtitle'),
+          ),
+        ),
+      );
+      await expectLater(
+        find.byType(AppCard),
+        matchesGoldenFile('card_title_dark.png'),
       );
     });
   });

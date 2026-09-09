@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:shipit_ui/src/components/app_date_picker.dart';
+import 'package:shipit_ui/src/theme/app_theme.dart';
 
 AppDatePreset _preset(String label, DateTime start, DateTime end) =>
     AppDatePreset(label: label, resolve: (_) => AppDateRange(start, end));
@@ -19,7 +20,8 @@ final _week = _preset(
 );
 final _month = _preset('This month', DateTime(2026, 3), DateTime(2026, 3, 31));
 
-Widget _surface(Widget child) => MaterialApp(
+Widget _surface(Widget child, {ThemeData? theme}) => MaterialApp(
+  theme: theme,
   home: Scaffold(
     body: Padding(
       key: const Key('golden_root'),
@@ -46,6 +48,25 @@ void main() {
       await expectLater(
         find.byKey(const Key('golden_root')),
         matchesGoldenFile('date_picker_single.png'),
+      );
+    });
+
+    testGoldens('single with value and presets (dark)', (tester) async {
+      await tester.pumpWidgetBuilder(
+        _surface(
+          AppDatePicker(
+            label: 'Due date',
+            value: DateTime(2026, 3, 14),
+            presets: [_today, _yesterday],
+            onChanged: (_) {},
+          ),
+          theme: shipitDarkTheme(),
+        ),
+        surfaceSize: const Size(400, 300),
+      );
+      await expectLater(
+        find.byKey(const Key('golden_root')),
+        matchesGoldenFile('date_picker_single_dark.png'),
       );
     });
 

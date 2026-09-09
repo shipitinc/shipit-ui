@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:shipit_ui/src/components/app_select.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 void main() {
   group('AppSelect', () {
@@ -147,7 +147,7 @@ void main() {
       expect(find.text('Role is no longer available'), findsOneWidget);
       expect(
         enabledBorder(tester).borderSide.color,
-        AppColors.stateErrorFgColor,
+        AppTheme.light.color.state.error.fg,
       );
     });
 

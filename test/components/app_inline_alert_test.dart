@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shipit_ui/src/components/app_inline_alert.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 Widget _wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
 
@@ -36,25 +36,26 @@ void main() {
     });
 
     testWidgets('applies severity colors and icons', (tester) async {
-      const cases = {
+      final state = AppTheme.light.color.state;
+      final cases = {
         AppInlineAlertSeverity.error: (
-          AppColors.stateErrorBgColor,
-          AppColors.stateErrorFgColor,
+          state.error.bg,
+          state.error.fg,
           Icons.error_outline,
         ),
         AppInlineAlertSeverity.warning: (
-          AppColors.stateWarningBgColor,
-          AppColors.stateWarningFgColor,
+          state.warning.bg,
+          state.warning.fg,
           Icons.warning_amber_rounded,
         ),
         AppInlineAlertSeverity.info: (
-          AppColors.stateInfoBgColor,
-          AppColors.stateInfoFgColor,
+          state.info.bg,
+          state.info.fg,
           Icons.info_outline,
         ),
         AppInlineAlertSeverity.success: (
-          AppColors.stateSuccessBgColor,
-          AppColors.stateSuccessFgColor,
+          state.success.bg,
+          state.success.fg,
           Icons.check_circle_outline,
         ),
       };

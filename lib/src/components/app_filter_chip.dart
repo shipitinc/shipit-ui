@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
-import 'package:shipit_ui/src/foundation/app_motion.dart';
-import 'package:shipit_ui/src/foundation/app_radius.dart';
-import 'package:shipit_ui/src/foundation/app_spacing.dart';
-import 'package:shipit_ui/src/foundation/app_typography.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 /// A compact, toggleable filter chip following the shipit_ui design system.
 ///
@@ -31,13 +27,15 @@ class AppFilterChip extends StatelessWidget {
     this.semanticLabel,
   });
 
-  static const double height = AppSpacing.space8;
+  /// Chip height (`space.s8`) on the base scale; the widget itself reads
+  /// `context.space.s8` so a themed spacing scale is honoured.
+  static final double height = AppSpaceTokens.base.s8;
 
   @override
   Widget build(BuildContext context) {
-    final Color fg = selected
-        ? AppColors.chipSelectedFgColor
-        : AppColors.chipFgColor;
+    final chip = context.color.chip;
+    final space = context.space;
+    final Color fg = selected ? chip.selected.fg : chip.fg;
     final IconData? leading = selected ? Icons.check : icon;
 
     return Semantics(
@@ -50,39 +48,35 @@ class AppFilterChip extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onSelected == null ? null : () => onSelected!(!selected),
-          borderRadius: AppRadius.borderRadiusFull,
-          hoverColor: AppColors.bgSubtleColor,
+          borderRadius: context.radius.all.full,
+          hoverColor: context.color.bg.subtle,
           child: AnimatedContainer(
-            duration: AppMotion.fast,
-            curve: AppMotion.curveStandard,
-            height: height,
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.space3),
+            duration: context.motion.duration.fast,
+            curve: context.motion.curve.standard,
+            height: space.s8,
+            padding: EdgeInsets.symmetric(horizontal: space.s3),
             decoration: BoxDecoration(
-              color: selected
-                  ? AppColors.chipSelectedBgColor
-                  : AppColors.chipBgColor,
-              borderRadius: AppRadius.borderRadiusFull,
+              color: selected ? chip.selected.bg : chip.bg,
+              borderRadius: context.radius.all.full,
               border: Border.all(
-                color: selected
-                    ? AppColors.chipSelectedBorderColor
-                    : AppColors.chipBorderColor,
+                color: selected ? chip.selected.border : chip.border,
               ),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (leading != null) ...[
-                  Icon(leading, size: AppSpacing.space4, color: fg),
-                  const SizedBox(width: AppSpacing.space1),
+                  Icon(leading, size: space.s4, color: fg),
+                  SizedBox(width: space.s1),
                 ],
                 ExcludeSemantics(
                   child: Text(
                     label,
-                    style: AppTypography.labelMedium.copyWith(
+                    style: context.text.label.medium.copyWith(
                       color: fg,
                       fontWeight: selected
-                          ? AppTypography.fontWeightSemibold
-                          : AppTypography.fontWeightMedium,
+                          ? context.font.weight.semibold
+                          : context.font.weight.medium,
                     ),
                   ),
                 ),

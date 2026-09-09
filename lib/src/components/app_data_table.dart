@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shipit_ui/src/components/app_shimmer.dart';
 import 'package:shipit_ui/src/components/app_empty_state.dart';
 import 'package:shipit_ui/src/components/app_tooltip.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
-import 'package:shipit_ui/src/foundation/app_radius.dart';
-import 'package:shipit_ui/src/foundation/app_spacing.dart';
-import 'package:shipit_ui/src/foundation/app_typography.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 /// A column definition for an [AppDataTable].
 ///
@@ -44,8 +41,8 @@ class AppDataColumn<T> {
          maxLines: 1,
          overflow: TextOverflow.ellipsis,
          textAlign: numeric ? TextAlign.right : TextAlign.left,
-         style: AppTypography.bodyMedium.copyWith(
-           color: AppColors.fgPrimaryColor,
+         style: context.text.body.medium.copyWith(
+           color: context.color.fg.primary,
          ),
        ));
 
@@ -100,9 +97,12 @@ class AppDataTable<T> extends StatefulWidget {
   }) : assert(columns.length > 0, 'AppDataTable requires at least 1 column'),
        assert(rowsPerPage > 0, 'rowsPerPage must be positive');
 
-  static const double headerHeight = AppSpacing.space10 + AppSpacing.space1;
-  static const double rowHeight = AppSpacing.space12;
-  static const double footerHeight = AppSpacing.space12;
+  /// Row heights on the base spacing scale (`space.s10 + space.s1`,
+  /// `space.s12`). Public API; kept static so callers can size containers.
+  static final double headerHeight =
+      AppSpaceTokens.base.s10 + AppSpaceTokens.base.s1;
+  static final double rowHeight = AppSpaceTokens.base.s12;
+  static final double footerHeight = AppSpaceTokens.base.s12;
   static const int loadingRowCount = 5;
 
   @override
@@ -158,6 +158,7 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
 
   @override
   Widget build(BuildContext context) {
+    final color = context.color;
     final List<T> rows = _visibleRows;
     final int total = rows.length;
     final int pageCount = total == 0
@@ -177,9 +178,9 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
       child: Container(
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
-          color: AppColors.bgSurfaceColor,
-          borderRadius: AppRadius.borderRadiusLg,
-          border: Border.all(color: AppColors.tableBorderColor),
+          color: color.bg.surface,
+          borderRadius: context.radius.all.lg,
+          border: Border.all(color: color.table.border),
         ),
         child: Material(
           color: Colors.transparent,
@@ -187,10 +188,10 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _buildHeader(),
+              _buildHeader(context),
               if (widget.isLoading)
                 for (var i = 0; i < AppDataTable.loadingRowCount; i++)
-                  _buildLoadingRow(i)
+                  _buildLoadingRow(context, i)
               else if (total == 0)
                 AppEmptyState(
                   title: widget.emptyTitle,
@@ -201,6 +202,7 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
                   _buildRow(context, i, pageRows[i]),
               if (showFooter)
                 _buildFooter(
+                  context,
                   start: total == 0 ? 0 : start + 1,
                   end: end,
                   total: total,
@@ -221,23 +223,26 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
     return Expanded(flex: column.flex, child: child);
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
+    final table = context.color.table;
     return Container(
       height: AppDataTable.headerHeight,
-      decoration: const BoxDecoration(
-        color: AppColors.tableHeaderBgColor,
-        border: Border(bottom: BorderSide(color: AppColors.tableBorderColor)),
+      decoration: BoxDecoration(
+        color: table.header.bg,
+        border: Border(bottom: BorderSide(color: table.border)),
       ),
       child: Row(
         children: [
           for (var i = 0; i < widget.columns.length; i++)
-            _sized(widget.columns[i], _buildHeaderCell(i)),
+            _sized(widget.columns[i], _buildHeaderCell(context, i)),
         ],
       ),
     );
   }
 
-  Widget _buildHeaderCell(int index) {
+  Widget _buildHeaderCell(BuildContext context, int index) {
+    final color = context.color;
+    final space = context.space;
     final AppDataColumn<T> column = widget.columns[index];
     final bool active = _sortColumnIndex == index && column.sortable;
     final Widget label = Text(
@@ -245,9 +250,9 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: column.numeric ? TextAlign.right : TextAlign.left,
-      style: AppTypography.labelMedium.copyWith(
-        color: AppColors.fgSecondaryColor,
-        fontWeight: AppTypography.fontWeightSemibold,
+      style: context.text.label.medium.copyWith(
+        color: color.fg.secondary,
+        fontWeight: context.font.weight.semibold,
       ),
     );
     final Widget? icon = column.sortable
@@ -255,15 +260,13 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
             active
                 ? (_sortAscending ? Icons.arrow_upward : Icons.arrow_downward)
                 : Icons.unfold_more,
-            size: AppSpacing.space4,
-            color: active
-                ? AppColors.actionPrimaryBgColor
-                : AppColors.fgMutedColor,
+            size: space.s4,
+            color: active ? color.action.primary.bg : color.fg.muted,
           )
         : null;
 
     Widget content = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+      padding: EdgeInsets.symmetric(horizontal: space.s4),
       child: Row(
         mainAxisAlignment: column.numeric
             ? MainAxisAlignment.end
@@ -271,11 +274,11 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
         children: [
           if (column.numeric && icon != null) ...[
             icon,
-            const SizedBox(width: AppSpacing.space1),
+            SizedBox(width: space.s1),
           ],
           Flexible(child: label),
           if (!column.numeric && icon != null) ...[
-            const SizedBox(width: AppSpacing.space1),
+            SizedBox(width: space.s1),
             icon,
           ],
         ],
@@ -286,7 +289,7 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
       content = InkWell(
         key: Key('table_sort_$index'),
         onTap: () => _handleSort(index),
-        hoverColor: AppColors.tableRowHoverColor,
+        hoverColor: color.table.row.hover,
         child: content,
       );
     }
@@ -302,6 +305,8 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
   }
 
   Widget _buildRow(BuildContext context, int index, T row) {
+    final table = context.color.table;
+    final space = context.space;
     final VoidCallback? onTap = widget.onRowTap == null
         ? null
         : () => widget.onRowTap!(row);
@@ -310,13 +315,11 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
       child: InkWell(
         key: Key('table_row_$index'),
         onTap: onTap,
-        hoverColor: AppColors.tableRowHoverColor,
+        hoverColor: table.row.hover,
         child: Container(
           height: AppDataTable.rowHeight,
-          decoration: const BoxDecoration(
-            border: Border(
-              bottom: BorderSide(color: AppColors.tableBorderColor),
-            ),
+          decoration: BoxDecoration(
+            border: Border(bottom: BorderSide(color: table.border)),
           ),
           child: Row(
             children: [
@@ -324,9 +327,7 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
                 _sized(
                   column,
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.space4,
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: space.s4),
                     child: Align(
                       alignment: column.numeric
                           ? Alignment.centerRight
@@ -342,12 +343,14 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
     );
   }
 
-  Widget _buildLoadingRow(int index) {
+  Widget _buildLoadingRow(BuildContext context, int index) {
+    final color = context.color;
+    final space = context.space;
     return Container(
       key: Key('table_loading_row_$index'),
       height: AppDataTable.rowHeight,
-      decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.tableBorderColor)),
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: color.table.border)),
       ),
       child: Row(
         children: [
@@ -355,9 +358,7 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
             _sized(
               column,
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space4,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: space.s4),
                 child: Align(
                   alignment: column.numeric
                       ? Alignment.centerRight
@@ -365,13 +366,11 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
                   child: AppShimmer(
                     initialProgress: 0.5,
                     child: Container(
-                      height: AppSpacing.space4,
-                      width: column.numeric
-                          ? AppSpacing.space10
-                          : AppSpacing.space16 + AppSpacing.space10,
-                      decoration: const BoxDecoration(
-                        color: AppColors.shimmerBaseColor,
-                        borderRadius: AppRadius.borderRadiusSm,
+                      height: space.s4,
+                      width: column.numeric ? space.s10 : space.s16 + space.s10,
+                      decoration: BoxDecoration(
+                        color: color.shimmer.base,
+                        borderRadius: context.radius.all.sm,
                       ),
                     ),
                   ),
@@ -383,38 +382,41 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
     );
   }
 
-  Widget _buildFooter({
+  Widget _buildFooter(
+    BuildContext context, {
     required int start,
     required int end,
     required int total,
     required int page,
     required int pageCount,
   }) {
+    final color = context.color;
+    final space = context.space;
     final bool canPrev = page > 0;
     final bool canNext = page < pageCount - 1;
     return Container(
       height: AppDataTable.footerHeight,
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.space2),
-      decoration: const BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.tableBorderColor)),
+      padding: EdgeInsets.symmetric(horizontal: space.s2),
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: color.table.border)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
             '$start–$end of $total',
-            style: AppTypography.bodySmall.copyWith(
-              color: AppColors.fgSecondaryColor,
-            ),
+            style: context.text.body.small.copyWith(color: color.fg.secondary),
           ),
-          const SizedBox(width: AppSpacing.space2),
+          SizedBox(width: space.s2),
           _pagerButton(
+            context,
             key: const Key('table_prev'),
             icon: Icons.chevron_left,
             label: 'Previous page',
             onPressed: canPrev ? () => _goToPage(page - 1) : null,
           ),
           _pagerButton(
+            context,
             key: const Key('table_next'),
             icon: Icons.chevron_right,
             label: 'Next page',
@@ -425,22 +427,24 @@ class _AppDataTableState<T> extends State<AppDataTable<T>> {
     );
   }
 
-  Widget _pagerButton({
+  Widget _pagerButton(
+    BuildContext context, {
     required Key key,
     required IconData icon,
     required String label,
     required VoidCallback? onPressed,
   }) {
+    final color = context.color;
     return Semantics(
       label: label,
       child: IconButton(
         key: key,
         onPressed: onPressed,
-        iconSize: AppSpacing.space5,
-        splashRadius: AppSpacing.space5,
-        color: AppColors.fgSecondaryColor,
-        disabledColor: AppColors.actionDisabledFgColor,
-        hoverColor: AppColors.tableRowHoverColor,
+        iconSize: context.space.s5,
+        splashRadius: context.space.s5,
+        color: color.fg.secondary,
+        disabledColor: color.action.disabled.fg,
+        hoverColor: color.table.row.hover,
         icon: Icon(icon),
       ),
     );

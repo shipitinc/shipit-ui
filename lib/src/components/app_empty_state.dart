@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shipit_ui/src/components/app_button.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
-import 'package:shipit_ui/src/foundation/app_spacing.dart';
-import 'package:shipit_ui/src/foundation/app_typography.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 /// An empty-state view following the shipit_ui design system.
 ///
@@ -36,51 +34,49 @@ class AppEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final space = context.space;
+    final color = context.color;
     return Center(
       child: Semantics(
         key: semanticLabel,
         container: true,
         label: '$title. ${message ?? "No content available."}',
         child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.space8),
+          padding: EdgeInsets.all(space.s8),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                width: AppSpacing.space12,
-                height: AppSpacing.space12,
-                decoration: const BoxDecoration(
-                  color: AppColors.bgSubtleColor,
+                width: space.s12,
+                height: space.s12,
+                decoration: BoxDecoration(
+                  color: color.bg.subtle,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  icon,
-                  size: AppSpacing.space6,
-                  color: AppColors.fgMutedColor,
-                ),
+                child: Icon(icon, size: space.s6, color: color.fg.muted),
               ),
-              const SizedBox(height: AppSpacing.space4),
+              SizedBox(height: space.s4),
               ExcludeSemantics(
                 child: Text(
                   title,
-                  style: AppTypography.headlineSmall,
+                  style: context.text.headline.small,
                   textAlign: TextAlign.center,
                 ),
               ),
               if (message != null) ...[
-                const SizedBox(height: AppSpacing.space1),
+                SizedBox(height: space.s1),
                 ExcludeSemantics(
                   child: Text(
                     message!,
-                    style: AppTypography.bodyMedium.copyWith(
-                      color: AppColors.fgSecondaryColor,
+                    style: context.text.body.medium.copyWith(
+                      color: color.fg.secondary,
                     ),
                     textAlign: TextAlign.center,
                   ),
                 ),
               ],
               if (onAction != null && actionLabel != null) ...[
-                const SizedBox(height: AppSpacing.space4),
+                SizedBox(height: space.s4),
                 AppButton.secondary(label: actionLabel!, onPressed: onAction!),
               ],
             ],

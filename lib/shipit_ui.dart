@@ -1,12 +1,3 @@
-export 'src/foundation/app_colors.dart';
-export 'src/foundation/app_typography.dart';
-export 'src/foundation/app_spacing.dart';
-export 'src/foundation/app_radius.dart';
-export 'src/foundation/app_breakpoints.dart'
-    hide AppLayoutType, AppBreakpointExtension;
-export 'src/foundation/app_elevation.dart';
-export 'src/foundation/app_opacity.dart';
-export 'src/foundation/app_motion.dart';
 export 'src/theme/app_theme_tokens.dart';
 export 'src/theme/app_theme.dart';
 export 'src/layout/app_layout.dart';

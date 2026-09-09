@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
-import 'package:shipit_ui/src/foundation/app_spacing.dart';
-import 'package:shipit_ui/src/foundation/app_radius.dart';
-import 'package:shipit_ui/src/foundation/app_typography.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 /// Text field state types for AppTextField.
-enum AppTextFieldState { default_, error, disabled }
+enum AppTextFieldState { base, error, disabled }
 
 /// A reusable text field widget following the shipit_ui design system.
 ///
@@ -56,7 +53,7 @@ class AppTextField extends StatefulWidget {
     required this.label,
     this.hint,
     this.initialValue,
-    this.state = AppTextFieldState.default_,
+    this.state = AppTextFieldState.base,
     this.errorText,
     this.autovalidateMode = AutovalidateMode.disabled,
     this.onSaved,
@@ -204,6 +201,8 @@ class _AppTextFieldState extends State<AppTextField> {
                 ? defaultErrorMessage
                 : null);
         final bool isError = errorText != null;
+        final color = context.color;
+        final space = context.space;
         return Semantics(
           textField: true,
           label: widget.label,
@@ -213,11 +212,11 @@ class _AppTextFieldState extends State<AppTextField> {
             children: [
               Text(
                 widget.label,
-                style: AppTypography.labelMedium.copyWith(
-                  color: _getLabelColor(),
+                style: context.text.label.medium.copyWith(
+                  color: _getLabelColor(color),
                 ),
               ),
-              const SizedBox(height: AppSpacing.space1),
+              SizedBox(height: space.s1),
               TextField(
                 key: widget.semanticLabel,
                 controller: _controller,
@@ -234,39 +233,45 @@ class _AppTextFieldState extends State<AppTextField> {
                 decoration: InputDecoration(
                   hintText: widget.hint,
                   prefixIcon: widget.prefixIcon,
-                  suffixIcon: _buildSuffixIcon(isError),
+                  suffixIcon: _buildSuffixIcon(context, isError),
                   filled: true,
-                  fillColor: _getFillColor(),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.space4,
-                    vertical: AppSpacing.space2,
+                  fillColor: _getFillColor(color),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: space.s4,
+                    vertical: space.s2,
                   ),
-                  border: _border(_getBorderColor(isError)),
-                  enabledBorder: _border(_getBorderColor(isError)),
+                  border: _border(context, _getBorderColor(color, isError)),
+                  enabledBorder: _border(
+                    context,
+                    _getBorderColor(color, isError),
+                  ),
                   focusedBorder: _border(
-                    isError
-                        ? AppColors.stateErrorFgColor
-                        : AppColors.actionPrimaryBgColor,
+                    context,
+                    isError ? color.state.error.fg : color.action.primary.bg,
                     width: 2,
                   ),
-                  errorBorder: _border(AppColors.stateErrorFgColor),
+                  errorBorder: _border(context, color.state.error.fg),
                   focusedErrorBorder: _border(
-                    AppColors.stateErrorFgColor,
+                    context,
+                    color.state.error.fg,
                     width: 2,
                   ),
-                  disabledBorder: _border(AppColors.actionDisabledBorderColor),
+                  disabledBorder: _border(
+                    context,
+                    color.action.disabled.border,
+                  ),
                 ),
               ),
               if (isError)
                 Padding(
-                  padding: const EdgeInsets.only(top: AppSpacing.space1),
+                  padding: EdgeInsets.only(top: space.s1),
                   child: Semantics(
                     liveRegion: true,
                     child: Text(
                       errorText,
                       key: const Key('text_field_error'),
-                      style: AppTypography.bodySmall.copyWith(
-                        color: AppColors.stateErrorFgColor,
+                      style: context.text.body.small.copyWith(
+                        color: color.state.error.fg,
                       ),
                     ),
                   ),
@@ -278,47 +283,51 @@ class _AppTextFieldState extends State<AppTextField> {
     );
   }
 
-  OutlineInputBorder _border(Color color, {double width = 1}) {
+  OutlineInputBorder _border(
+    BuildContext context,
+    Color color, {
+    double width = 1,
+  }) {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(AppRadius.radiusMd),
+      borderRadius: context.radius.all.md,
       borderSide: BorderSide(color: color, width: width),
     );
   }
 
-  Color _getLabelColor() {
+  Color _getLabelColor(AppColorTokens color) {
     switch (widget.state) {
       case AppTextFieldState.error:
-        return AppColors.fgSecondaryColor;
+        return color.fg.secondary;
       case AppTextFieldState.disabled:
-        return AppColors.fgDisabledColor;
-      case AppTextFieldState.default_:
-        return AppColors.fgSecondaryColor;
+        return color.fg.disabled;
+      case AppTextFieldState.base:
+        return color.fg.secondary;
     }
   }
 
-  Color _getFillColor() {
+  Color _getFillColor(AppColorTokens color) {
     switch (widget.state) {
       case AppTextFieldState.disabled:
-        return AppColors.actionDisabledBgColor;
+        return color.action.disabled.bg;
       case AppTextFieldState.error:
-        return AppColors.bgSurfaceColor;
-      case AppTextFieldState.default_:
-        return AppColors.bgSurfaceColor;
+        return color.bg.surface;
+      case AppTextFieldState.base:
+        return color.bg.surface;
     }
   }
 
-  Color _getBorderColor(bool isError) {
+  Color _getBorderColor(AppColorTokens color, bool isError) {
     if (widget.state == AppTextFieldState.disabled) {
-      return AppColors.actionDisabledBorderColor;
+      return color.action.disabled.border;
     }
-    return isError ? AppColors.stateErrorFgColor : AppColors.borderDefaultColor;
+    return isError ? color.state.error.fg : color.border.base;
   }
 
-  Widget? _buildSuffixIcon(bool isError) {
+  Widget? _buildSuffixIcon(BuildContext context, bool isError) {
     if (isError && widget.suffixIcon == null) {
-      return const Icon(
+      return Icon(
         Icons.error_outline,
-        color: AppColors.stateErrorFgColor,
+        color: context.color.state.error.fg,
         size: 20,
       );
     }

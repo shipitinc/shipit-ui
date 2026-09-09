@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shipit_ui/src/components/app_button.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
-import 'package:shipit_ui/src/foundation/app_radius.dart';
-import 'package:shipit_ui/src/foundation/app_spacing.dart';
-import 'package:shipit_ui/src/foundation/app_typography.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 /// A confirmation dialog following the shipit_ui design system.
 ///
@@ -90,16 +87,16 @@ class AppConfirmDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final space = context.space;
+    final color = context.color;
     return Dialog(
       key: semanticLabel,
-      backgroundColor: AppColors.bgSurfaceColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.radiusXl),
-      ),
+      backgroundColor: color.bg.surface,
+      shape: RoundedRectangleBorder(borderRadius: context.radius.all.xl),
       elevation: 0,
-      insetPadding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.space4,
-        vertical: AppSpacing.space4,
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: space.s4,
+        vertical: space.s4,
       ),
       child: Semantics(
         label: title,
@@ -109,28 +106,28 @@ class AppConfirmDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.space6,
-                AppSpacing.space5,
-                AppSpacing.space6,
-                AppSpacing.space2,
+              padding: EdgeInsets.fromLTRB(
+                space.s6,
+                space.s5,
+                space.s6,
+                space.s2,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (isDestructive)
                     Padding(
-                      padding: const EdgeInsets.only(bottom: AppSpacing.space4),
-                      child: _buildWarningIcon(),
+                      padding: EdgeInsets.only(bottom: space.s4),
+                      child: _buildWarningIcon(context),
                     ),
-                  Text(title, style: AppTypography.headlineMedium),
+                  Text(title, style: context.text.headline.medium),
                   if (message != null)
                     Padding(
-                      padding: const EdgeInsets.only(top: AppSpacing.space1),
+                      padding: EdgeInsets.only(top: space.s1),
                       child: Text(
                         message!,
-                        style: AppTypography.bodyMedium.copyWith(
-                          color: AppColors.fgSecondaryColor,
+                        style: context.text.body.medium.copyWith(
+                          color: color.fg.secondary,
                         ),
                       ),
                     ),
@@ -139,22 +136,22 @@ class AppConfirmDialog extends StatelessWidget {
             ),
             if (content != null)
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space6,
-                  vertical: AppSpacing.space3,
+                padding: EdgeInsets.symmetric(
+                  horizontal: space.s6,
+                  vertical: space.s3,
                 ),
                 child: content!,
               ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.space6,
-                AppSpacing.space3,
-                AppSpacing.space6,
-                AppSpacing.space5,
+              padding: EdgeInsets.fromLTRB(
+                space.s6,
+                space.s3,
+                space.s6,
+                space.s5,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                spacing: AppSpacing.space2,
+                spacing: space.s2,
                 children: [
                   AppButton.secondary(
                     label: cancelLabel,
@@ -175,20 +172,15 @@ class AppConfirmDialog extends StatelessWidget {
     );
   }
 
-  Widget _buildWarningIcon() {
+  Widget _buildWarningIcon(BuildContext context) {
+    final space = context.space;
+    final error = context.color.state.error;
     return Container(
-      width: AppSpacing.space10,
-      height: AppSpacing.space10,
-      decoration: const BoxDecoration(
-        color: AppColors.stateErrorBgColor,
-        shape: BoxShape.circle,
-      ),
+      width: space.s10,
+      height: space.s10,
+      decoration: BoxDecoration(color: error.bg, shape: BoxShape.circle),
       alignment: Alignment.center,
-      child: const Icon(
-        Icons.warning_amber_rounded,
-        color: AppColors.stateErrorFgColor,
-        size: AppSpacing.space6,
-      ),
+      child: Icon(Icons.warning_amber_rounded, color: error.fg, size: space.s6),
     );
   }
 }

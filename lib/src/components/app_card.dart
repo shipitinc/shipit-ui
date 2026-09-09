@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
-import 'package:shipit_ui/src/foundation/app_spacing.dart';
-import 'package:shipit_ui/src/foundation/app_radius.dart';
-import 'package:shipit_ui/src/foundation/app_typography.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 /// A reusable card widget following the shipit_ui design system.
 ///
@@ -39,19 +36,22 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.color;
+    final space = context.space;
+    final text = context.text;
     final card = Card(
-      color: color ?? AppColors.bgSurfaceColor,
+      color: color ?? colors.bg.surface,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        side: const BorderSide(color: AppColors.borderDefaultColor),
-        borderRadius: BorderRadius.circular(AppRadius.radiusLg),
+        side: BorderSide(color: colors.border.base),
+        borderRadius: context.radius.all.lg,
       ),
       margin: EdgeInsets.zero,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppRadius.radiusLg),
+        borderRadius: context.radius.all.lg,
         child: Padding(
-          padding: padding ?? const EdgeInsets.all(AppSpacing.space4),
+          padding: padding ?? EdgeInsets.all(space.s4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -60,7 +60,7 @@ class AppCard extends StatelessWidget {
                   children: [
                     if (leading != null) ...[
                       leading!,
-                      const SizedBox(width: AppSpacing.space2),
+                      SizedBox(width: space.s2),
                     ],
                     Expanded(
                       child: Column(
@@ -69,14 +69,14 @@ class AppCard extends StatelessWidget {
                           if (title != null)
                             Text(
                               title!,
-                              style: AppTypography.headlineMedium,
+                              style: text.headline.medium,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                           if (subtitle != null && title != null)
                             Text(
                               subtitle!,
-                              style: AppTypography.bodySmall,
+                              style: text.body.small,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -87,10 +87,10 @@ class AppCard extends StatelessWidget {
                   ],
                 ),
                 if (subtitle != null && title == null) ...[
-                  Text(subtitle!, style: AppTypography.bodySmall),
+                  Text(subtitle!, style: text.body.small),
                 ],
                 if (children != null || child != null) ...[
-                  const SizedBox(height: AppSpacing.space2),
+                  SizedBox(height: space.s2),
                   ?child,
                   ...?children,
                 ],

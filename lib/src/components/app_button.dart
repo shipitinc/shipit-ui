@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
-import 'package:shipit_ui/src/foundation/app_spacing.dart';
-import 'package:shipit_ui/src/foundation/app_radius.dart';
-import 'package:shipit_ui/src/foundation/app_typography.dart';
-import 'package:shipit_ui/src/foundation/app_motion.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 /// Button variant types for AppButton.
 enum AppButtonVariant { primary, secondary }
 
 /// Button state types for AppButton.
-enum AppButtonState { default_, disabled, loading }
+enum AppButtonState { base, disabled, loading }
 
 /// A reusable button widget following the shipit_ui design system.
 ///
-/// Supports primary and secondary variants with default, disabled, and loading states.
-/// Based on approved Penpot design tokens.
+/// Supports primary and secondary variants with base, disabled, and loading
+/// states. Based on approved Penpot design tokens.
 ///
 /// ## Semantics
 ///
@@ -32,7 +28,7 @@ class AppButton extends StatelessWidget {
     super.key,
     required this.label,
     this.variant = AppButtonVariant.primary,
-    this.state = AppButtonState.default_,
+    this.state = AppButtonState.base,
     this.onPressed,
     this.icon,
     this.semanticLabel,
@@ -43,7 +39,7 @@ class AppButton extends StatelessWidget {
     final VoidCallback? onPressed,
     final IconData? icon,
     final Key? semanticLabel,
-    final AppButtonState state = AppButtonState.default_,
+    final AppButtonState state = AppButtonState.base,
   }) {
     return AppButton(
       label: label,
@@ -59,7 +55,7 @@ class AppButton extends StatelessWidget {
     final VoidCallback? onPressed,
     final IconData? icon,
     final Key? semanticLabel,
-    final AppButtonState state = AppButtonState.default_,
+    final AppButtonState state = AppButtonState.base,
   }) {
     return AppButton(
       label: label,
@@ -73,6 +69,7 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final action = context.color.action;
     final isEnabled =
         state != AppButtonState.disabled && state != AppButtonState.loading;
 
@@ -83,42 +80,29 @@ class AppButton extends StatelessWidget {
     switch (variant) {
       case AppButtonVariant.primary:
         switch (state) {
-          case AppButtonState.default_:
-            backgroundColor = AppColors.actionPrimaryBgColor;
-            foregroundColor = AppColors.actionPrimaryFgColor;
+          case AppButtonState.base:
+          case AppButtonState.loading:
+            backgroundColor = action.primary.bg;
+            foregroundColor = action.primary.fg;
             break;
           case AppButtonState.disabled:
-            backgroundColor = AppColors.actionDisabledBgColor;
-            foregroundColor = AppColors.actionDisabledFgColor;
-            break;
-          case AppButtonState.loading:
-            backgroundColor = AppColors.actionPrimaryBgColor;
-            foregroundColor = AppColors.actionPrimaryFgColor;
+            backgroundColor = action.disabled.bg;
+            foregroundColor = action.disabled.fg;
             break;
         }
         break;
       case AppButtonVariant.secondary:
         switch (state) {
-          case AppButtonState.default_:
-            backgroundColor = AppColors.actionSecondaryBgColor;
-            foregroundColor = AppColors.actionSecondaryFgColor;
-            borderSide = const BorderSide(
-              color: AppColors.actionSecondaryBorderColor,
-            );
+          case AppButtonState.base:
+          case AppButtonState.loading:
+            backgroundColor = action.secondary.bg;
+            foregroundColor = action.secondary.fg;
+            borderSide = BorderSide(color: action.secondary.border);
             break;
           case AppButtonState.disabled:
-            backgroundColor = AppColors.actionDisabledBgColor;
-            foregroundColor = AppColors.actionDisabledFgColor;
-            borderSide = const BorderSide(
-              color: AppColors.actionDisabledBorderColor,
-            );
-            break;
-          case AppButtonState.loading:
-            backgroundColor = AppColors.actionSecondaryBgColor;
-            foregroundColor = AppColors.actionSecondaryFgColor;
-            borderSide = const BorderSide(
-              color: AppColors.actionSecondaryBorderColor,
-            );
+            backgroundColor = action.disabled.bg;
+            foregroundColor = action.disabled.fg;
+            borderSide = BorderSide(color: action.disabled.border);
             break;
         }
         break;
@@ -138,37 +122,37 @@ class AppButton extends StatelessWidget {
             backgroundColor: backgroundColor,
             foregroundColor: foregroundColor,
             disabledForegroundColor: foregroundColor.withValues(alpha: 0.5),
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.space4,
-              vertical: AppSpacing.space2,
+            padding: EdgeInsets.symmetric(
+              horizontal: context.space.s4,
+              vertical: context.space.s2,
             ),
             minimumSize: Size.zero,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppRadius.radiusMd),
+              borderRadius: context.radius.all.md,
               side: borderSide ?? BorderSide.none,
             ),
-            animationDuration: AppMotion.buttonPress,
+            animationDuration: context.motion.duration.buttonPress,
           ),
           child: state == AppButtonState.loading
               ? _buildLoadingIndicator(foregroundColor)
-              : _buildContent(foregroundColor),
+              : _buildContent(context, foregroundColor),
         ),
       ),
     );
   }
 
-  Widget _buildContent(Color foregroundColor) {
+  Widget _buildContent(BuildContext context, Color foregroundColor) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         if (icon != null) ...[
           Icon(icon, size: 18),
-          const SizedBox(width: AppSpacing.space2),
+          SizedBox(width: context.space.s2),
         ],
         Text(
           label,
-          style: AppTypography.labelLarge.copyWith(color: foregroundColor),
+          style: context.text.label.large.copyWith(color: foregroundColor),
         ),
       ],
     );

@@ -1,58 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:shipit_ui/src/foundation/app_breakpoints.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
-import 'package:shipit_ui/src/foundation/app_spacing.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 /// Layout primitives for the shipit_ui design system.
 ///
-/// Provides responsive layout helpers, standard page widths,
-/// and spacing/layout primitives.
+/// Every helper resolves its defaults from the ambient [AppTheme] via
+/// `context.space` / `context.breakpoint`, so consumer overrides apply.
 class AppLayout {
   AppLayout._();
 
   // MARK: - Standard page widths
 
-  /// Returns a constrained [BoxConstraints] for standard page content.
-  static BoxConstraints pageConstraints({
+  /// Max-width constraints for standard page content.
+  static BoxConstraints pageConstraints(
+    BuildContext context, {
     double? width,
-    EdgeInsetsGeometry? padding,
-  }) {
-    return BoxConstraints(maxWidth: width ?? AppBreakpoints.pageWidth);
-  }
+  }) => BoxConstraints(maxWidth: width ?? context.breakpoint.pageWidth);
 
-  /// Returns a horizontally centered [Container] with max-width constraints.
+  /// A horizontally centered, max-width constrained page body.
   static Widget centeredPage({
     required Widget child,
     double? width,
     EdgeInsetsGeometry? padding,
   }) {
-    return Center(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: width ?? AppBreakpoints.pageWidth,
-        ),
-        child: Padding(
-          padding:
-              padding ??
-              const EdgeInsets.symmetric(horizontal: AppSpacing.space4),
-          child: child,
+    return Builder(
+      builder: (context) => Center(
+        child: ConstrainedBox(
+          constraints: pageConstraints(context, width: width),
+          child: Padding(
+            padding:
+                padding ?? EdgeInsets.symmetric(horizontal: context.space.s4),
+            child: child,
+          ),
         ),
       ),
     );
   }
 
-  /// Returns a responsive max-width for the current context.
+  /// Full width below the mobile breakpoint, otherwise the page width.
   static double responsivePageWidth(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    if (width < AppBreakpoints.mobile) {
-      return width;
-    }
-    return AppBreakpoints.pageWidth;
+    final width = MediaQuery.sizeOf(context).width;
+    return width < context.breakpoint.mobile
+        ? width
+        : context.breakpoint.pageWidth;
   }
 
   // MARK: - Responsive wrapper
 
-  /// Wraps [child] with responsive horizontal padding based on layout type.
+  /// Wraps [child] with padding chosen by the available width's layout class.
   static Widget responsivePadding({
     required Widget child,
     EdgeInsetsGeometry? compactPadding,
@@ -62,109 +56,117 @@ class AppLayout {
   }) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final padding = _getPadding(
+        final padding = switch (context.breakpoint.layoutTypeFor(
           constraints.maxWidth,
-          compactPadding,
-          mobilePadding,
-          tabletPadding,
-          desktopPadding,
-        );
+        )) {
+          AppLayoutType.compact => compactPadding,
+          AppLayoutType.mobile => mobilePadding,
+          AppLayoutType.tablet => tabletPadding,
+          AppLayoutType.desktop || AppLayoutType.wide => desktopPadding,
+        };
         return Padding(padding: padding ?? EdgeInsets.zero, child: child);
       },
     );
   }
 
-  static EdgeInsetsGeometry? _getPadding(
-    double width,
-    EdgeInsetsGeometry? compact,
-    EdgeInsetsGeometry? mobile,
-    EdgeInsetsGeometry? tablet,
-    EdgeInsetsGeometry? desktop,
-  ) {
-    if (width < AppBreakpoints.mobile) return compact;
-    if (width < AppBreakpoints.tablet) return mobile;
-    if (width < AppBreakpoints.desktop) return tablet;
-    return desktop;
-  }
-
   // MARK: - Flex layout helpers
 
-  /// Returns a [Row] with standard spacing and alignment.
+  /// A [Row] (or [Wrap]) with token spacing; [spacing] defaults to `space.s4`.
   static Widget hStack({
     required List<Widget> children,
-    double spacing = AppSpacing.space4,
+    double? spacing,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
     WrapAlignment wrapAlignment = WrapAlignment.start,
     bool wrap = false,
   }) {
-    if (wrap) {
-      return Wrap(
-        spacing: spacing,
-        runSpacing: spacing,
-        alignment: wrapAlignment,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: children,
-      );
-    }
-    return Row(
-      mainAxisAlignment: mainAxisAlignment,
-      crossAxisAlignment: crossAxisAlignment,
-      spacing: spacing,
-      children: children,
+    return Builder(
+      builder: (context) {
+        final gap = spacing ?? context.space.s4;
+        if (wrap) {
+          return Wrap(
+            spacing: gap,
+            runSpacing: gap,
+            alignment: wrapAlignment,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: children,
+          );
+        }
+        return Row(
+          mainAxisAlignment: mainAxisAlignment,
+          crossAxisAlignment: crossAxisAlignment,
+          spacing: gap,
+          children: children,
+        );
+      },
     );
   }
 
-  /// Returns a [Column] with standard spacing and alignment.
+  /// A [Column] (or vertical [Wrap]) with token spacing; defaults to `space.s4`.
   static Widget vStack({
     required List<Widget> children,
-    double spacing = AppSpacing.space4,
+    double? spacing,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.start,
     bool wrap = false,
   }) {
-    if (wrap) {
-      return Wrap(
-        spacing: spacing,
-        runSpacing: spacing,
-        direction: Axis.vertical,
-        children: children,
-      );
-    }
-    return Column(
-      mainAxisAlignment: mainAxisAlignment,
-      crossAxisAlignment: crossAxisAlignment,
-      spacing: spacing,
-      children: children,
+    return Builder(
+      builder: (context) {
+        final gap = spacing ?? context.space.s4;
+        if (wrap) {
+          return Wrap(
+            spacing: gap,
+            runSpacing: gap,
+            direction: Axis.vertical,
+            children: children,
+          );
+        }
+        return Column(
+          mainAxisAlignment: mainAxisAlignment,
+          crossAxisAlignment: crossAxisAlignment,
+          spacing: gap,
+          children: children,
+        );
+      },
     );
   }
 
   // MARK: - Spacer utilities
 
-  /// Returns a sized box with width [AppSpacing.space2].
-  static Widget get width2 => const SizedBox(width: AppSpacing.space2);
+  static Widget _gap({
+    double Function(AppSpaceTokens)? w,
+    double Function(AppSpaceTokens)? h,
+  }) => Builder(
+    builder: (context) =>
+        SizedBox(width: w?.call(context.space), height: h?.call(context.space)),
+  );
 
-  /// Returns a sized box with width [AppSpacing.space4].
-  static Widget get width4 => const SizedBox(width: AppSpacing.space4);
+  /// Horizontal gap of `space.s2`.
+  static Widget get width2 => _gap(w: (s) => s.s2);
 
-  /// Returns a sized box with width [AppSpacing.space6].
-  static Widget get width6 => const SizedBox(width: AppSpacing.space6);
+  /// Horizontal gap of `space.s4`.
+  static Widget get width4 => _gap(w: (s) => s.s4);
 
-  /// Returns a sized box with height [AppSpacing.space2].
-  static Widget get height2 => const SizedBox(height: AppSpacing.space2);
+  /// Horizontal gap of `space.s6`.
+  static Widget get width6 => _gap(w: (s) => s.s6);
 
-  /// Returns a sized box with height [AppSpacing.space4].
-  static Widget get height4 => const SizedBox(height: AppSpacing.space4);
+  /// Vertical gap of `space.s2`.
+  static Widget get height2 => _gap(h: (s) => s.s2);
 
-  /// Returns a sized box with height [AppSpacing.space6].
-  static Widget get height6 => const SizedBox(height: AppSpacing.space6);
+  /// Vertical gap of `space.s4`.
+  static Widget get height4 => _gap(h: (s) => s.s4);
 
-  /// Returns a divider with standard spacing.
+  /// Vertical gap of `space.s6`.
+  static Widget get height6 => _gap(h: (s) => s.s6);
+
+  /// A divider in `color.border.base` with `space.s4` vertical extent.
   static Widget divider({Color? color, double? thickness}) {
-    return Divider(
-      color: color ?? AppColors.borderDefaultColor,
-      thickness: thickness ?? 1,
-      height: AppSpacing.space4,
+    return Builder(
+      builder: (context) => Divider(
+        color: color ?? context.color.border.base,
+        thickness: thickness ?? 1,
+        height: context.space.s4,
+      ),
     );
   }
 }

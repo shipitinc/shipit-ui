@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shipit_ui/src/components/app_text_field.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 void main() {
   group('AppTextField', () {
@@ -93,7 +93,7 @@ void main() {
       expect(find.text('Error: Please check this field'), findsNothing);
       expect(find.byIcon(Icons.error_outline), findsOneWidget);
       final border = decorationOf(tester).enabledBorder! as OutlineInputBorder;
-      expect(border.borderSide.color, AppColors.stateErrorFgColor);
+      expect(border.borderSide.color, AppTheme.light.color.state.error.fg);
     });
 
     testWidgets('error variant keeps default message when errorText is null', (
@@ -138,7 +138,7 @@ void main() {
 
       expect(find.text('Email is required'), findsOneWidget);
       final border = decorationOf(tester).enabledBorder! as OutlineInputBorder;
-      expect(border.borderSide.color, AppColors.stateErrorFgColor);
+      expect(border.borderSide.color, AppTheme.light.color.state.error.fg);
 
       await tester.enterText(find.byType(TextField), 'a@b.co');
       expect(formKey.currentState!.validate(), isTrue);

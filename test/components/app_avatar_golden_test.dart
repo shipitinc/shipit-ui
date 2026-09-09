@@ -2,25 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:shipit_ui/src/components/app_avatar.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
-import 'package:shipit_ui/src/foundation/app_radius.dart';
-import 'package:shipit_ui/src/foundation/app_spacing.dart';
-import 'package:shipit_ui/src/foundation/app_typography.dart';
+import 'package:shipit_ui/src/theme/app_theme.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
-Widget _row(List<Widget> children) {
+Widget _row(List<Widget> children, {ThemeData? theme}) {
   return MaterialApp(
-    home: Scaffold(
-      backgroundColor: AppColors.bgSurfaceColor,
-      body: Center(
-        child: Row(
-          key: const Key('avatar_row'),
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            for (var i = 0; i < children.length; i++) ...[
-              if (i > 0) const SizedBox(width: AppSpacing.space6),
-              children[i],
+    theme: theme,
+    home: Builder(
+      builder: (context) => Scaffold(
+        backgroundColor: context.color.bg.surface,
+        body: Center(
+          child: Row(
+            key: const Key('avatar_row'),
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (var i = 0; i < children.length; i++) ...[
+                if (i > 0) SizedBox(width: context.space.s6),
+                children[i],
+              ],
             ],
-          ],
+          ),
         ),
       ),
     ),
@@ -28,23 +29,32 @@ Widget _row(List<Widget> children) {
 }
 
 Widget _countBadge(String count) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.space1),
-    constraints: const BoxConstraints(minWidth: AppSpacing.space4),
-    height: AppSpacing.space4,
-    alignment: Alignment.center,
-    decoration: const BoxDecoration(
-      color: AppColors.actionPrimaryBgColor,
-      borderRadius: AppRadius.borderRadiusFull,
-    ),
-    child: Text(
-      count,
-      style: AppTypography.labelSmall.copyWith(
-        color: AppColors.actionPrimaryFgColor,
+  return Builder(
+    builder: (context) => Container(
+      padding: EdgeInsets.symmetric(horizontal: context.space.s1),
+      constraints: BoxConstraints(minWidth: context.space.s4),
+      height: context.space.s4,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: context.color.action.primary.bg,
+        borderRadius: context.radius.all.full,
+      ),
+      child: Text(
+        count,
+        style: context.text.label.small.copyWith(
+          color: context.color.action.primary.fg,
+        ),
       ),
     ),
   );
 }
+
+List<Widget> _stateAvatars() => [
+  const AppAvatar(name: 'Ada Lovelace', status: AppAvatarStatus.online),
+  const AppAvatar(name: 'Ada Lovelace', status: AppAvatarStatus.busy),
+  const AppAvatar(),
+  AppAvatar(name: 'Ada Lovelace', badge: _countBadge('3')),
+];
 
 void main() {
   group('Golden tests - AppAvatar', () {
@@ -66,17 +76,23 @@ void main() {
 
     testGoldens('states', (tester) async {
       await tester.pumpWidgetBuilder(
-        _row([
-          const AppAvatar(name: 'Ada Lovelace', status: AppAvatarStatus.online),
-          const AppAvatar(name: 'Ada Lovelace', status: AppAvatarStatus.busy),
-          const AppAvatar(),
-          AppAvatar(name: 'Ada Lovelace', badge: _countBadge('3')),
-        ]),
+        _row(_stateAvatars()),
         surfaceSize: const Size(320, 120),
       );
       await expectLater(
         find.byType(Scaffold),
         matchesGoldenFile('avatar_states.png'),
+      );
+    });
+
+    testGoldens('states (dark)', (tester) async {
+      await tester.pumpWidgetBuilder(
+        _row(_stateAvatars(), theme: shipitDarkTheme()),
+        surfaceSize: const Size(320, 120),
+      );
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('avatar_states_dark.png'),
       );
     });
   });

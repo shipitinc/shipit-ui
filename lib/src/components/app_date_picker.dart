@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shipit_ui/src/components/app_tooltip.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
-import 'package:shipit_ui/src/foundation/app_spacing.dart';
-import 'package:shipit_ui/src/foundation/app_radius.dart';
-import 'package:shipit_ui/src/foundation/app_typography.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 /// Selection modes for [AppDatePicker].
 enum AppDatePickerMode { single, range }
@@ -174,6 +171,8 @@ class AppDatePicker extends StatelessWidget {
       autovalidateMode: autovalidateMode,
       enabled: !isDisabled,
       builder: (field) {
+        final color = context.color;
+        final space = context.space;
         final String? message = errorText ?? field.errorText;
         final bool showError = isError || message != null;
         return Semantics(
@@ -190,34 +189,32 @@ class AppDatePicker extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: AppTypography.labelMedium.copyWith(
-                  color: isDisabled
-                      ? AppColors.fgDisabledColor
-                      : AppColors.fgSecondaryColor,
+                style: context.text.label.medium.copyWith(
+                  color: isDisabled ? color.fg.disabled : color.fg.secondary,
                 ),
               ),
-              const SizedBox(height: AppSpacing.space1),
+              SizedBox(height: space.s1),
               _buildField(context, field, showError),
               if (message != null)
                 Padding(
-                  padding: const EdgeInsets.only(top: AppSpacing.space1),
+                  padding: EdgeInsets.only(top: space.s1),
                   child: Semantics(
                     liveRegion: true,
                     child: Text(
                       message,
                       key: const Key('date_picker_error'),
-                      style: AppTypography.bodySmall.copyWith(
-                        color: AppColors.stateErrorFgColor,
+                      style: context.text.body.small.copyWith(
+                        color: color.state.error.fg,
                       ),
                     ),
                   ),
                 ),
               if (presets.isNotEmpty)
                 Padding(
-                  padding: const EdgeInsets.only(top: AppSpacing.space2),
+                  padding: EdgeInsets.only(top: space.s2),
                   child: Wrap(
-                    spacing: AppSpacing.space2,
-                    runSpacing: AppSpacing.space2,
+                    spacing: space.s2,
+                    runSpacing: space.s2,
                     children: [
                       for (var i = 0; i < presets.length; i++)
                         _PresetChip(
@@ -243,32 +240,30 @@ class AppDatePicker extends StatelessWidget {
     FormFieldState<Object?> field,
     bool showError,
   ) {
+    final color = context.color;
+    final space = context.space;
     final textColor = isDisabled
-        ? AppColors.fgDisabledColor
+        ? color.fg.disabled
         : _hasValue
-        ? AppColors.fgPrimaryColor
-        : AppColors.fgMutedColor;
-    final iconColor = isDisabled
-        ? AppColors.fgDisabledColor
-        : AppColors.fgMutedColor;
+        ? color.fg.primary
+        : color.fg.muted;
+    final iconColor = isDisabled ? color.fg.disabled : color.fg.muted;
     return Material(
       key: const Key('date_picker_field'),
-      color: isDisabled
-          ? AppColors.actionDisabledBgColor
-          : AppColors.bgSurfaceColor,
+      color: isDisabled ? color.action.disabled.bg : color.bg.surface,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-        side: BorderSide(color: _borderColor(showError)),
+        borderRadius: context.radius.all.md,
+        side: BorderSide(color: _borderColor(color, showError)),
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(AppRadius.radiusMd),
+        borderRadius: context.radius.all.md,
         onTap: isDisabled ? null : () => _open(context, field),
         child: ConstrainedBox(
           constraints: const BoxConstraints(minHeight: _fieldHeight),
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.space4,
-              vertical: AppSpacing.space2,
+            padding: EdgeInsets.symmetric(
+              horizontal: space.s4,
+              vertical: space.s2,
             ),
             child: Row(
               children: [
@@ -277,11 +272,11 @@ class AppDatePicker extends StatelessWidget {
                   size: _iconSize,
                   color: iconColor,
                 ),
-                const SizedBox(width: AppSpacing.space2),
+                SizedBox(width: space.s2),
                 Expanded(
                   child: Text(
                     _displayText,
-                    style: AppTypography.bodyMedium.copyWith(color: textColor),
+                    style: context.text.body.medium.copyWith(color: textColor),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -293,7 +288,7 @@ class AppDatePicker extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                       iconSize: _iconSize,
-                      color: AppColors.fgMutedColor,
+                      color: color.fg.muted,
                       icon: const Icon(Icons.close),
                       onPressed: () => _clear(field),
                     ),
@@ -306,10 +301,10 @@ class AppDatePicker extends StatelessWidget {
     );
   }
 
-  Color _borderColor(bool showError) {
-    if (isDisabled) return AppColors.actionDisabledBorderColor;
-    if (showError) return AppColors.stateErrorFgColor;
-    return AppColors.borderDefaultColor;
+  Color _borderColor(AppColorTokens color, bool showError) {
+    if (isDisabled) return color.action.disabled.border;
+    if (showError) return color.state.error.fg;
+    return color.border.base;
   }
 
   void _emitRange(FormFieldState<Object?> field, AppDateRange? r) {
@@ -395,18 +390,17 @@ class AppDatePicker extends StatelessWidget {
 
   static ThemeData _pickerTheme(BuildContext context) {
     final base = Theme.of(context);
+    final color = context.color;
     return base.copyWith(
       colorScheme: base.colorScheme.copyWith(
-        primary: AppColors.actionPrimaryBgColor,
-        onPrimary: AppColors.actionPrimaryFgColor,
-        surface: AppColors.bgSurfaceColor,
-        onSurface: AppColors.fgPrimaryColor,
+        primary: color.action.primary.bg,
+        onPrimary: color.action.primary.fg,
+        surface: color.bg.surface,
+        onSurface: color.fg.primary,
       ),
       datePickerTheme: DatePickerThemeData(
-        backgroundColor: AppColors.bgSurfaceColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.radiusXl),
-        ),
+        backgroundColor: color.bg.surface,
+        shape: RoundedRectangleBorder(borderRadius: context.radius.all.xl),
       ),
     );
   }
@@ -427,36 +421,36 @@ class _PresetChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final enabled = onTap != null;
+    final chip = context.color.chip;
+    final space = context.space;
     final fg = !enabled
-        ? AppColors.fgDisabledColor
+        ? context.color.fg.disabled
         : selected
-        ? AppColors.chipSelectedFgColor
-        : AppColors.chipFgColor;
+        ? chip.selected.fg
+        : chip.fg;
     return Semantics(
       button: true,
       selected: selected,
       enabled: enabled,
       label: label,
       child: Material(
-        color: selected ? AppColors.chipSelectedBgColor : AppColors.chipBgColor,
+        color: selected ? chip.selected.bg : chip.bg,
         shape: StadiumBorder(
           side: BorderSide(
-            color: selected
-                ? AppColors.chipSelectedBorderColor
-                : AppColors.chipBorderColor,
+            color: selected ? chip.selected.border : chip.border,
           ),
         ),
         child: InkWell(
           customBorder: const StadiumBorder(),
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.space3,
-              vertical: AppSpacing.space1,
+            padding: EdgeInsets.symmetric(
+              horizontal: space.s3,
+              vertical: space.s1,
             ),
             child: Text(
               label,
-              style: AppTypography.labelMedium.copyWith(color: fg),
+              style: context.text.label.medium.copyWith(color: fg),
             ),
           ),
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:shipit_ui/src/components/app_search_field.dart';
+import 'package:shipit_ui/src/theme/app_theme.dart';
 
 const _filters = [
   AppSearchFilter(label: 'All', selected: true),
@@ -14,8 +15,10 @@ Widget _field({
   FocusNode? focusNode,
   List<AppSearchFilter> filters = const [],
   List<String> recentSearches = const [],
+  ThemeData? theme,
 }) {
   return MaterialApp(
+    theme: theme,
     home: Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -45,6 +48,17 @@ void main() {
       await expectLater(
         find.byType(Scaffold),
         matchesGoldenFile('search_field_default.png'),
+      );
+    });
+
+    testGoldens('default with filters (dark)', (tester) async {
+      await tester.pumpWidgetBuilder(
+        _field(filters: _filters, theme: shipitDarkTheme()),
+        surfaceSize: const Size(400, 260),
+      );
+      await expectLater(
+        find.byType(Scaffold),
+        matchesGoldenFile('search_field_default_dark.png'),
       );
     });
 

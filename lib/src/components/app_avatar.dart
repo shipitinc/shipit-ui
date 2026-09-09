@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
-import 'package:shipit_ui/src/foundation/app_spacing.dart';
-import 'package:shipit_ui/src/foundation/app_typography.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 /// Size variants for [AppAvatar].
 enum AppAvatarSize { sm, md, lg, xl }
@@ -43,20 +41,24 @@ class AppAvatar extends StatelessWidget {
     this.semanticLabel,
   });
 
-  /// Status ring width; half of [AppSpacing.space1].
+  /// Status ring width; half of `space.s1`.
   static const double _ringWidth = 2.0;
 
-  /// Diameter in logical pixels for the given [size].
-  static double dimension(AppAvatarSize size) {
+  /// Diameter in logical pixels for the given [size], resolved against
+  /// [space] (defaults to the base scale; pass `context.space` in widgets).
+  static double dimension(
+    AppAvatarSize size, [
+    AppSpaceTokens space = AppSpaceTokens.base,
+  ]) {
     switch (size) {
       case AppAvatarSize.sm:
-        return AppSpacing.space6;
+        return space.s6;
       case AppAvatarSize.md:
-        return AppSpacing.space8;
+        return space.s8;
       case AppAvatarSize.lg:
-        return AppSpacing.space10;
+        return space.s10;
       case AppAvatarSize.xl:
-        return AppSpacing.space12 + AppSpacing.space2;
+        return space.s12 + space.s2;
     }
   }
 
@@ -68,46 +70,43 @@ class AppAvatar extends StatelessWidget {
     return words.take(2).map((w) => w[0].toUpperCase()).join();
   }
 
-  static TextStyle _textStyle(AppAvatarSize size) {
+  static TextStyle _textStyle(AppAvatarSize size, AppTextTokens text) {
     switch (size) {
       case AppAvatarSize.sm:
-        return AppTypography.labelSmall;
+        return text.label.small;
       case AppAvatarSize.md:
-        return AppTypography.labelMedium;
+        return text.label.medium;
       case AppAvatarSize.lg:
-        return AppTypography.labelLarge;
+        return text.label.large;
       case AppAvatarSize.xl:
-        return AppTypography.titleMedium;
+        return text.title.medium;
     }
   }
 
-  static Color _statusColor(AppAvatarStatus status) {
+  static Color _statusColor(AppAvatarStatus status, AppColorTokens color) {
     switch (status) {
       case AppAvatarStatus.online:
-        return AppColors.stateSuccessFgColor;
+        return color.state.success.fg;
       case AppAvatarStatus.offline:
-        return AppColors.fgMutedColor;
+        return color.fg.muted;
       case AppAvatarStatus.busy:
-        return AppColors.stateErrorFgColor;
+        return color.state.error.fg;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final double d = dimension(size);
+    final color = context.color;
+    final double d = dimension(size, context.space);
     final String initials = initialsFor(name);
 
     final Widget fallback = initials.isEmpty
-        ? Icon(
-            Icons.person_outline,
-            size: d / 2,
-            color: AppColors.avatarFgColor,
-          )
+        ? Icon(Icons.person_outline, size: d / 2, color: color.avatar.fg)
         : Text(
             initials,
-            style: _textStyle(size).copyWith(
-              color: AppColors.avatarFgColor,
-              fontWeight: AppTypography.fontWeightSemibold,
+            style: _textStyle(size, context.text).copyWith(
+              color: color.avatar.fg,
+              fontWeight: context.font.weight.semibold,
             ),
           );
 
@@ -115,10 +114,7 @@ class AppAvatar extends StatelessWidget {
       width: d,
       height: d,
       clipBehavior: Clip.antiAlias,
-      decoration: const BoxDecoration(
-        color: AppColors.avatarBgColor,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: color.avatar.bg, shape: BoxShape.circle),
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -152,7 +148,7 @@ class AppAvatar extends StatelessWidget {
                 right: 0,
                 bottom: 0,
                 child: _AppAvatarStatusDot(
-                  color: _statusColor(status!),
+                  color: _statusColor(status!, color),
                   diameter: d / 4,
                 ),
               ),
@@ -187,7 +183,7 @@ class _AppAvatarStatusDot extends StatelessWidget {
         color: color,
         shape: BoxShape.circle,
         border: Border.all(
-          color: AppColors.bgSurfaceColor,
+          color: context.color.bg.surface,
           width: AppAvatar._ringWidth,
         ),
       ),

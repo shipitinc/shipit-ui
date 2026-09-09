@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shipit_ui/src/foundation/app_colors.dart';
-import 'package:shipit_ui/src/foundation/app_spacing.dart';
-import 'package:shipit_ui/src/foundation/app_radius.dart';
-import 'package:shipit_ui/src/foundation/app_typography.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 /// Select state types for AppSelect.
-enum AppSelectState { default_, error, disabled }
+enum AppSelectState { base, error, disabled }
 
 /// A reusable select/dropdown widget following the shipit_ui design system.
 ///
@@ -43,7 +40,7 @@ class AppSelect<T> extends StatefulWidget {
     this.value,
     this.onChanged,
     this.hint,
-    this.state = AppSelectState.default_,
+    this.state = AppSelectState.base,
     this.prefixIcon,
     this.errorText,
     this.validator,
@@ -71,6 +68,9 @@ class _AppSelectState<T> extends State<AppSelect<T>> {
         final String? errorText = widget.errorText ?? field.errorText;
         final bool isError =
             errorText != null || widget.state == AppSelectState.error;
+        final color = context.color;
+        final space = context.space;
+        final text = context.text;
         return Semantics(
           label: widget.label,
           button: true,
@@ -80,36 +80,40 @@ class _AppSelectState<T> extends State<AppSelect<T>> {
             children: [
               Text(
                 widget.label,
-                style: AppTypography.labelMedium.copyWith(
-                  color: _getLabelColor(),
-                ),
+                style: text.label.medium.copyWith(color: _getLabelColor(color)),
               ),
-              const SizedBox(height: AppSpacing.space1),
+              SizedBox(height: space.s1),
               InputDecorator(
                 decoration: InputDecoration(
                   hintText:
                       widget.hint ?? 'Select ${widget.label.toLowerCase()}',
                   prefixIcon: widget.prefixIcon,
                   filled: true,
-                  fillColor: _getFillColor(),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.space4,
-                    vertical: AppSpacing.space2,
+                  fillColor: _getFillColor(color),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: space.s4,
+                    vertical: space.s2,
                   ),
-                  border: _border(_getBorderColor(isError)),
-                  enabledBorder: _border(_getBorderColor(isError)),
+                  border: _border(context, _getBorderColor(color, isError)),
+                  enabledBorder: _border(
+                    context,
+                    _getBorderColor(color, isError),
+                  ),
                   focusedBorder: _border(
-                    isError
-                        ? AppColors.stateErrorFgColor
-                        : AppColors.actionPrimaryBgColor,
+                    context,
+                    isError ? color.state.error.fg : color.action.primary.bg,
                     width: 2,
                   ),
-                  errorBorder: _border(AppColors.stateErrorFgColor),
+                  errorBorder: _border(context, color.state.error.fg),
                   focusedErrorBorder: _border(
-                    AppColors.stateErrorFgColor,
+                    context,
+                    color.state.error.fg,
                     width: 2,
                   ),
-                  disabledBorder: _border(AppColors.actionDisabledBorderColor),
+                  disabledBorder: _border(
+                    context,
+                    color.action.disabled.border,
+                  ),
                 ),
                 isEmpty: widget.value == null,
                 child: DropdownButtonHideUnderline(
@@ -120,17 +124,12 @@ class _AppSelectState<T> extends State<AppSelect<T>> {
                     isDense: true,
                     hint: Text(
                       widget.hint ?? 'Select ${widget.label.toLowerCase()}',
-                      style: AppTypography.bodyMedium.copyWith(
-                        color: AppColors.fgMutedColor,
-                      ),
+                      style: text.body.medium.copyWith(color: color.fg.muted),
                     ),
                     items: widget.options.map((option) {
                       return DropdownMenuItem<T>(
                         value: option.value,
-                        child: Text(
-                          option.label,
-                          style: AppTypography.bodyMedium,
-                        ),
+                        child: Text(option.label, style: text.body.medium),
                       );
                     }).toList(),
                     onChanged: _isDisabled
@@ -144,14 +143,14 @@ class _AppSelectState<T> extends State<AppSelect<T>> {
               ),
               if (errorText != null)
                 Padding(
-                  padding: const EdgeInsets.only(top: AppSpacing.space1),
+                  padding: EdgeInsets.only(top: space.s1),
                   child: Semantics(
                     liveRegion: true,
                     child: Text(
                       errorText,
                       key: const Key('select_error'),
-                      style: AppTypography.bodySmall.copyWith(
-                        color: AppColors.stateErrorFgColor,
+                      style: text.body.small.copyWith(
+                        color: color.state.error.fg,
                       ),
                     ),
                   ),
@@ -163,26 +162,28 @@ class _AppSelectState<T> extends State<AppSelect<T>> {
     );
   }
 
-  OutlineInputBorder _border(Color color, {double width = 1}) {
+  OutlineInputBorder _border(
+    BuildContext context,
+    Color color, {
+    double width = 1,
+  }) {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(AppRadius.radiusMd),
+      borderRadius: context.radius.all.md,
       borderSide: BorderSide(color: color, width: width),
     );
   }
 
-  Color _getLabelColor() {
-    return _isDisabled ? AppColors.fgDisabledColor : AppColors.fgSecondaryColor;
+  Color _getLabelColor(AppColorTokens color) {
+    return _isDisabled ? color.fg.disabled : color.fg.secondary;
   }
 
-  Color _getFillColor() {
-    return _isDisabled
-        ? AppColors.actionDisabledBgColor
-        : AppColors.bgSurfaceColor;
+  Color _getFillColor(AppColorTokens color) {
+    return _isDisabled ? color.action.disabled.bg : color.bg.surface;
   }
 
-  Color _getBorderColor(bool isError) {
-    if (_isDisabled) return AppColors.actionDisabledBorderColor;
-    return isError ? AppColors.stateErrorFgColor : AppColors.borderDefaultColor;
+  Color _getBorderColor(AppColorTokens color, bool isError) {
+    if (_isDisabled) return color.action.disabled.border;
+    return isError ? color.state.error.fg : color.border.base;
   }
 }
 

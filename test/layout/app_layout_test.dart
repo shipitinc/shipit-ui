@@ -1,69 +1,122 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shipit_ui/src/layout/app_layout.dart';
-import 'package:flutter/material.dart';
+import 'package:shipit_ui/src/theme/app_theme.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
+
+Future<BuildContext> _pump(WidgetTester tester, Widget child) async {
+  late BuildContext captured;
+  await tester.pumpWidget(
+    MaterialApp(
+      theme: shipitLightTheme(),
+      home: Scaffold(
+        body: Builder(
+          builder: (context) {
+            captured = context;
+            return child;
+          },
+        ),
+      ),
+    ),
+  );
+  return captured;
+}
 
 void main() {
   group('AppLayout', () {
-    test('pageConstraints returns valid constraints', () {
-      final constraints = AppLayout.pageConstraints();
-      expect(constraints.maxWidth, 1200);
+    testWidgets('pageConstraints reads breakpoint.pageWidth', (tester) async {
+      final context = await _pump(tester, const SizedBox());
+      expect(AppLayout.pageConstraints(context).maxWidth, 1200);
+      expect(AppLayout.pageConstraints(context, width: 800).maxWidth, 800);
     });
 
-    test('pageConstraints with custom width', () {
-      final constraints = AppLayout.pageConstraints(width: 800);
-      expect(constraints.maxWidth, 800);
-    });
-
-    test('centeredPage returns a widget', () {
-      final widget = AppLayout.centeredPage(child: const Text('Content'));
-      expect(widget, isNotNull);
-    });
-
-    test('hStack returns a Row', () {
-      final widget = AppLayout.hStack(
-        children: [const Text('A'), const Text('B')],
+    testWidgets('centeredPage pads with space.s4 by default', (tester) async {
+      await _pump(tester, AppLayout.centeredPage(child: const Text('C')));
+      final padding = tester.widget<Padding>(
+        find.ancestor(of: find.text('C'), matching: find.byType(Padding)).first,
       );
-      expect(widget, isA<Row>());
-    });
-
-    test('vStack returns a Column', () {
-      final widget = AppLayout.vStack(
-        children: [const Text('A'), const Text('B')],
+      expect(padding.padding, const EdgeInsets.symmetric(horizontal: 16));
+      expect(
+        find.byWidgetPredicate(
+          (w) => w is ConstrainedBox && w.constraints.maxWidth == 1200,
+        ),
+        findsOneWidget,
       );
-      expect(widget, isA<Column>());
     });
 
-    test('hStack with wrap returns a Wrap', () {
-      final widget = AppLayout.hStack(
-        children: [const Text('A'), const Text('B')],
-        wrap: true,
+    testWidgets('hStack / vStack default spacing to space.s4', (tester) async {
+      await _pump(
+        tester,
+        Column(
+          children: [
+            AppLayout.hStack(children: const [Text('a'), Text('b')]),
+            AppLayout.vStack(children: const [Text('c'), Text('d')]),
+            AppLayout.hStack(children: const [Text('e')], wrap: true),
+          ],
+        ),
       );
-      expect(widget, isA<Wrap>());
-    });
-
-    test('vStack with wrap returns a Wrap', () {
-      final widget = AppLayout.vStack(
-        children: [const Text('A'), const Text('B')],
-        wrap: true,
+      expect(tester.widget<Row>(find.byType(Row)).spacing, 16);
+      expect(
+        tester
+            .widgetList<Column>(find.byType(Column))
+            .map((c) => c.spacing)
+            .toList(),
+        contains(16),
       );
-      expect(widget, isA<Wrap>());
+      expect(find.byType(Wrap), findsOneWidget);
     });
 
-    test('spacer widgets are sized boxes', () {
-      expect(AppLayout.width2, isA<SizedBox>());
-      expect(AppLayout.width4, isA<SizedBox>());
-      expect(AppLayout.height2, isA<SizedBox>());
-      expect(AppLayout.height4, isA<SizedBox>());
+    testWidgets('spacers and divider resolve tokens', (tester) async {
+      await _pump(
+        tester,
+        Column(
+          children: [AppLayout.width2, AppLayout.height4, AppLayout.divider()],
+        ),
+      );
+      final boxes = tester.widgetList<SizedBox>(find.byType(SizedBox));
+      expect(boxes.any((b) => b.width == 8), isTrue);
+      expect(boxes.any((b) => b.height == 16), isTrue);
+      final divider = tester.widget<Divider>(find.byType(Divider));
+      expect(divider.color, AppTheme.light.color.border.base);
+      expect(divider.height, 16);
     });
 
-    test('divider returns a Divider', () {
-      final widget = AppLayout.divider();
-      expect(widget, isA<Divider>());
+    testWidgets('overridden space tokens flow into layout helpers', (
+      tester,
+    ) async {
+      final tokens = AppTheme.light.copyWith(
+        space: AppTheme.light.space.copyWith(s4: 24),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: shipitLightTheme(tokens: tokens),
+          home: Scaffold(
+            body: AppLayout.hStack(children: const [Text('a'), Text('b')]),
+          ),
+        ),
+      );
+      expect(tester.widget<Row>(find.byType(Row)).spacing, 24);
     });
 
-    test('responsivePadding returns a widget', () {
-      final widget = AppLayout.responsivePadding(child: const Text('Content'));
-      expect(widget, isNotNull);
+    testWidgets('responsivePadding picks padding by width class', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(800, 600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.reset);
+      await _pump(
+        tester,
+        AppLayout.responsivePadding(
+          child: const Text('C'),
+          mobilePadding: const EdgeInsets.all(1),
+          tabletPadding: const EdgeInsets.all(2),
+          desktopPadding: const EdgeInsets.all(3),
+        ),
+      );
+      final padding = tester.widget<Padding>(
+        find.ancestor(of: find.text('C'), matching: find.byType(Padding)).first,
+      );
+      expect(padding.padding, const EdgeInsets.all(2));
     });
   });
 }
