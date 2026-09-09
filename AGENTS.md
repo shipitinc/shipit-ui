@@ -26,11 +26,14 @@ Arbitrary hex colors are **prohibited** in product UI unless explicitly justifie
 // WRONG
 Container(color: Color(0xFF3A7BD5))
 
-// CORRECT
-Container(color: AppColors.actionPrimary)
+// CORRECT (brightness-aware — preferred in product code)
+Container(color: AppPalette.of(context).actionPrimaryBg)
+
+// CORRECT (light-only constant)
+Container(color: AppColors.actionPrimaryBgColor)
 ```
 
-If a color does not exist in `AppColors`, add it to the foundation first.
+If a color does not exist in `AppColors`, add it to the foundation first — and add its dark counterpart to `AppColorsDark`, `AppPalette` and the Penpot `shipit/color-dark` set in the same change. Never branch on `Theme.of(context).brightness` to pick colors by hand.
 
 ### 3. No Arbitrary Spacing Literals
 

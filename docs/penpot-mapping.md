@@ -79,6 +79,8 @@ Penpot identifiers follow a hierarchical path format:
 
 #### Tokens - Colors
 
+Light values live in the Penpot set `shipit/color` (theme **ShipIt / Light**) and map to `AppColors.*`. Every token also has a dark counterpart in `shipit/color-dark` (theme **ShipIt / Dark**) that maps to `AppColorsDark.*` with the same name; both are exposed brightness-aware through `AppPalette.light` / `AppPalette.dark` and consumed by `shipitLightTheme()` / `shipitDarkTheme()`.
+
 | Penpot ID | Flutter API | Status |
 |-----------|------------|--------|
 | `token/color/bg/base` | `AppColors.bgBase` | MATCHED |
@@ -225,6 +227,13 @@ Penpot identifiers follow a hierarchical path format:
 |-----------|------------------|--------|
 | `pattern/action-row` | `AppButton.secondary` left, `AppButton.primary` right, gap `AppSpacing.space2` | MATCHED |
 | `pattern/field-stack` | Fields fill width, vertical gap `AppSpacing.space4` | MATCHED |
+
+#### Themes
+
+| Penpot theme | Flutter API | Status |
+|--------------|-------------|--------|
+| `ShipIt / Light` (sets: primitives + `shipit/color` + shared) | `shipitLightTheme()` / `AppPalette.light` | MATCHED |
+| `ShipIt / Dark` (sets: primitives + `shipit/color-dark` + shared) | `shipitDarkTheme()` / `AppPalette.dark` | MATCHED |
 
 ## Status Legend
 

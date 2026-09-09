@@ -70,6 +70,11 @@ MaterialApp(
 );
 ```
 
+Both themes register an `AppPalette` `ThemeExtension`; read
+`AppPalette.of(context)` for brightness-aware semantic colors instead of the
+light-only `AppColors` constants. Dark tokens come from `AppColorsDark`
+(Penpot set `shipit/color-dark`, theme **ShipIt / Dark**).
+
 ## Fonts
 
 `shipit_ui` bundles **Inter** (400 / 500 / 600 / 700, SIL OFL 1.1 — see

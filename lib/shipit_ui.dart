@@ -6,6 +6,7 @@ export 'src/foundation/app_breakpoints.dart';
 export 'src/foundation/app_elevation.dart';
 export 'src/foundation/app_opacity.dart';
 export 'src/foundation/app_motion.dart';
+export 'src/theme/app_palette.dart';
 export 'src/theme/app_theme.dart';
 export 'src/layout/app_layout.dart';
 export 'src/components/app_avatar.dart';

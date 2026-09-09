@@ -27,23 +27,32 @@ class AppColors {
   // MARK: - Primitive Accent Scale
 
   static const int _accent50 = 0xFFEFF6FF;
+  static const int _accent400 = 0xFF60A5FA;
+  static const int _accent500 = 0xFF3B82F6;
   static const int _accent600 = 0xFF2563EB;
   static const int _accent700 = 0xFF1D4ED8;
+  static const int _accent950 = 0xFF172554;
 
   // MARK: - Primitive Red Scale
 
   static const int _red50 = 0xFFFEF2F2;
+  static const int _red400 = 0xFFF87171;
   static const int _red600 = 0xFFDC2626;
+  static const int _red950 = 0xFF450A0A;
 
   // MARK: - Primitive Green Scale
 
   static const int _green50 = 0xFFF0FDF4;
+  static const int _green400 = 0xFF4ADE80;
   static const int _green600 = 0xFF16A34A;
+  static const int _green950 = 0xFF052E16;
 
   // MARK: - Primitive Amber Scale
 
   static const int _amber50 = 0xFFFFFBEB;
+  static const int _amber400 = 0xFFFBBF24;
   static const int _amber600 = 0xFFD97706;
+  static const int _amber950 = 0xFF451A03;
 
   // MARK: - Background
 
@@ -366,4 +375,176 @@ class AppColors {
 
   /// @deprecated Use stateErrorFgColor instead
   static const Color actionDestructive = stateErrorFgColor;
+}
+
+/// Dark-mode semantic color tokens for the shipit_ui design system.
+///
+/// Every token in [AppColors] has a counterpart here with the same name,
+/// resolved against the dark end of the same primitive scales
+/// (Penpot token set `shipit/color-dark`). Consumed by `shipitDarkTheme()`
+/// via [AppPalette]; components read colors through the palette so they
+/// adapt automatically.
+class AppColorsDark {
+  AppColorsDark._();
+
+  // MARK: - Background
+
+  /// token/color/bg/base → #020617 (neutral.950)
+  static const Color bgBaseColor = Color(AppColors._neutral950);
+
+  /// token/color/bg/surface → #0F172A (neutral.900)
+  static const Color bgSurfaceColor = Color(AppColors._neutral900);
+
+  /// token/color/bg/subtle → #1E293B (neutral.800)
+  static const Color bgSubtleColor = Color(AppColors._neutral800);
+
+  /// token/color/bg/disabled → #1E293B (neutral.800)
+  static const Color bgDisabledColor = Color(AppColors._neutral800);
+
+  // MARK: - Foreground
+
+  /// token/color/fg/primary → #F8FAFC (neutral.50)
+  static const Color fgPrimaryColor = Color(AppColors._neutral50);
+
+  /// token/color/fg/secondary → #CBD5E1 (neutral.300)
+  static const Color fgSecondaryColor = Color(AppColors._neutral300);
+
+  /// token/color/fg/muted → #64748B (neutral.500)
+  static const Color fgMutedColor = Color(AppColors._neutral500);
+
+  /// token/color/fg/inverse → #0F172A (neutral.900)
+  static const Color fgInverseColor = Color(AppColors._neutral900);
+
+  /// token/color/fg/disabled → #475569 (neutral.600)
+  static const Color fgDisabledColor = Color(AppColors._neutral600);
+
+  // MARK: - Border
+
+  /// token/color/border/default → #334155 (neutral.700)
+  static const Color borderDefaultColor = Color(AppColors._neutral700);
+
+  /// token/color/border/strong → #475569 (neutral.600)
+  static const Color borderStrongColor = Color(AppColors._neutral600);
+
+  /// token/color/border/focus → #60A5FA (accent.400)
+  static const Color borderFocusColor = Color(AppColors._accent400);
+
+  /// token/color/border/error → #F87171 (red.400)
+  static const Color borderErrorColor = Color(AppColors._red400);
+
+  // MARK: - Action
+
+  /// token/color/action/primary/bg → #2563EB (accent.600)
+  static const Color actionPrimaryBgColor = Color(AppColors._accent600);
+
+  /// token/color/action/primary/bgHover → #3B82F6 (accent.500)
+  static const Color actionPrimaryBgHoverColor = Color(AppColors._accent500);
+
+  /// token/color/action/primary/fg → #FFFFFF (neutral.0)
+  static const Color actionPrimaryFgColor = Color(AppColors._neutral0);
+
+  /// token/color/action/secondary/bg → #0F172A (neutral.900)
+  static const Color actionSecondaryBgColor = Color(AppColors._neutral900);
+
+  /// token/color/action/secondary/border → #334155 (neutral.700)
+  static const Color actionSecondaryBorderColor = Color(AppColors._neutral700);
+
+  /// token/color/action/secondary/fg → #F8FAFC (neutral.50)
+  static const Color actionSecondaryFgColor = Color(AppColors._neutral50);
+
+  /// token/color/action/disabled/bg → #1E293B (neutral.800)
+  static const Color actionDisabledBgColor = Color(AppColors._neutral800);
+
+  /// token/color/action/disabled/border → #334155 (neutral.700)
+  static const Color actionDisabledBorderColor = Color(AppColors._neutral700);
+
+  /// token/color/action/disabled/fg → #475569 (neutral.600)
+  static const Color actionDisabledFgColor = Color(AppColors._neutral600);
+
+  // MARK: - State
+
+  /// token/color/state/error/fg → #F87171 (red.400)
+  static const Color stateErrorFgColor = Color(AppColors._red400);
+
+  /// token/color/state/error/bg → #450A0A (red.950)
+  static const Color stateErrorBgColor = Color(AppColors._red950);
+
+  /// token/color/state/success/fg → #4ADE80 (green.400)
+  static const Color stateSuccessFgColor = Color(AppColors._green400);
+
+  /// token/color/state/success/bg → #052E16 (green.950)
+  static const Color stateSuccessBgColor = Color(AppColors._green950);
+
+  /// token/color/state/warning/fg → #FBBF24 (amber.400)
+  static const Color stateWarningFgColor = Color(AppColors._amber400);
+
+  /// token/color/state/warning/bg → #451A03 (amber.950)
+  static const Color stateWarningBgColor = Color(AppColors._amber950);
+
+  /// token/color/state/info/fg → #60A5FA (accent.400)
+  static const Color stateInfoFgColor = Color(AppColors._accent400);
+
+  /// token/color/state/info/bg → #172554 (accent.950)
+  static const Color stateInfoBgColor = Color(AppColors._accent950);
+
+  // MARK: - Overlay / Shimmer
+
+  /// token/color/scrim → #020617 (neutral.950)
+  static const Color scrimColor = Color(AppColors._neutral950);
+
+  /// token/color/shimmer/base → #1E293B (neutral.800)
+  static const Color shimmerBaseColor = Color(AppColors._neutral800);
+
+  /// token/color/shimmer/highlight → #334155 (neutral.700)
+  static const Color shimmerHighlightColor = Color(AppColors._neutral700);
+
+  // MARK: - Navigation / Tooltip / Avatar / Chip / Table
+
+  /// token/color/nav/selected/bg → #172554 (accent.950)
+  static const Color navSelectedBgColor = Color(AppColors._accent950);
+
+  /// token/color/nav/selected/fg → #60A5FA (accent.400)
+  static const Color navSelectedFgColor = Color(AppColors._accent400);
+
+  /// token/color/nav/unselected/fg → #CBD5E1 (neutral.300)
+  static const Color navUnselectedFgColor = Color(AppColors._neutral300);
+
+  /// token/color/tooltip/bg → #F1F5F9 (neutral.100)
+  static const Color tooltipBgColor = Color(AppColors._neutral100);
+
+  /// token/color/tooltip/fg → #0F172A (neutral.900)
+  static const Color tooltipFgColor = Color(AppColors._neutral900);
+
+  /// token/color/avatar/bg → #334155 (neutral.700)
+  static const Color avatarBgColor = Color(AppColors._neutral700);
+
+  /// token/color/avatar/fg → #F1F5F9 (neutral.100)
+  static const Color avatarFgColor = Color(AppColors._neutral100);
+
+  /// token/color/chip/bg → #0F172A (neutral.900)
+  static const Color chipBgColor = Color(AppColors._neutral900);
+
+  /// token/color/chip/fg → #CBD5E1 (neutral.300)
+  static const Color chipFgColor = Color(AppColors._neutral300);
+
+  /// token/color/chip/border → #334155 (neutral.700)
+  static const Color chipBorderColor = Color(AppColors._neutral700);
+
+  /// token/color/chip/selected/bg → #172554 (accent.950)
+  static const Color chipSelectedBgColor = Color(AppColors._accent950);
+
+  /// token/color/chip/selected/fg → #60A5FA (accent.400)
+  static const Color chipSelectedFgColor = Color(AppColors._accent400);
+
+  /// token/color/chip/selected/border → #60A5FA (accent.400)
+  static const Color chipSelectedBorderColor = Color(AppColors._accent400);
+
+  /// token/color/table/header/bg → #1E293B (neutral.800)
+  static const Color tableHeaderBgColor = Color(AppColors._neutral800);
+
+  /// token/color/table/row/hover → #1E293B (neutral.800)
+  static const Color tableRowHoverColor = Color(AppColors._neutral800);
+
+  /// token/color/table/border → #334155 (neutral.700)
+  static const Color tableBorderColor = Color(AppColors._neutral700);
 }
