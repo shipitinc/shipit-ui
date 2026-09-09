@@ -34,12 +34,14 @@ lib/
 │       ├── app_dialog.dart
 │       ├── app_empty_state.dart     # the only view-replacing state
 │       ├── app_filter_chip.dart
+│       ├── app_icon_button.dart         # icon-only action button
 │       ├── app_inline_alert.dart    # error / warning / info / success feedback
 │       ├── app_navigation_rail.dart
 │       ├── app_search_field.dart
 │       ├── app_select.dart
 │       ├── app_shimmer.dart
 │       ├── app_skeleton.dart        # loading silhouettes
+│       ├── app_text_button.dart         # text/link-style button
 │       ├── app_text_field.dart
 │       └── app_tooltip.dart
 ```
@@ -56,6 +58,8 @@ final style = context.text.title.medium;
 
 // Use components
 AppButton.primary(label: 'Submit', onPressed: () {});
+AppTextButton(label: 'Forgot password?', onPressed: () {});
+AppIconButton(icon: Icons.visibility_outlined, tooltip: 'Show password', onPressed: () {});
 AppTextField.normal(label: 'Name');
 AppCard(title: 'Title', children: [...]);
 ```

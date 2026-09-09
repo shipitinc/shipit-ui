@@ -77,6 +77,26 @@ Penpot identifiers follow a hierarchical path format:
 | `component/data_table/empty` | `AppDataTable(rows: [])` | MATCHED |
 | `component/data_table/loading` | `AppDataTable(isLoading: true)` | MATCHED |
 
+#### Components without a full Penpot design (UI gaps)
+
+These exist in Flutter and Penpot; the Penpot component covers the approved
+`state` variants (`default` / `disabled` / `loading`) and reuses the existing
+`component/button/*` token set — **no new tokens were added**. The Flutter
+implementations additionally honour a hover overlay (`color.bg.subtle` at 8%,
+text button) that has no static Penpot equivalent, and accept the same
+`AppButtonState`s (`base` / `disabled` / `loading`) and `semanticLabel`
+automation key as [AppButton].
+
+| Penpot component | Flutter API | Status |
+|------------------|-------------|--------|
+| `component/button/text` (`AppTextButton` · state) | `AppTextButton(label: ...)` — text/link-style button in `color.action.primary.bg` (`context.text.label.large`, 44 px tap target) | MATCHED |
+| `component/button/icon` (`AppIconButton` · state) | `AppIconButton(icon: ..., tooltip: ...)` — icon-only button in `color.fg.secondary` (44×44 tap target) | MATCHED |
+
+Penpot boards: **02 Components → `AppTextButton`** (board
+`416652ee-53fd-807b-8008-9d644c111de7`) and **`AppIconButton`** (board
+`416652ee-53fd-807b-8008-9d6450d61b85`), both registered as local library
+components.
+
 #### Tokens - Colors
 
 Light values live in the Penpot set `shipit/color` (theme **ShipIt / Light**, `AppColorTokens.light`) and dark values in `shipit/color-dark` (theme **ShipIt / Dark**, `AppColorTokens.dark`) with identical names. In code read them as `context.color.<path>`; the path is the Penpot name minus the `color.` prefix (`color.border.base` → `context.color.border.base`, `color.state.error.fg` → `context.color.state.error.fg`).

@@ -3,6 +3,8 @@ export 'src/theme/app_theme.dart';
 export 'src/layout/app_layout.dart';
 export 'src/components/app_avatar.dart';
 export 'src/components/app_button.dart';
+export 'src/components/app_icon_button.dart';
+export 'src/components/app_text_button.dart';
 export 'src/components/app_text_field.dart';
 export 'src/components/app_select.dart';
 export 'src/components/app_card.dart';
