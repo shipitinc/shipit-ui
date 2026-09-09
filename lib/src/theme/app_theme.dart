@@ -1,231 +1,204 @@
 import 'package:flutter/material.dart';
-import 'package:shipit_ui/src/foundation/app_radius.dart';
-import 'package:shipit_ui/src/foundation/app_spacing.dart';
-import 'package:shipit_ui/src/foundation/app_typography.dart';
-import 'package:shipit_ui/src/theme/app_palette.dart';
+import 'package:shipit_ui/src/theme/app_theme_tokens.dart';
 
 /// Builds a light [ThemeData] for the shipit_ui design system.
 ///
-/// Uses approved Penpot design tokens (`shipit/color`).
-ThemeData shipitLightTheme() => _buildTheme(AppPalette.light);
+/// Pass [tokens] to override any token node, e.g.
+/// `AppTheme.light.copyWith(radius: AppTheme.light.radius.copyWith(md: 12))`.
+ThemeData shipitLightTheme({AppTheme? tokens}) =>
+    buildShipitTheme(tokens ?? AppTheme.light);
 
-/// Builds a dark [ThemeData] for the shipit_ui design system.
-///
-/// Uses approved Penpot design tokens (`shipit/color-dark`): dark surfaces
-/// from the neutral 950/900/800 primitives, light foregrounds, and
-/// dark-adapted state, border and action tokens.
-ThemeData shipitDarkTheme() => _buildTheme(AppPalette.dark);
+/// Builds a dark [ThemeData] for the shipit_ui design system
+/// (Penpot theme ShipIt / Dark).
+ThemeData shipitDarkTheme({AppTheme? tokens}) =>
+    buildShipitTheme(tokens ?? AppTheme.dark);
 
-ThemeData _buildTheme(AppPalette p) {
-  final bool isDark = p.brightness == Brightness.dark;
-  final TextTheme textTheme = _textTheme(p);
+/// Builds a [ThemeData] from an arbitrary [AppTheme] token tree and registers
+/// the tree as a [ThemeExtension] so `context.color.*` etc. resolve to it.
+ThemeData buildShipitTheme(AppTheme t) {
+  final c = t.color, s = t.space, r = t.radius, x = t.text;
+  final bool isDark = c.brightness == Brightness.dark;
   final RoundedRectangleBorder buttonShape = RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(AppRadius.radiusMd),
+    borderRadius: r.all.md,
   );
   OutlineInputBorder border(Color color, {double width = 1}) =>
       OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppRadius.radiusMd),
+        borderRadius: r.all.md,
         borderSide: BorderSide(color: color, width: width),
       );
+  final EdgeInsets buttonPadding = EdgeInsets.symmetric(
+    horizontal: s.s4,
+    vertical: s.s2,
+  );
 
   return ThemeData(
     useMaterial3: true,
-    brightness: p.brightness,
-    extensions: <ThemeExtension<dynamic>>[p],
+    brightness: c.brightness,
+    extensions: <ThemeExtension<dynamic>>[t],
     colorScheme: ColorScheme(
-      brightness: p.brightness,
-      primary: p.actionPrimaryBg,
-      onPrimary: p.actionPrimaryFg,
-      primaryContainer: p.stateInfoBg,
-      onPrimaryContainer: p.stateInfoFg,
-      secondary: p.actionSecondaryFg,
-      onSecondary: p.actionSecondaryBg,
-      secondaryContainer: p.bgSubtle,
-      onSecondaryContainer: p.fgPrimary,
-      tertiary: p.stateSuccessFg,
-      onTertiary: p.actionPrimaryFg,
-      tertiaryContainer: p.stateSuccessBg,
-      onTertiaryContainer: p.stateSuccessFg,
-      error: p.stateErrorFg,
-      onError: isDark ? p.fgInverse : p.actionPrimaryFg,
-      errorContainer: p.stateErrorBg,
-      onErrorContainer: p.stateErrorFg,
-      surface: p.bgSurface,
-      onSurface: p.fgPrimary,
-      surfaceDim: p.bgBase,
-      surfaceBright: p.bgSurface,
-      surfaceContainerLowest: isDark ? p.bgBase : p.bgSurface,
-      surfaceContainerLow: isDark ? p.bgSurface : p.bgBase,
-      surfaceContainer: p.bgSubtle,
-      surfaceContainerHigh: p.bgSubtle,
-      surfaceContainerHighest: isDark ? p.borderDefault : p.bgSubtle,
-      onSurfaceVariant: p.fgSecondary,
-      outline: p.borderDefault,
-      outlineVariant: isDark ? p.bgSubtle : p.borderDefault,
-      shadow: p.scrim,
-      scrim: p.scrim,
-      inverseSurface: p.fgPrimary,
-      onInverseSurface: p.bgSurface,
-      inversePrimary: p.navSelectedFg,
+      brightness: c.brightness,
+      primary: c.action.primary.bg,
+      onPrimary: c.action.primary.fg,
+      primaryContainer: c.state.info.bg,
+      onPrimaryContainer: c.state.info.fg,
+      secondary: c.action.secondary.fg,
+      onSecondary: c.action.secondary.bg,
+      secondaryContainer: c.bg.subtle,
+      onSecondaryContainer: c.fg.primary,
+      tertiary: c.state.success.fg,
+      onTertiary: c.action.primary.fg,
+      tertiaryContainer: c.state.success.bg,
+      onTertiaryContainer: c.state.success.fg,
+      error: c.state.error.fg,
+      onError: isDark ? c.fg.inverse : c.action.primary.fg,
+      errorContainer: c.state.error.bg,
+      onErrorContainer: c.state.error.fg,
+      surface: c.bg.surface,
+      onSurface: c.fg.primary,
+      surfaceDim: c.bg.base,
+      surfaceBright: c.bg.surface,
+      surfaceContainerLowest: isDark ? c.bg.base : c.bg.surface,
+      surfaceContainerLow: isDark ? c.bg.surface : c.bg.base,
+      surfaceContainer: c.bg.subtle,
+      surfaceContainerHigh: c.bg.subtle,
+      surfaceContainerHighest: isDark ? c.border.base : c.bg.subtle,
+      onSurfaceVariant: c.fg.secondary,
+      outline: c.border.base,
+      outlineVariant: isDark ? c.bg.subtle : c.border.base,
+      shadow: c.scrim,
+      scrim: c.scrim,
+      inverseSurface: c.fg.primary,
+      onInverseSurface: c.bg.surface,
+      inversePrimary: c.nav.selected.fg,
     ),
-    textTheme: textTheme,
-    scaffoldBackgroundColor: p.bgBase,
-    canvasColor: p.bgSurface,
-    cardColor: p.bgSurface,
+    textTheme: TextTheme(
+      displayLarge: x.display.large,
+      displayMedium: x.display.medium,
+      displaySmall: x.display.small,
+      headlineLarge: x.headline.large,
+      headlineMedium: x.headline.medium,
+      headlineSmall: x.headline.small,
+      titleLarge: x.title.large,
+      titleMedium: x.title.medium,
+      titleSmall: x.title.small,
+      bodyLarge: x.body.large,
+      bodyMedium: x.body.medium,
+      bodySmall: x.body.small,
+      labelLarge: x.label.large,
+      labelMedium: x.label.medium,
+      labelSmall: x.label.small,
+    ),
+    scaffoldBackgroundColor: c.bg.base,
+    canvasColor: c.bg.surface,
+    cardColor: c.bg.surface,
     dialogTheme: DialogThemeData(
-      backgroundColor: p.bgSurface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.radiusXl),
-      ),
+      backgroundColor: c.bg.surface,
+      shape: RoundedRectangleBorder(borderRadius: r.all.xl),
     ),
-    dividerColor: p.borderDefault,
-    dividerTheme: DividerThemeData(color: p.borderDefault, thickness: 1),
-    iconTheme: IconThemeData(color: p.fgSecondary),
+    dividerColor: c.border.base,
+    dividerTheme: DividerThemeData(color: c.border.base, thickness: 1),
+    iconTheme: IconThemeData(color: c.fg.secondary),
     appBarTheme: AppBarTheme(
-      backgroundColor: p.bgSurface,
-      foregroundColor: p.fgPrimary,
+      backgroundColor: c.bg.surface,
+      foregroundColor: c.fg.primary,
       elevation: 0,
       centerTitle: false,
-      titleTextStyle: AppTypography.headlineMedium.copyWith(color: p.fgPrimary),
+      titleTextStyle: x.headline.medium,
     ),
     cardTheme: CardThemeData(
       elevation: 0,
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: p.borderDefault),
-        borderRadius: BorderRadius.circular(AppRadius.radiusMd),
+        side: BorderSide(color: c.border.base),
+        borderRadius: r.all.md,
       ),
-      color: p.bgSurface,
+      color: c.bg.surface,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: p.actionPrimaryBg,
-        foregroundColor: p.actionPrimaryFg,
-        disabledBackgroundColor: p.actionDisabledBg,
-        disabledForegroundColor: p.actionDisabledFg,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.space4,
-          vertical: AppSpacing.space2,
-        ),
+        backgroundColor: c.action.primary.bg,
+        foregroundColor: c.action.primary.fg,
+        disabledBackgroundColor: c.action.disabled.bg,
+        disabledForegroundColor: c.action.disabled.fg,
+        padding: buttonPadding,
         shape: buttonShape,
-        textStyle: AppTypography.labelLarge,
+        textStyle: x.label.large,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        foregroundColor: p.actionSecondaryFg,
-        backgroundColor: p.actionSecondaryBg,
-        disabledForegroundColor: p.actionDisabledFg,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.space4,
-          vertical: AppSpacing.space2,
-        ),
+        foregroundColor: c.action.secondary.fg,
+        backgroundColor: c.action.secondary.bg,
+        disabledForegroundColor: c.action.disabled.fg,
+        padding: buttonPadding,
         shape: buttonShape,
-        side: BorderSide(color: p.actionSecondaryBorder),
-        textStyle: AppTypography.labelLarge,
+        side: BorderSide(color: c.action.secondary.border),
+        textStyle: x.label.large,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        foregroundColor: p.actionPrimaryBg,
-        textStyle: AppTypography.labelLarge,
+        foregroundColor: c.action.primary.bg,
+        textStyle: x.label.large,
         shape: buttonShape,
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: p.bgSurface,
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.space4,
-        vertical: AppSpacing.space2,
-      ),
-      border: border(p.borderDefault),
-      enabledBorder: border(p.borderDefault),
-      focusedBorder: border(p.borderFocus, width: 2),
-      errorBorder: border(p.borderError),
-      focusedErrorBorder: border(p.borderError, width: 2),
-      disabledBorder: border(p.actionDisabledBorder),
-      hintStyle: AppTypography.bodyMedium.copyWith(color: p.fgMuted),
-      labelStyle: AppTypography.labelMedium.copyWith(color: p.fgSecondary),
-      errorStyle: AppTypography.bodySmall.copyWith(color: p.stateErrorFg),
+      fillColor: c.bg.surface,
+      contentPadding: buttonPadding,
+      border: border(c.border.base),
+      enabledBorder: border(c.border.base),
+      focusedBorder: border(c.border.focus, width: 2),
+      errorBorder: border(c.border.error),
+      focusedErrorBorder: border(c.border.error, width: 2),
+      disabledBorder: border(c.action.disabled.border),
+      hintStyle: x.body.medium.copyWith(color: c.fg.muted),
+      labelStyle: x.label.medium.copyWith(color: c.fg.secondary),
+      errorStyle: x.body.small.copyWith(color: c.state.error.fg),
     ),
     chipTheme: ChipThemeData(
-      backgroundColor: p.chipBg,
-      selectedColor: p.chipSelectedBg,
-      side: BorderSide(color: p.chipBorder),
-      labelStyle: AppTypography.labelMedium.copyWith(color: p.chipFg),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.radiusFull),
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.space2,
-        vertical: AppSpacing.space1,
-      ),
+      backgroundColor: c.chip.bg,
+      selectedColor: c.chip.selected.bg,
+      side: BorderSide(color: c.chip.border),
+      labelStyle: x.label.medium.copyWith(color: c.chip.fg),
+      shape: RoundedRectangleBorder(borderRadius: r.all.full),
+      padding: EdgeInsets.symmetric(horizontal: s.s2, vertical: s.s1),
     ),
     tooltipTheme: TooltipThemeData(
-      decoration: BoxDecoration(
-        color: p.tooltipBg,
-        borderRadius: AppRadius.borderRadiusMd,
-      ),
-      textStyle: AppTypography.labelMedium.copyWith(color: p.tooltipFg),
+      decoration: BoxDecoration(color: c.tooltip.bg, borderRadius: r.all.md),
+      textStyle: x.label.medium.copyWith(color: c.tooltip.fg),
     ),
     snackBarTheme: SnackBarThemeData(
-      backgroundColor: p.tooltipBg,
-      contentTextStyle: AppTypography.bodyMedium.copyWith(color: p.tooltipFg),
+      backgroundColor: c.tooltip.bg,
+      contentTextStyle: x.body.medium.copyWith(color: c.tooltip.fg),
       behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.radiusMd),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: r.all.md),
     ),
     progressIndicatorTheme: ProgressIndicatorThemeData(
-      color: p.actionPrimaryBg,
+      color: c.action.primary.bg,
       strokeWidth: 3,
     ),
     listTileTheme: ListTileThemeData(
-      tileColor: p.bgSurface,
-      textColor: p.fgPrimary,
-      iconColor: p.fgSecondary,
+      tileColor: c.bg.surface,
+      textColor: c.fg.primary,
+      iconColor: c.fg.secondary,
     ),
     navigationRailTheme: NavigationRailThemeData(
-      backgroundColor: p.bgSurface,
-      indicatorColor: p.navSelectedBg,
-      selectedIconTheme: IconThemeData(color: p.navSelectedFg),
-      unselectedIconTheme: IconThemeData(color: p.navUnselectedFg),
-      selectedLabelTextStyle: AppTypography.labelLarge.copyWith(
-        color: p.navSelectedFg,
-      ),
-      unselectedLabelTextStyle: AppTypography.labelLarge.copyWith(
-        color: p.navUnselectedFg,
+      backgroundColor: c.bg.surface,
+      indicatorColor: c.nav.selected.bg,
+      selectedIconTheme: IconThemeData(color: c.nav.selected.fg),
+      unselectedIconTheme: IconThemeData(color: c.nav.unselected.fg),
+      selectedLabelTextStyle: x.label.large.copyWith(color: c.nav.selected.fg),
+      unselectedLabelTextStyle: x.label.large.copyWith(
+        color: c.nav.unselected.fg,
       ),
     ),
     datePickerTheme: DatePickerThemeData(
-      backgroundColor: p.bgSurface,
-      headerForegroundColor: p.fgPrimary,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.radiusXl),
-      ),
+      backgroundColor: c.bg.surface,
+      headerForegroundColor: c.fg.primary,
+      shape: RoundedRectangleBorder(borderRadius: r.all.xl),
     ),
-  );
-}
-
-TextTheme _textTheme(AppPalette p) {
-  TextStyle c(TextStyle s, Color color) => s.copyWith(color: color);
-  return TextTheme(
-    displayLarge: c(AppTypography.displayLarge, p.fgPrimary),
-    displayMedium: c(AppTypography.displayMedium, p.fgPrimary),
-    displaySmall: c(AppTypography.displaySmall, p.fgPrimary),
-    headlineLarge: c(AppTypography.headlineLarge, p.fgPrimary),
-    headlineMedium: c(AppTypography.headlineMedium, p.fgPrimary),
-    headlineSmall: c(AppTypography.headlineSmall, p.fgPrimary),
-    titleLarge: c(AppTypography.titleLarge, p.fgPrimary),
-    titleMedium: c(AppTypography.titleMedium, p.fgPrimary),
-    titleSmall: c(AppTypography.titleSmall, p.fgPrimary),
-    bodyLarge: c(AppTypography.bodyLarge, p.fgPrimary),
-    bodyMedium: c(AppTypography.bodyMedium, p.fgPrimary),
-    bodySmall: c(AppTypography.bodySmall, p.fgSecondary),
-    labelLarge: c(AppTypography.labelLarge, p.fgPrimary),
-    labelMedium: c(AppTypography.labelMedium, p.fgPrimary),
-    labelSmall: c(AppTypography.labelSmall, p.fgMuted),
   );
 }
