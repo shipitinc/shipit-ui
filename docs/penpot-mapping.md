@@ -235,6 +235,8 @@ Light values live in the Penpot set `shipit/color` (theme **ShipIt / Light**) an
 | `ShipIt / Light` (sets: primitives + `shipit/color` + shared) | `shipitLightTheme()` / `AppPalette.light` | MATCHED |
 | `ShipIt / Dark` (sets: primitives + `shipit/color-dark` + shared) | `shipitDarkTheme()` / `AppPalette.dark` | MATCHED |
 
+**Previewing dark mode in Penpot:** Tokens panel → Themes → activate **ShipIt / Dark**. Every component, state board and pattern is bound to semantic tokens, so the whole file re-colours; switch back to **ShipIt / Light** when done (Light is the committed default). Section labels on the canvas are intentionally static. When adding shapes, always bind fills/strokes with tokens (never raw hex) or they will not follow the theme; note that the plugin API only persists token bindings on the *active* page.
+
 ## Status Legend
 
 | Status | Meaning |
