@@ -194,6 +194,34 @@ class AppOpacityTokens {
       AppOpacityTokens(scrim: scrim ?? this.scrim);
 }
 
+/// Max-width constraints (`maxWidth.*`).
+class AppLayoutMaxWidthTokens {
+  final double form;
+
+  const AppLayoutMaxWidthTokens({required this.form});
+
+  static const AppLayoutMaxWidthTokens base = AppLayoutMaxWidthTokens(
+    form: 440,
+  );
+
+  AppLayoutMaxWidthTokens copyWith({double? form}) =>
+      AppLayoutMaxWidthTokens(form: form ?? this.form);
+}
+
+/// Layout tokens (`layout.*`): max-width constraints for centered content.
+class AppLayoutTokens {
+  final AppLayoutMaxWidthTokens maxWidth;
+
+  const AppLayoutTokens({required this.maxWidth});
+
+  static const AppLayoutTokens base = AppLayoutTokens(
+    maxWidth: AppLayoutMaxWidthTokens.base,
+  );
+
+  AppLayoutTokens copyWith({AppLayoutMaxWidthTokens? maxWidth}) =>
+      AppLayoutTokens(maxWidth: maxWidth ?? this.maxWidth);
+}
+
 /// Layout classes derived from [AppBreakpointTokens].
 enum AppLayoutType { compact, mobile, tablet, desktop, wide }
 
