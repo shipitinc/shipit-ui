@@ -137,6 +137,27 @@ void main() {
       expect(t.label.small.fontSize, 12);
       expect(light.opacity.scrim, 0.4);
     });
+
+    test('font weight tokens cover the emphasis scale', () {
+      final w = light.font.weight;
+      expect(w.regular, FontWeight.w400);
+      expect(w.medium, FontWeight.w500);
+      expect(w.semibold, FontWeight.w600);
+      expect(w.bold, FontWeight.w700);
+    });
+
+    test('icon sizes are a 4px based scale starting at 16', () {
+      final i = light.icon.size;
+      expect([i.sm, i.md, i.lg, i.xl], [16, 20, 24, 28]);
+      for (final size in [i.sm, i.md, i.lg, i.xl]) {
+        expect(size % 4, 0);
+      }
+    });
+
+    test('layout max-width tokens constrain centered forms', () {
+      final l = light.layout;
+      expect(l.maxWidth.form, 440);
+    });
   });
 
   group('fonts', () {

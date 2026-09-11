@@ -103,6 +103,9 @@ void main() {
       expect(captured.appTheme, same(AppTheme.dark));
       expect(captured.space.s4, 16);
       expect(captured.radius.all.md, BorderRadius.circular(8));
+      expect(captured.font.weight.semibold, FontWeight.w600);
+      expect(captured.icon.size.sm, 16);
+      expect(captured.layout.maxWidth.form, 440);
     });
   });
 
@@ -122,6 +125,8 @@ void main() {
       expect(AppTheme.light.elevation.e2.single.blurRadius, 8);
       expect(AppTheme.light.opacity.scrim, 0.4);
       expect(AppTheme.light.breakpoint.desktop, 1024);
+      expect(AppTheme.light.icon.size.sm, 16);
+      expect(AppTheme.light.layout.maxWidth.form, 440);
     });
 
     test('text styles resolve bundled Inter and brightness colour', () {

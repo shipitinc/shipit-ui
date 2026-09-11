@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shipit_ui/src/theme/tokens/app_color_tokens.dart';
+import 'package:shipit_ui/src/theme/tokens/app_icon_tokens.dart';
 import 'package:shipit_ui/src/theme/tokens/app_layout_tokens.dart';
 import 'package:shipit_ui/src/theme/tokens/app_motion_tokens.dart';
 import 'package:shipit_ui/src/theme/tokens/app_text_tokens.dart';
 
 export 'package:shipit_ui/src/theme/tokens/app_color_tokens.dart';
+export 'package:shipit_ui/src/theme/tokens/app_icon_tokens.dart';
 export 'package:shipit_ui/src/theme/tokens/app_layout_tokens.dart';
 export 'package:shipit_ui/src/theme/tokens/app_motion_tokens.dart';
 export 'package:shipit_ui/src/theme/tokens/app_text_tokens.dart';
@@ -34,6 +36,8 @@ class AppTheme extends ThemeExtension<AppTheme> {
   final AppMotionTokens motion;
   final AppBreakpointTokens breakpoint;
   final AppOpacityTokens opacity;
+  final AppIconTokens icon;
+  final AppLayoutTokens layout;
 
   const AppTheme({
     required this.color,
@@ -45,6 +49,8 @@ class AppTheme extends ThemeExtension<AppTheme> {
     required this.motion,
     required this.breakpoint,
     required this.opacity,
+    required this.icon,
+    required this.layout,
   });
 
   /// Builds a theme from [color] with the shared non-color defaults; text
@@ -62,6 +68,8 @@ class AppTheme extends ThemeExtension<AppTheme> {
     motion: AppMotionTokens.base,
     breakpoint: AppBreakpointTokens.base,
     opacity: AppOpacityTokens.base,
+    icon: AppIconTokens.base,
+    layout: AppLayoutTokens.base,
   );
 
   static final AppTheme light = AppTheme.fromColor(AppColorTokens.light);
@@ -91,6 +99,8 @@ class AppTheme extends ThemeExtension<AppTheme> {
     AppMotionTokens? motion,
     AppBreakpointTokens? breakpoint,
     AppOpacityTokens? opacity,
+    AppIconTokens? icon,
+    AppLayoutTokens? layout,
   }) {
     final c = color ?? this.color;
     final f = font ?? this.font;
@@ -108,6 +118,8 @@ class AppTheme extends ThemeExtension<AppTheme> {
       motion: motion ?? this.motion,
       breakpoint: breakpoint ?? this.breakpoint,
       opacity: opacity ?? this.opacity,
+      icon: icon ?? this.icon,
+      layout: layout ?? this.layout,
     );
   }
 
@@ -129,6 +141,8 @@ extension AppThemeContext on BuildContext {
   AppMotionTokens get motion => appTheme.motion;
   AppBreakpointTokens get breakpoint => appTheme.breakpoint;
   AppOpacityTokens get opacity => appTheme.opacity;
+  AppIconTokens get icon => appTheme.icon;
+  AppLayoutTokens get layout => appTheme.layout;
 
   /// Current layout class from the window width and [breakpoint] tokens.
   AppLayoutType get layoutType =>

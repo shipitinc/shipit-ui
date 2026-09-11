@@ -17,7 +17,7 @@ Penpot identifiers follow a hierarchical path format:
 | Type | Values | Description |
 |------|--------|-------------|
 | `component` | button, text_field, select, card, dialog, confirm_dialog, empty_state, skeleton, inline_alert, shimmer, tooltip, navigation_rail, avatar, filter_chip, search_field, date_picker, data_table | UI component |
-| `token` | color, spacing, radius, typography, motion, breakpoint, elevation, opacity | Design token |
+| `token` | color, spacing, radius, typography, motion, breakpoint, elevation, opacity, icon, layout | Design token |
 | `theme` | light, dark | Theme variant |
 
 ### Naming Convention
@@ -240,6 +240,25 @@ Light values live in the Penpot set `shipit/color` (theme **ShipIt / Light**, `A
 | `token/motion/curve/accelerate` | `context.motion.curve.accelerate` | MISSING_IN_PENPOT |
 | `token/motion/curve/sharp` | `context.motion.curve.sharp` | MISSING_IN_PENPOT |
 | `token/motion/curve/bouncy` | `context.motion.curve.bouncy` | MISSING_IN_PENPOT |
+
+#### Tokens - Icon
+
+Values live in the Penpot set `shipit/icon`.
+
+| Penpot ID | Flutter API | Status |
+|-----------|------------|--------|
+| `token/icon/size/sm` | `context.icon.size.sm` | MATCHED |
+| `token/icon/size/md` | `context.icon.size.md` | MATCHED |
+| `token/icon/size/lg` | `context.icon.size.lg` | MATCHED |
+| `token/icon/size/xl` | `context.icon.size.xl` | MATCHED |
+
+#### Tokens - Layout
+
+Values live in the Penpot set `shipit/layout`.
+
+| Penpot ID | Flutter API | Status |
+|-----------|------------|--------|
+| `token/layout/maxWidth/form` | `context.layout.maxWidth.form` | MATCHED |
 
 #### Patterns (Penpot page "03 Patterns" → `docs/patterns.md`)
 
