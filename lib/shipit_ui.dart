@@ -2,6 +2,7 @@ export 'src/theme/app_theme_tokens.dart';
 export 'src/theme/app_theme.dart';
 export 'src/layout/app_layout.dart';
 export 'src/components/app_avatar.dart';
+export 'src/components/app_bottom_navigation_bar.dart';
 export 'src/components/app_button.dart';
 export 'src/components/app_icon_button.dart';
 export 'src/components/app_text_button.dart';

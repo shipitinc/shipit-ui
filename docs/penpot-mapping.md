@@ -56,6 +56,7 @@ Penpot identifiers follow a hierarchical path format:
 | `component/tooltip/default` | `AppTooltip(message: ..., child: ...)` | MATCHED |
 | `component/navigation_rail/extended` | `AppNavigationRail(items: ..., extended: true)` | MATCHED |
 | `component/navigation_rail/collapsed` | `AppNavigationRail(items: ..., extended: false)` | MATCHED |
+| `component/bottom_navigation_bar/base` | `AppBottomNavigationBar(items: ..., selectedIndex: ..., onDestinationSelected: ...)` | MISSING_IN_PENPOT |
 | `component/confirm_dialog/base` | `AppConfirmDialog(title: ..., onConfirm: ...)` | MATCHED |
 | `component/confirm_dialog/destructive` | `AppConfirmDialog.destructive(title: ..., onConfirm: ...)` | MATCHED |
 | `component/avatar/{sm,md,lg,xl}` | `AppAvatar(name: ..., size: AppAvatarSize.*)` | MATCHED |
@@ -96,6 +97,10 @@ Penpot boards: **02 Components → `AppTextButton`** (board
 `416652ee-53fd-807b-8008-9d644c111de7`) and **`AppIconButton`** (board
 `416652ee-53fd-807b-8008-9d6450d61b85`), both registered as local library
 components.
+
+#### Components not yet in Penpot (missing design)
+
+`AppBottomNavigationBar` is the mobile/compact companion to the rail for narrow layouts. It is **not** a Penpot component yet (approved Penpot design covers the desktop/tablet rail only; the narrow `AppNavigationRail` collapse-with-tooltip behaviour remains the interim approach for `StatefulShellRoute.indexedStack` shells that have not shipped the bottom bar). It reuses the approved `color.nav.*`, `icon.size.lg`, `radius.md`, type and spacing tokens and mirrors the rail's active pill — **no new tokens were added**. When the Penpot component lands, revisit this row and update it to MATCHED.
 
 #### Tokens - Colors
 

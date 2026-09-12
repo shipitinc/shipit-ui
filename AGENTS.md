@@ -16,7 +16,7 @@ ElevatedButton(onPressed: () {}, child: Text('Submit'))
 AppButton.primary(label: 'Submit', onPressed: () {})
 ```
 
-This applies to all Material fallbacks, including `Tooltip` (use `AppTooltip`), `NavigationRail` (use `AppNavigationRail`), `AlertDialog` confirmations (use `AppConfirmDialog`), `SnackBar`/`MaterialBanner` feedback (use `AppInlineAlert`), `CircleAvatar` (use `AppAvatar`), `FilterChip` (use `AppFilterChip`), `SearchBar` (use `AppSearchField`), raw `showDatePicker` (use `AppDatePicker`) and `DataTable`/`PaginatedDataTable` (use `AppDataTable`). For low-emphasis actions use `TextButton` → `AppTextButton` and icon-only triggers use `IconButton` → `AppIconButton`.
+This applies to all Material fallbacks, including `Tooltip` (use `AppTooltip`), `NavigationRail` (use `AppNavigationRail`), `NavigationBar` (use `AppBottomNavigationBar`), `AlertDialog` confirmations (use `AppConfirmDialog`), `SnackBar`/`MaterialBanner` feedback (use `AppInlineAlert`), `CircleAvatar` (use `AppAvatar`), `FilterChip` (use `AppFilterChip`), `SearchBar` (use `AppSearchField`), raw `showDatePicker` (use `AppDatePicker`) and `DataTable`/`PaginatedDataTable` (use `AppDataTable`). For low-emphasis actions use `TextButton` → `AppTextButton` and icon-only triggers use `IconButton` → `AppIconButton`.
 
 ### 2. All Design Values Come From `context.*`
 
