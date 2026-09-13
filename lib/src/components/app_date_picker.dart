@@ -112,6 +112,7 @@ class AppDatePicker extends StatelessWidget {
   final Key? semanticLabel;
 
   static const double _fieldHeight = 44;
+  static const double _targetSize = 44;
   static const double _iconSize = 20;
 
   const AppDatePicker({
@@ -248,6 +249,7 @@ class AppDatePicker extends StatelessWidget {
         ? color.fg.primary
         : color.fg.muted;
     final iconColor = isDisabled ? color.fg.disabled : color.fg.muted;
+    final bool showClear = allowClear && _hasValue && !isDisabled;
     return Material(
       key: const Key('date_picker_field'),
       color: isDisabled ? color.action.disabled.bg : color.bg.surface,
@@ -255,48 +257,66 @@ class AppDatePicker extends StatelessWidget {
         borderRadius: context.radius.all.md,
         side: BorderSide(color: _borderColor(color, showError)),
       ),
-      child: InkWell(
-        borderRadius: context.radius.all.md,
-        onTap: isDisabled ? null : () => _open(context, field),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: _fieldHeight),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: space.s4,
-              vertical: space.s2,
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.calendar_today_outlined,
-                  size: _iconSize,
-                  color: iconColor,
+      child: Stack(
+        children: [
+          InkWell(
+            borderRadius: context.radius.all.md,
+            onTap: isDisabled ? null : () => _open(context, field),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: _fieldHeight),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: space.s4,
+                  vertical: space.s2,
                 ),
-                SizedBox(width: space.s2),
-                Expanded(
-                  child: Text(
-                    _displayText,
-                    style: context.text.body.medium.copyWith(color: textColor),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                if (allowClear && _hasValue && !isDisabled)
-                  AppTooltip(
-                    message: 'Clear',
-                    child: IconButton(
-                      key: const Key('date_picker_clear'),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      iconSize: _iconSize,
-                      color: color.fg.muted,
-                      icon: const Icon(Icons.close),
-                      onPressed: () => _clear(field),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.calendar_today_outlined,
+                      size: _iconSize,
+                      color: iconColor,
                     ),
-                  ),
-              ],
+                    SizedBox(width: space.s2),
+                    Expanded(
+                      child: Text(
+                        _displayText,
+                        style: context.text.body.medium.copyWith(
+                          color: textColor,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (showClear) const SizedBox(width: _iconSize),
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
+          if (showClear)
+            Positioned(
+              right: space.s4 - (_targetSize - _iconSize) / 2,
+              top: 0,
+              bottom: 0,
+              child: SizedBox(
+                width: _targetSize,
+                child: AppTooltip(
+                  message: 'Clear',
+                  child: IconButton(
+                    key: const Key('date_picker_clear'),
+                    constraints: const BoxConstraints(
+                      minWidth: _targetSize,
+                      minHeight: _targetSize,
+                    ),
+                    padding: EdgeInsets.zero,
+                    iconSize: _iconSize,
+                    color: color.fg.muted,
+                    icon: const Icon(Icons.close),
+                    onPressed: () => _clear(field),
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

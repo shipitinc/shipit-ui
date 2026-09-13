@@ -107,6 +107,56 @@ void main() {
       expect(received, isNull);
     });
 
+    testWidgets('clear affordance exposes a 44dp tap target (WCAG 2.5.5)', (
+      tester,
+    ) async {
+      DateTime? received = DateTime(2000);
+      await tester.pumpWidget(
+        _wrap(
+          AppDatePicker(
+            label: 'Date',
+            value: DateTime(2026, 3, 14),
+            onChanged: (v) => received = v,
+          ),
+        ),
+      );
+      final clear = find.byKey(const Key('date_picker_clear'));
+      final box = tester.renderObject<RenderBox>(clear);
+      expect(box.size.width, greaterThanOrEqualTo(40));
+      expect(box.size.height, greaterThanOrEqualTo(40));
+
+      final fieldBox = tester.renderObject<RenderBox>(
+        find.byKey(const Key('date_picker_field')),
+      );
+      expect(fieldBox.size.height, 44);
+
+      // A tap in the expanded hit area but outside the 20px icon still clears.
+      await tester.tapAt(tester.getCenter(clear) + const Offset(18, 0));
+      expect(received, isNull);
+    });
+
+    testWidgets('tap outside the clear affordance still opens picker', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        _wrap(
+          AppDatePicker(
+            label: 'Date',
+            value: DateTime(2026, 3, 14),
+            firstDate: DateTime(2020),
+            lastDate: DateTime(2030),
+            onChanged: (_) {},
+          ),
+        ),
+      );
+      final clearCenter = tester.getCenter(
+        find.byKey(const Key('date_picker_clear')),
+      );
+      await tester.tapAt(clearCenter + const Offset(-120, 0));
+      await tester.pumpAndSettle();
+      expect(find.byType(DatePickerDialog), findsOneWidget);
+    });
+
     testWidgets('allowClear false hides clear button', (tester) async {
       await tester.pumpWidget(
         _wrap(
